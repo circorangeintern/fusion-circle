@@ -2,6 +2,9 @@
   "compilerOptions": {
     "target": "es2022",
     "module": "nodenext",
+    "types": [
+      "node"
+    ],
     "lib": [
       "es2022"
     ],
