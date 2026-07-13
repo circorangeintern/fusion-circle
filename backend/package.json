@@ -7,9 +7,9 @@
     "node": "20.19.0"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/serverjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "prepare": "cd .. && npx husky backend/.husky"
@@ -32,7 +32,7 @@
   "devDependencies": {
     "husky": "^9.0.11",
     "ts-node-dev": "^2.0.0",
-    "typescript": "7.0.2",
+    "typescript": "^5.5.4",
     "vitest": "^1.6.0"
   }
 }
