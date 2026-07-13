@@ -49,6 +49,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build application
+        run: npm run build
+
       # - name: Run Prisma Migrations
       #   run: npx prisma migrate deploy
       #   env:
