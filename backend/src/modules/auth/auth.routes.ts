@@ -3,11 +3,11 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/", (req, res) => {
-    console.log("Admin routes are ready for development.");
+    console.log("Auth routes are ready for development.");
 
     res.status(200).json({
         success: true,
-        message: "Admin routes are ready for development.",
+        message: "Auth routes are ready for development.",
     });
 });
 

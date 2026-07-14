@@ -1,13 +1,13 @@
 // src/routes/index.ts
 import { Router } from 'express';
-import adminRoutes from '../modules/admin/admin.routes';
+import authRoutes from '../modules/auth/auth.routes';
 //import schoolRoutes from '../modules/schools/schools.routes';
 //import userRoutes from '../modules/users/users.routes';
 // ... other modules as you build them
 
 const router = Router();
 
-router.use('/admin', adminRoutes);
+router.use('/auth', authRoutes);
 //router.use('/schools', schoolRoutes);
 //router.use('/users', userRoutes);
 
