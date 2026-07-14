@@ -1,31 +1,68 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
-import express from 'express';
 
+import express from "express";
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
+import router from './routes/index';
 
 app.use(express.json());
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', nodeVersion: process.version });
-});
-
-app.get("/info", (req, res) => {
-  res.json({
-    api: 'ResultTrack',
-    project_team: 'Fusion Circle',
-    version: process.env.npm_package_version || '1.0.0',
-    description: 'Automated CA and exam result computation system',
-    status: 'in development',
+// Root endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({
+    project: "ResultTrack API",
+    version: process.env.npm_package_version || "1.0.0",
+    status: "Active",
+    api_root: "/api/v1",
+    description: "Automated CA and exam result computation system",
+    team: "Fusion Circle",
   });
 });
 
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+// Health check
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "UP",
+    timestamp: new Date().toISOString(),
+    nodeVersion: process.version,
   });
-}
+});
+
+// API routes
+app.use("/api/v1", router);
+
+// Catch unknown routes
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found.`,
+  });
+});
+
+
+// if (process.env.NODE_ENV !== "test") {
+//   app.listen(PORT, () => {
+//     console.log(` ResultTrack API running on port ${PORT}`);
+//   });
+// }
 
 export default app;
+
+
+
+// // src/app.ts
+// import express from 'express';
+
+// import { errorMiddleware } from './middleware/error.middleware';
+
+// const app = express();
+// app.use(express.json());
+// app.use(cookieParser()); // needed since sessions are cookie-based
+
+
+
+// app.use(errorMiddleware); // always last
+
+// export default app;
