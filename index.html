@@ -1,0 +1,5264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="ResultTrack — the academic result system for Nigerian universities. Lecturers enter scores once; students see a verified result the moment it's approved." />
+    <title>ResultTrack — Academic Result Management for Universities</title>
+
+    <!-- Fonts: Roboto Slab (display) + Work Sans (body), per ResultTrack Brand Identity v1 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;600;700;800&family=Work+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* ════════════════════════════════════════════════════════════
+   DESIGN TOKENS — ResultTrack Brand Identity v1
+   Ink Navy #1B2A4A · Ledger Paper #EEEDE6 · Marking Red #A63D3D
+   Result Gold #BF9B30 · Ink Grey #383C42
+   Display: Roboto Slab · Body: Work Sans
+════════════════════════════════════════════════════════════ */
+        :root {
+            /* Core brand — Ink Navy carries all chrome, navigation, the wordmark */
+            --primary: #1B2A4A;
+            --primary-dark: #101a30;
+            --primary-light: #2f4470;
+            --primary-50: #eef1f6;
+            --primary-100: #d7deea;
+
+            /* Result Gold — confirmed / positive / resolved states only */
+            --secondary: #BF9B30;
+            --secondary-light: #d4b352;
+            --secondary-50: #fbf6e8;
+
+            /* Marking Red — the signature accent. Flags, corrections, the stamp motif.
+         Reserved for moments that need attention, never decoration. */
+            --accent: #A63D3D;
+            --accent-light: #c15a5a;
+            --accent-50: #f9ecec;
+            /* Lighter tint used only where Marking Red sits on a dark navy field */
+            --accent-on-dark: #e3a3a3;
+
+            /* Surfaces — Ledger Paper is the background; worn paper, not warm cream */
+            --bg: #EEEDE6;
+            --surface: #ffffff;
+            --surface-2: #f7f6f1;
+            --surface-3: #efeee7;
+            --border: #ddd9cd;
+            --border-strong: #c7c2b2;
+
+            /* Typography — Ink Grey carries body text throughout */
+            --text-primary: #1B2A4A;
+            --text-secondary: #383C42;
+            --text-tertiary: #7a7d84;
+            --text-inverse: #ffffff;
+
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(27, 42, 74, .06);
+            --shadow-sm: 0 1px 3px rgba(27, 42, 74, .12), 0 1px 2px rgba(27, 42, 74, .07);
+            --shadow-md: 0 4px 6px rgba(27, 42, 74, .08), 0 2px 4px rgba(27, 42, 74, .07);
+            --shadow-lg: 0 10px 15px rgba(27, 42, 74, .12), 0 4px 6px rgba(27, 42, 74, .06);
+            --shadow-xl: 0 20px 25px rgba(27, 42, 74, .12), 0 10px 10px rgba(27, 42, 74, .05);
+            --shadow-2xl: 0 25px 50px rgba(27, 42, 74, .16);
+            --shadow-blue: 0 20px 40px rgba(27, 42, 74, .18);
+
+            /* Radius — squared-off, closer to a ledger card than a soft app tile */
+            --r-sm: 5px;
+            --r-md: 8px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 22px;
+            --r-full: 50px;
+
+            /* Typography scale */
+            --font-xs: 0.75rem;
+            --font-sm: 0.875rem;
+            --font-base: 1rem;
+            --font-lg: 1.125rem;
+            --font-xl: 1.25rem;
+            --font-2xl: 1.5rem;
+            --font-3xl: 1.875rem;
+            --font-4xl: 2.25rem;
+            --font-5xl: 3rem;
+            --font-6xl: 3.75rem;
+            --font-7xl: 4.5rem;
+
+            /* Transitions */
+            --ease: cubic-bezier(.4, 0, .2, 1);
+            --dur: .25s;
+            --dur-md: .35s;
+
+            /* Type roles */
+            --font-display: 'Roboto Slab', Georgia, serif;
+            --font-body: 'Work Sans', system-ui, -apple-system, sans-serif;
+            --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   RESET & BASE
+════════════════════════════════════════════════════════════ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: var(--font-display);
+            color: var(--text-primary);
+        }
+
+        /* ── Utility ── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        /* Section label pill */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--font-body);
+            font-size: var(--font-xs);
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--primary);
+            background: var(--primary-50);
+            border: 1px solid var(--primary-100);
+            padding: 5px 13px;
+            border-radius: var(--r-full);
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3.5vw, var(--font-4xl));
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -.01em;
+            line-height: 1.18;
+        }
+
+        .section-sub {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            line-height: 1.75;
+            max-width: 560px;
+        }
+
+        .text-gradient {
+            background: linear-gradient(120deg, var(--accent-on-dark) 0%, #f0c4c4 60%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .mt-6 {
+            margin-top: 24px;
+        }
+
+        .mt-8 {
+            margin-top: 32px;
+        }
+
+        .mt-10 {
+            margin-top: 40px;
+        }
+
+        .mt-12 {
+            margin-top: 48px;
+        }
+
+        .mt-16 {
+            margin-top: 64px;
+        }
+
+        /* ── Buttons ──
+       One system: primary (navy fill), secondary (gold fill, used sparingly
+       for confirm/positive actions), outline, and ghost-on-dark. */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 22px;
+            border-radius: var(--r-md);
+            font-family: var(--font-body);
+            font-size: var(--font-sm);
+            font-weight: 600;
+            transition: all var(--dur) var(--ease);
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1.5px solid transparent;
+        }
+
+        .btn:disabled,
+        .btn[aria-disabled="true"] {
+            opacity: .5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--text-inverse);
+            border-color: var(--primary);
+            box-shadow: 0 1px 3px rgba(27, 42, 74, .3), 0 4px 12px rgba(27, 42, 74, .18);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(27, 42, 74, .32), 0 8px 20px rgba(27, 42, 74, .2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .btn-outline:hover {
+            background: var(--surface);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: var(--font-base);
+            border-radius: var(--r-lg);
+        }
+
+        .btn-xl {
+            padding: 16px 34px;
+            font-size: var(--font-lg);
+            border-radius: var(--r-lg);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: #2b2205;
+            border-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(191, 155, 48, .3);
+        }
+
+        .btn-white {
+            background: var(--surface);
+            color: var(--primary);
+            border-color: var(--surface);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-white:hover {
+            background: var(--primary-50);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-ghost-white {
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(8px);
+            color: var(--text-inverse);
+            border-color: rgba(255, 255, 255, .25);
+        }
+
+        .btn-ghost-white:hover {
+            background: rgba(255, 255, 255, .16);
+            transform: translateY(-1px);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   SIGNATURE ELEMENT — the verification stamp
+   The one bold, memorable device: a teacher's marking pen, translated
+   into product. Reserved for verified / resolved moments only.
+════════════════════════════════════════════════════════════ */
+        .verified-stamp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            font-family: var(--font-display);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            transform: rotate(-8deg);
+            position: relative;
+        }
+
+        .verified-stamp::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            opacity: .5;
+        }
+
+        .verified-stamp.sm {
+            width: 30px;
+            height: 30px;
+            font-size: 6px;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   PAGE LOADER
+════════════════════════════════════════════════════════════ */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            background: var(--primary-dark);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loader-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-inverse);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            opacity: 0;
+        }
+
+        .loader-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .loader-bar-track {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, .15);
+            border-radius: 2px;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .loader-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-on-dark);
+            border-radius: 2px;
+            transition: width .5s var(--ease);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   NAVBAR
+════════════════════════════════════════════════════════════ */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 500;
+            padding: 16px 0;
+            transition: all var(--dur-md) var(--ease);
+        }
+
+        #navbar.scrolled {
+            background: rgba(255, 255, 255, .95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            padding: 12px 0;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-inverse);
+            letter-spacing: -.01em;
+            flex-shrink: 0;
+            transition: color var(--dur);
+        }
+
+        .wm-result {
+            color: currentColor;
+        }
+
+        .wm-track {
+            color: var(--accent-on-dark);
+        }
+
+        #navbar.scrolled .wm-track {
+            color: var(--accent);
+        }
+
+        #navbar.scrolled .nav-logo {
+            color: var(--text-primary);
+        }
+
+        .nav-logo-mark {
+            width: 34px;
+            height: 34px;
+            background: var(--primary);
+            border: 1.5px solid rgba(255, 255, 255, .18);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(27, 42, 74, .35);
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-link {
+            font-size: var(--font-sm);
+            font-weight: 500;
+            color: rgba(255, 255, 255, .82);
+            padding: 7px 14px;
+            border-radius: var(--r-md);
+            transition: all var(--dur) var(--ease);
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        #navbar.scrolled .nav-link {
+            color: var(--text-secondary);
+        }
+
+        #navbar.scrolled .nav-link:hover {
+            color: var(--primary);
+            background: var(--primary-50);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .nav-signin {
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: rgba(255, 255, 255, .85);
+            padding: 8px 16px;
+            border-radius: var(--r-md);
+            transition: all var(--dur);
+        }
+
+        .nav-signin:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        #navbar.scrolled .nav-signin {
+            color: var(--text-primary);
+        }
+
+        #navbar.scrolled .nav-signin:hover {
+            background: var(--surface-3);
+        }
+        
+        /* 
+        hamburger css code
+          */
+
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--primary, #4f46e5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-hamburger:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.nav-hamburger:active {
+    transform: scale(0.94);
+}
+
+.nav-hamburger span {
+    width: 22px;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.2s ease;
+    display: block;
+    transform-origin: center;
+}
+
+/* Same background throughout — only the icon shape changes */
+.nav-hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+        /* Mobile menu */
+        .nav-mobile {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 490;
+            background: var(--surface);
+            padding: 80px 24px 36px;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .nav-mobile.open {
+            display: flex;
+        }
+
+        .nav-mobile a {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-mobile .mob-btns {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-mobile-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            background: var(--surface-3);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   HERO SECTION
+════════════════════════════════════════════════════════════ */
+        #hero {
+            min-height: 100vh;
+            background: linear-gradient(165deg, var(--primary-dark) 0%, #16233f 35%, var(--primary) 65%, #23355c 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hero-bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-orb-1 {
+            width: 700px;
+            height: 700px;
+            top: -200px;
+            right: -200px;
+            background: radial-gradient(circle, rgba(166, 61, 61, .14) 0%, transparent 70%);
+        }
+
+        .hero-orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -80px;
+            background: radial-gradient(circle, rgba(191, 155, 48, .12) 0%, transparent 70%);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            padding: 60px 0 80px;
+            width: 100%;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            align-items: center;
+        }
+
+        .hero-left {
+            max-width: 560px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .18);
+            backdrop-filter: blur(8px);
+            color: rgba(255, 255, 255, .9);
+            font-size: var(--font-xs);
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: var(--r-full);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--secondary-light);
+            animation: heroPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes heroPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: .4;
+                transform: scale(.7)
+            }
+        }
+
+        .hero-h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.1rem, 4.2vw, var(--font-6xl));
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -.02em;
+            line-height: 1.14;
+            margin-bottom: 22px;
+        }
+
+        .hero-h1 .hero-h1-hl {
+            background: linear-gradient(120deg, #f0c4c4, var(--accent-on-dark) 60%, #d9a5a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-p {
+            font-size: var(--font-lg);
+            color: rgba(255, 255, 255, .72);
+            line-height: 1.75;
+            margin-bottom: 36px;
+            max-width: 460px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .hero-social-proof {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero-avatars {
+            display: flex;
+        }
+
+        .hero-av {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, .4);
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            margin-left: -8px;
+        }
+
+        .hero-av:first-child {
+            margin-left: 0;
+        }
+
+        .hero-sp-text {
+            font-size: var(--font-sm);
+            color: rgba(255, 255, 255, .65);
+        }
+
+        .hero-sp-text strong {
+            color: rgba(255, 255, 255, .9);
+        }
+
+        /* Hero visual area */
+        .hero-right {
+            position: relative;
+            height: 580px;
+        }
+
+        .hero-dash-main {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: -20px;
+            background: var(--surface);
+            border-radius: var(--r-2xl);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, .25), 0 0 0 1px rgba(255, 255, 255, .1);
+            overflow: hidden;
+            transform-origin: top left;
+        }
+
+        /* Lecturer dashboard mockup */
+        .dash-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dash-tb-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dash-tb-logo {
+            width: 26px;
+            height: 26px;
+            background: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .dash-tb-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .dash-tb-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dash-tb-notif {
+            width: 26px;
+            height: 26px;
+            background: var(--primary-50);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 11px;
+            position: relative;
+        }
+
+        .dash-tb-notif::after {
+            content: '3';
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 8px;
+            font-weight: 800;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dash-tb-av {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .dash-body {
+            display: flex;
+            height: 310px;
+        }
+
+        .dash-sidebar {
+            width: 130px;
+            background: var(--surface-2);
+            border-right: 1px solid var(--border);
+            padding: 14px 0;
+            flex-shrink: 0;
+        }
+
+        .dash-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 0;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .dash-nav-item.active {
+            background: var(--primary-50);
+            color: var(--primary);
+            font-weight: 600;
+            border-right: 2px solid var(--primary);
+        }
+
+        .dash-nav-item i {
+            font-size: 11px;
+        }
+
+        .dash-main {
+            flex: 1;
+            padding: 14px;
+            overflow: hidden;
+        }
+
+        .dash-main-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        /* Mini stats in dashboard */
+        .dash-stats-row {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 10px;
+        }
+
+        .dash-stat {
+            flex: 1;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 7px 8px;
+        }
+
+        .dash-stat-val {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .dash-stat-lbl {
+            font-size: 9px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .dash-stat.blue .dash-stat-val {
+            color: var(--primary);
+        }
+
+        .dash-stat.green .dash-stat-val {
+            color: var(--secondary);
+        }
+
+        .dash-stat.amber .dash-stat-val {
+            color: var(--accent);
+        }
+
+        /* Mini table */
+        .dash-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .dash-table-head {
+            background: var(--surface-3);
+        }
+
+        .dash-table-head th {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            padding: 5px 7px;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .dash-table td {
+            font-size: 9.5px;
+            color: var(--text-secondary);
+            padding: 5px 7px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dash-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: var(--r-full);
+        }
+
+        /* Status semantics: Gold = confirmed/positive. Red-tint = needs attention.
+       Navy-tint = under review. Never use red for a completed state. */
+        .status-chip.submitted {
+            background: var(--secondary-50);
+            color: #8a6f1e;
+        }
+
+        .status-chip.pending {
+            background: var(--accent-50);
+            color: var(--accent);
+        }
+
+        .status-chip.reviewed {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        /* Floating student card */
+        .hero-float-student {
+            position: absolute;
+            bottom: 30px;
+            left: -40px;
+            width: 260px;
+            background: var(--surface);
+            border-radius: var(--r-xl);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .2);
+            padding: 16px;
+            animation: heroFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes heroFloat {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+        }
+
+        .hfs-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .hfs-av {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), #9c7c22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .hfs-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .hfs-dept {
+            font-size: 9.5px;
+            color: var(--text-tertiary);
+        }
+
+        .hfs-gpa-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 9px;
+        }
+
+        .hfs-gpa-label {
+            font-size: 9px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+        }
+
+        .hfs-gpa-val {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .hfs-progress-track {
+            height: 5px;
+            background: var(--surface-3);
+            border-radius: 3px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .hfs-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--secondary-light));
+            width: 82%;
+        }
+
+        .hfs-courses {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hfs-course {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hfs-course-name {
+            font-size: 9.5px;
+            color: var(--text-secondary);
+        }
+
+        .hfs-course-grade {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--primary-50);
+            padding: 1px 7px;
+            border-radius: var(--r-full);
+        }
+
+        /* Floating stats badge */
+        .hero-float-stat {
+            position: absolute;
+            right: -20px;
+            background: var(--surface);
+            border-radius: var(--r-lg);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: heroFloat 6s ease-in-out infinite reverse;
+        }
+
+        .hero-float-stat:nth-of-type(1) {
+            top: 180px;
+        }
+
+        .hero-float-stat:nth-of-type(2) {
+            top: 260px;
+        }
+
+        .hfst-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .hfst-icon.blue {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .hfst-icon.green {
+            background: var(--secondary-50);
+            color: #8a6f1e;
+        }
+
+        .hfst-icon.amber {
+            background: var(--accent-50);
+            color: var(--accent);
+        }
+
+        .hfst-val {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .hfst-lbl {
+            font-size: 10px;
+            color: var(--text-tertiary);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   TRUST / STATISTICS BAND
+════════════════════════════════════════════════════════════ */
+        #stats-band {
+            padding: 60px 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -.01em;
+            line-height: 1;
+            display: block;
+        }
+
+        .stat-num span {
+            color: var(--accent);
+        }
+
+        .stat-lbl {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .stats-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 48px;
+            padding-top: 48px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stats-logos-label {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: var(--font-xs);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--text-tertiary);
+            font-weight: 700;
+        }
+
+        .institution-badge {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            padding: .75rem 1.15rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            box-shadow: var(--shadow-xs);
+            transition: all .3s var(--ease);
+        }
+
+        .institution-badge svg,
+        .institution-badge i {
+            width: 18px;
+            height: 18px;
+            color: var(--primary);
+        }
+
+        .institution-badge span {
+            font-size: .9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .institution-badge:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   WHY RESULTTRACK
+════════════════════════════════════════════════════════════ */
+        #why {
+            padding: 100px 0;
+            background: var(--bg);
+        }
+
+        .why-header {
+            max-width: 600px;
+            margin-bottom: 60px;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .why-card {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-xl);
+            padding: 28px;
+            transition: all var(--dur-md) var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--dur-md) var(--ease);
+            border-radius: var(--r-xl) var(--r-xl) 0 0;
+        }
+
+        .why-card:hover {
+            border-color: var(--primary-100);
+            box-shadow: var(--shadow-blue);
+            transform: translateY(-4px);
+        }
+
+        .why-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .why-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            transition: transform var(--dur) var(--ease);
+        }
+
+        .why-card:hover .why-icon {
+            transform: scale(1.07);
+        }
+
+        .why-icon.blue {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .why-icon.green {
+            background: var(--secondary-50);
+            color: #8a6f1e;
+        }
+
+        .why-icon.amber {
+            background: var(--accent-50);
+            color: var(--accent);
+        }
+
+        .why-title {
+            font-family: var(--font-body);
+            font-size: var(--font-base);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .why-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   LECTURER EXPERIENCE
+════════════════════════════════════════════════════════════ */
+        #lecturer {
+            padding: 100px 0;
+            background: var(--surface);
+        }
+
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 56px;
+            align-items: stretch;
+        }
+
+        .ba-card {
+            border-radius: var(--r-2xl);
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ba-card.before {
+            background: var(--surface-2);
+            border: 1.5px solid var(--border);
+        }
+
+        .ba-card.after {
+            background: linear-gradient(140deg, var(--primary-dark), var(--primary));
+            color: #fff;
+        }
+
+        .ba-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: var(--font-xs);
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            padding: 5px 13px;
+            border-radius: var(--r-full);
+            margin-bottom: 20px;
+        }
+
+        .ba-card.before .ba-label {
+            background: var(--accent-50);
+            color: var(--accent);
+            border: 1px solid #eecccc;
+        }
+
+        .ba-card.after .ba-label {
+            background: rgba(255, 255, 255, .15);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, .25);
+        }
+
+        .ba-title {
+            font-family: var(--font-display);
+            font-size: var(--font-xl);
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -.01em;
+        }
+
+        .ba-card.before .ba-title {
+            color: var(--text-primary);
+        }
+
+        .ba-card.after .ba-title {
+            color: #fff;
+        }
+
+        .ba-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ba-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+        }
+
+        .ba-item-icon {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            margin-top: 1px;
+        }
+
+        .ba-card.before .ba-item-icon {
+            background: var(--accent-50);
+            color: var(--accent);
+        }
+
+        .ba-card.after .ba-item-icon {
+            background: rgba(255, 255, 255, .2);
+            color: #fff;
+        }
+
+        .ba-item-text {
+            font-size: var(--font-sm);
+            line-height: 1.6;
+        }
+
+        .ba-card.before .ba-item-text {
+            color: var(--text-secondary);
+        }
+
+        .ba-card.after .ba-item-text {
+            color: rgba(255, 255, 255, .82);
+        }
+
+        /* Lecturer dashboard big mockup */
+        .lecturer-dash-wrap {
+            margin-top: 56px;
+            background: var(--surface-2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-2xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .lec-dash-bar {
+            background: var(--primary-dark);
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lec-dash-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .lec-dash-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .lec-dash-dot.r {
+            background: var(--accent);
+        }
+
+        .lec-dash-dot.y {
+            background: var(--secondary);
+        }
+
+        .lec-dash-dot.g {
+            background: #6b8f6b;
+        }
+
+        .lec-dash-url {
+            flex: 1;
+            max-width: 340px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: var(--r-sm);
+            padding: 4px 12px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: rgba(255, 255, 255, .6);
+            text-align: center;
+        }
+
+        .lec-dash-body {
+            display: flex;
+            height: 380px;
+        }
+
+        .lec-sb {
+            width: 160px;
+            background: var(--primary-dark);
+            padding: 18px 0;
+            flex-shrink: 0;
+        }
+
+        .lec-sb-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 14px 18px;
+        }
+
+        .lec-sb-logo {
+            width: 26px;
+            height: 26px;
+            background: var(--accent);
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .lec-sb-name {
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .lec-sb-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 14px;
+            font-size: 10.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .5);
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .lec-sb-item.active {
+            background: rgba(255, 255, 255, .1);
+            color: var(--accent-on-dark);
+            font-weight: 600;
+        }
+
+        .lec-sb-item:hover {
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .lec-content {
+            flex: 1;
+            padding: 18px;
+            overflow: hidden;
+        }
+
+        .lec-content-hd {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 10px;
+        }
+
+        .lec-content-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .lec-upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: var(--r-sm);
+            cursor: pointer;
+        }
+
+        .lec-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .lec-card-mini {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 11px 12px;
+        }
+
+        .lec-cm-val {
+            font-family: var(--font-display);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .lec-cm-lbl {
+            font-size: 9px;
+            color: var(--text-tertiary);
+            margin-top: 3px;
+        }
+
+        .lec-cm-change {
+            font-size: 9px;
+            font-weight: 600;
+            color: #8a6f1e;
+            margin-top: 2px;
+        }
+
+        .lec-result-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .lec-result-table thead th {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            padding: 7px 10px;
+            background: var(--surface-3);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lec-result-table tbody td {
+            font-size: 10px;
+            color: var(--text-secondary);
+            padding: 7px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lec-result-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .lec-result-table tbody tr:hover td {
+            background: var(--primary-50);
+        }
+
+        .grade-chip {
+            display: inline-flex;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--r-full);
+        }
+
+        /* Grades: A/B read as achievement (gold/navy), C is neutral,
+       F is the only grade that borrows Marking Red. */
+        .grade-a {
+            background: var(--secondary-50);
+            color: #8a6f1e;
+        }
+
+        .grade-b {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .grade-c {
+            background: var(--surface-3);
+            color: var(--text-secondary);
+        }
+
+        .grade-f {
+            background: var(--accent-50);
+            color: var(--accent);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   STUDENT EXPERIENCE
+════════════════════════════════════════════════════════════ */
+        #student {
+            padding: 100px 0;
+            background: linear-gradient(160deg, var(--primary-dark) 0%, #1a2a4a 50%, var(--primary-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-bg-dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, .04) 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
+        }
+
+        .student-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .student-header {
+            max-width: 580px;
+            margin-bottom: 56px;
+        }
+
+        .student-header .section-label {
+            background: rgba(191, 155, 48, .15);
+            color: var(--secondary-light);
+            border-color: rgba(191, 155, 48, .3);
+        }
+
+        .student-header .section-title {
+            color: #fff;
+        }
+
+        .student-header .section-sub {
+            color: rgba(255, 255, 255, .65);
+        }
+
+        .student-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        /* Student portal mockup */
+        .student-portal {
+            background: var(--surface);
+            border-radius: var(--r-2xl);
+            overflow: hidden;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, .4);
+        }
+
+        .sp-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 20px 22px;
+        }
+
+        .sp-hd-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sp-hd-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .sp-hd-sem {
+            font-size: 10px;
+            color: rgba(255, 255, 255, .7);
+            background: rgba(255, 255, 255, .15);
+            padding: 3px 10px;
+            border-radius: var(--r-full);
+        }
+
+        .sp-gpa-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sp-gpa {
+            font-family: var(--font-display);
+            font-size: 34px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .sp-gpa-label {
+            font-size: 9px;
+            color: rgba(255, 255, 255, .7);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+        }
+
+        .sp-gpa-change {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--secondary-light);
+            margin-top: 4px;
+        }
+
+        .sp-progress-section {
+            padding: 16px 22px;
+        }
+
+        .sp-prog-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .sp-prog-bar {
+            height: 7px;
+            background: var(--surface-3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .sp-prog-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--secondary-light));
+        }
+
+        .sp-courses {
+            padding: 0 22px 18px;
+        }
+
+        .sp-course-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sp-course-row:last-child {
+            border-bottom: none;
+        }
+
+        .sp-course-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .sp-course-units {
+            font-size: 9.5px;
+            color: var(--text-tertiary);
+            margin-top: 1px;
+        }
+
+        .sp-course-score {
+            text-align: right;
+        }
+
+        .sp-course-grade {
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .sp-course-score-num {
+            font-size: 9.5px;
+            color: var(--text-tertiary);
+        }
+
+        /* Student features list */
+        .student-features {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sf-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: var(--r-lg);
+            transition: .25s;
+        }
+
+        .sf-item:hover {
+            background: rgba(255, 255, 255, .07);
+            border-color: rgba(255, 255, 255, .12);
+        }
+
+        .sf-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+
+        .sf-icon.blue {
+            background: rgba(139, 158, 199, .18);
+            color: #a9bcdd;
+        }
+
+        .sf-icon.green {
+            background: rgba(191, 155, 48, .18);
+            color: var(--secondary-light);
+        }
+
+        .sf-icon.amber {
+            background: rgba(166, 61, 61, .18);
+            color: var(--accent-on-dark);
+        }
+
+        .sf-icon.violet {
+            background: rgba(255, 255, 255, .1);
+            color: #d8dbe4;
+        }
+
+        .sf-title {
+            font-size: var(--font-base);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .sf-desc {
+            font-size: var(--font-sm);
+            color: rgba(255, 255, 255, .6);
+            line-height: 1.65;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   PRODUCT SHOWCASE
+════════════════════════════════════════════════════════════ */
+        #showcase {
+            padding: 100px 0;
+            background: var(--bg);
+        }
+
+        .showcase-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+
+        .showcase-tabs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 36px;
+            flex-wrap: wrap;
+        }
+
+        .showcase-tab {
+            padding: 9px 20px;
+            border-radius: var(--r-full);
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .showcase-tab.active,
+        .showcase-tab:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 3px 10px rgba(27, 42, 74, .25);
+        }
+
+        .showcase-screen {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-2xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-2xl);
+        }
+
+        /* Analytics screen */
+        .sc-topbar {
+            background: var(--primary-dark);
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sc-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .sc-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .sc-dot.r {
+            background: var(--accent);
+        }
+
+        .sc-dot.y {
+            background: var(--secondary);
+        }
+
+        .sc-dot.g {
+            background: #6b8f6b;
+        }
+
+        .sc-main-area {
+            display: flex;
+            min-height: 400px;
+        }
+
+        .sc-sidebar {
+            width: 150px;
+            background: var(--primary-dark);
+            flex-shrink: 0;
+            padding: 14px 0;
+        }
+
+        .sc-sb-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, .45);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .sc-sb-item.active {
+            color: var(--accent-on-dark);
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .sc-content {
+            flex: 1;
+            padding: 20px;
+            background: var(--surface-2);
+        }
+
+        .sc-section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .sc-kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .sc-kpi {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 13px 14px;
+        }
+
+        .sc-kpi-val {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .sc-kpi-lbl {
+            font-size: 9.5px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+
+        .sc-kpi-trend {
+            font-size: 9px;
+            font-weight: 600;
+            color: #8a6f1e;
+            margin-top: 2px;
+        }
+
+        .sc-grid-2 {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 14px;
+        }
+
+        /* Fake chart */
+        .sc-chart-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 14px;
+        }
+
+        .sc-chart-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .sc-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            height: 80px;
+        }
+
+        .sc-bar {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            background: linear-gradient(180deg, var(--primary-light), var(--primary));
+            opacity: .8;
+            transition: opacity .2s;
+        }
+
+        .sc-bar:hover {
+            opacity: 1;
+        }
+
+        .sc-bar-labels {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .sc-bar-lbl {
+            flex: 1;
+            text-align: center;
+            font-size: 8px;
+            color: var(--text-tertiary);
+        }
+
+        /* Dept distribution */
+        .sc-dist {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 14px;
+        }
+
+        .sc-dist-row {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 8px;
+        }
+
+        .sc-dist-label {
+            font-size: 9.5px;
+            color: var(--text-secondary);
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .sc-dist-bar-wrap {
+            flex: 1;
+            height: 8px;
+            background: var(--surface-3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .sc-dist-bar {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--primary);
+        }
+
+        .sc-dist-pct {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            width: 30px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   CORE FEATURES GRID
+════════════════════════════════════════════════════════════ */
+        #features-grid {
+            padding: 100px 0;
+            background: var(--surface);
+        }
+
+        .fg-header {
+            text-align: center;
+            max-width: 580px;
+            margin: 0 auto 60px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border-radius: var(--r-2xl);
+            overflow: hidden;
+        }
+
+        .feature-tile {
+            background: var(--surface);
+            padding: 30px;
+            transition: background var(--dur) var(--ease);
+            position: relative;
+        }
+
+        .feature-tile:hover {
+            background: var(--primary-50);
+        }
+
+        .feature-tile-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 14px;
+            transition: transform var(--dur) var(--ease);
+        }
+
+        .feature-tile:hover .feature-tile-icon {
+            transform: scale(1.08);
+        }
+
+        .feature-tile-icon.blue {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .feature-tile-icon.green {
+            background: var(--secondary-50);
+            color: #8a6f1e;
+        }
+
+        .feature-tile-icon.amber {
+            background: var(--accent-50);
+            color: var(--accent);
+        }
+
+        .feature-tile-icon.violet {
+            background: var(--surface-3);
+            color: var(--text-secondary);
+        }
+
+        .feature-tile-title {
+            font-size: var(--font-base);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 7px;
+        }
+
+        .feature-tile-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   SECURITY SECTION
+════════════════════════════════════════════════════════════ */
+        #security {
+            padding: 100px 0;
+            background: var(--primary-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .security-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(191, 155, 48, .12) 0%, transparent 70%);
+        }
+
+        .security-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .security-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .security-left .section-label {
+            background: rgba(255, 255, 255, .1);
+            color: var(--accent-on-dark);
+            border-color: rgba(255, 255, 255, .18);
+        }
+
+        .security-left .section-title {
+            color: #fff;
+        }
+
+        .security-left .section-sub {
+            color: rgba(255, 255, 255, .65);
+        }
+
+        .security-points {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .sec-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: var(--r-lg);
+            transition: .25s;
+        }
+
+        .sec-point:hover {
+            background: rgba(255, 255, 255, .07);
+            border-color: rgba(191, 155, 48, .3);
+        }
+
+        .sec-pt-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, .1);
+            color: var(--secondary-light);
+        }
+
+        .sec-pt-title {
+            font-size: var(--font-sm);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+
+        .sec-pt-desc {
+            font-size: var(--font-xs);
+            color: rgba(255, 255, 255, .55);
+            line-height: 1.6;
+        }
+
+        /* Security visual */
+        .security-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sv-card {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: var(--r-xl);
+            padding: 20px;
+        }
+
+        .sv-card-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .7);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            margin-bottom: 12px;
+        }
+
+        .sv-shield {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .sv-shield-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(191, 155, 48, .15);
+            border: 2px solid rgba(191, 155, 48, .4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 0 30px rgba(191, 155, 48, .18);
+            animation: secPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes secPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(191, 155, 48, .18)
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(191, 155, 48, .32)
+            }
+        }
+
+        .sv-certs {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .sv-cert {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: var(--r-md);
+        }
+
+        .sv-cert-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--secondary-light);
+            flex-shrink: 0;
+        }
+
+        .sv-cert-label {
+            font-size: var(--font-xs);
+            color: rgba(255, 255, 255, .7);
+            font-weight: 500;
+        }
+
+        .sv-cert-status {
+            margin-left: auto;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--secondary-light);
+            background: rgba(191, 155, 48, .15);
+            padding: 2px 8px;
+            border-radius: var(--r-full);
+        }
+
+        .sv-uptime {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            margin-top: 10px;
+        }
+
+        .sv-uptime-val {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--secondary-light);
+        }
+
+        .sv-uptime-label {
+            font-size: 9.5px;
+            color: rgba(255, 255, 255, .5);
+        }
+
+        .sv-uptime-bars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .sv-uptime-bar {
+            width: 6px;
+            height: 20px;
+            background: var(--secondary-light);
+            border-radius: 2px;
+            opacity: .7;
+        }
+
+        .sv-uptime-bar:nth-child(3n) {
+            height: 14px;
+            opacity: .3;
+        }
+
+        .sv-uptime-bar:nth-child(5n) {
+            height: 10px;
+            opacity: .15;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   FAQ
+════════════════════════════════════════════════════════════ */
+        #faq {
+            padding: 100px 0;
+            background: var(--bg);
+        }
+
+        .faq-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .faq-left {
+            position: sticky;
+            top: 100px;
+        }
+
+        .faq-left .section-sub {
+            margin-top: 12px;
+            margin-bottom: 28px;
+            max-width: 340px;
+        }
+
+        .faq-contact {
+            background: var(--primary-50);
+            border: 1.5px solid var(--primary-100);
+            border-radius: var(--r-xl);
+            padding: 24px;
+        }
+
+        .faq-contact-title {
+            font-size: var(--font-base);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .faq-contact-sub {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            transition: border-color var(--dur);
+        }
+
+        .faq-item.open {
+            border-color: var(--primary-100);
+        }
+
+        .faq-q {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 22px;
+            cursor: pointer;
+            gap: 16px;
+            user-select: none;
+            transition: background 0.2s var(--ease);
+        }
+
+        .faq-q:hover {
+            background: var(--surface-2);
+        }
+
+        .faq-q:focus-visible {
+            outline: 2px solid var(--primary-light);
+            outline-offset: -2px;
+        }
+
+        .faq-q-text {
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .faq-q-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--surface-3);
+            border: 1.5px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: .25s;
+        }
+
+        .faq-item.open .faq-q-icon {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            transform: rotate(45deg);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s cubic-bezier(.4, 0, .2, 1), padding .25s;
+            padding: 0 22px;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 300px;
+            padding: 0 22px 20px;
+        }
+
+        .faq-a p {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.75;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   FINAL CTA
+════════════════════════════════════════════════════════════ */
+        #cta-final {
+            padding: 100px 0;
+            background: linear-gradient(155deg, var(--primary-dark) 0%, var(--primary) 50%, #23355c 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .cta-final-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(191, 155, 48, .12) 0%, transparent 60%);
+        }
+
+        .cta-final-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .cta-final-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.9rem, 4.2vw, var(--font-5xl));
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -.02em;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .cta-final-sub {
+            font-size: var(--font-xl);
+            color: rgba(255, 255, 255, .72);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .cta-final-btns {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .cta-final-trust {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .cta-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: var(--font-sm);
+            color: rgba(255, 255, 255, .65);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════════════════ */
+        footer {
+            background: var(--primary-dark);
+            padding: 56px 0 28px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand .nav-logo {
+            color: var(--text-inverse);
+            margin-bottom: 14px;
+        }
+
+        .footer-desc {
+            font-size: var(--font-sm);
+            color: rgba(255, 255, 255, .45);
+            line-height: 1.7;
+            margin-bottom: 22px;
+            max-width: 280px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 9px;
+        }
+
+        .footer-soc {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, .5);
+            transition: .2s;
+        }
+
+        .footer-soc:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .footer-col h5 {
+            font-family: var(--font-body);
+            font-size: var(--font-xs);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: rgba(255, 255, 255, .6);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-col ul li a {
+            position: relative;
+            font-size: var(--font-sm);
+            color: rgba(255, 255, 255, .4);
+            transition: color var(--dur);
+        }
+
+        .footer-col ul li a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.2s var(--ease);
+        }
+
+        .footer-col ul li a:hover,
+        .footer-col ul li a:focus-visible {
+            color: var(--text-inverse);
+        }
+
+        .footer-col ul li a:hover::after,
+        .footer-col ul li a:focus-visible::after {
+            transform: scaleX(1);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-copy {
+            font-size: var(--font-xs);
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-size: var(--font-xs);
+            color: rgba(255, 255, 255, .3);
+            transition: color var(--dur);
+        }
+
+        .footer-links a:hover {
+            color: rgba(255, 255, 255, .7);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   REVEAL ANIMATION CLASSES
+════════════════════════════════════════════════════════════ */
+        .rt-reveal {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        .rt-reveal-l {
+            opacity: 0;
+            transform: translateX(-24px);
+        }
+
+        .rt-reveal-r {
+            opacity: 0;
+            transform: translateX(24px);
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   RESULTTRACK — RESPONSIVE LAYER
+   Mobile-first fixes, expressed as max-width overrides since the
+   base file is written desktop-first.
+   Breakpoints: 1280 / 1024 / 768 / 480 / 375
+════════════════════════════════════════════════════════════ */
+        html,
+        body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+
+        img,
+        svg,
+        video {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+        }
+        
+
+        /* 1. NAVIGATION */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-hamburger {
+                display: flex;
+            }
+
+            .nav-signin {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .nav-logo span,
+            .nav-logo {
+                font-size: 1rem;
+            }
+
+            .nav-logo-mark,
+            .loader-logo-icon {
+                width: 30px;
+                height: 30px;
+            }
+
+            .nav-login {
+                padding: 7px 14px;
+                font-size: var(--font-xs);
+            }
+        }
+
+        /* 2. HERO */
+        @media (max-width: 1024px) {
+            #hero {
+                padding-top: 100px;
+                min-height: auto;
+                overflow: visible;
+                align-items: flex-start;
+            }
+
+            .hero-inner {
+                padding: 40px 0 60px;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .hero-left {
+                max-width: 100%;
+                text-align: center;
+                margin: 0 auto;
+            }
+
+            .hero-p {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-btns {
+                justify-content: center;
+                
+            }
+
+            .hero-social-proof {
+                justify-content: center;
+            }
+
+            .hero-right {
+                height: auto;
+                max-width: 430px;
+                margin: 0 auto;
+                padding-bottom: 40px;
+            }
+
+            .hero-dash-main {
+                position: relative;
+                inset: auto;
+                width: 100%;
+                right: auto;
+                padding-bottom: 40px;
+            }
+
+            .hero-float-student {
+                position: relative;
+                left: auto;
+                bottom: auto;
+                width: 100%;
+                max-width: 320px;
+                margin: -30px auto 0;
+                animation: none;
+            }
+
+            .hero-float-stat {
+                position: relative;
+                top: auto !important;
+                right: auto;
+                width: fit-content;
+                margin: 10px auto 0;
+                animation: none;
+            }
+        }
+
+        @media (max-width: 430px) {
+            #hero {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-h1 {
+                margin-bottom: 16px;
+            }
+
+            .hero-p {
+                font-size: var(--font-base);
+                margin-bottom: 28px;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-btns .btn {
+                width: auto;
+                max-width: 220px;
+                justify-content: center;
+            }
+
+            .hero-right {
+                padding-bottom: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dash-body {
+                height: auto;
+                min-height: 260px;
+                flex-direction: column;
+            }
+
+            .dash-sidebar {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                padding: 8px 6px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .dash-nav-item {
+                flex-shrink: 0;
+                border-right: none;
+            }
+
+            .dash-nav-item.active {
+                border-right: none;
+                border-bottom: 2px solid var(--primary);
+            }
+
+            .dash-stats-row {
+                flex-wrap: wrap;
+            }
+
+            .dash-stat {
+                min-width: 90px;
+            }
+        }
+
+        /* ── FIX 1: Hero content overflowing right on small screens ── */
+* {
+    box-sizing: border-box;
+}
+
+.hero-content,
+.hero-left,
+.hero-right,
+.hero-social-proof,
+.hero-btns {
+    min-width: 0;
+}
+
+@media (max-width: 380px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    .hero-h1 {
+        font-size: clamp(1.4rem, 7vw, 2rem);
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    .hero-p {
+        font-size: 0.9rem;
+        padding: 0 4px;
+    }
+
+    .hero-social-proof {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+/* ── FIX 2: Mobile nav "Log In to ResultTrack" button ── */
+@media (max-width: 1024px) {
+
+    /* Force visible, centered, wider button no matter what the
+       base .btn-primary rule is doing (transparent text,
+       background-clip: text leak, missing z-index on a
+       pseudo-element, etc.) */
+    a.btn.btn-primary {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 340px;
+        margin: 16px auto 0;
+        padding: 12px 20px;
+        position: relative;
+        z-index: 5;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important; /* undoes background-clip:text if that's the culprit */
+        background-clip: padding-box !important;
+        overflow: visible;
+    }
+
+    a.btn.btn-primary * {
+        color: inherit !important;
+        -webkit-text-fill-color: inherit !important;
+    }
+
+    a.btn.btn-primary::before,
+    a.btn.btn-primary::after {
+        z-index: -1; /* pushes any decorative pseudo-element behind the text */
+    }
+}
+
+        /* 3. TRUST / STATS BAND */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                row-gap: 32px;
+            }
+
+            .stats-logos {
+                gap: 20px;
+                margin-top: 32px;
+                padding-top: 32px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 4. WHY RESULTTRACK */
+        @media (max-width: 1024px) {
+            .why-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .why-header {
+                text-align: center;
+                margin: 0 auto 40px;
+            }
+
+            .section-sub {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 5. LECTURER */
+        @media (max-width: 768px) {
+            .before-after {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .lec-dash-body {
+                height: auto;
+                min-height: 320px;
+                flex-direction: column;
+            }
+
+            .lec-sb {
+                width: 100%;
+                padding: 12px 0;
+            }
+
+            .lec-sb-brand {
+                padding: 0 14px 12px;
+            }
+
+            .lec-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .lec-result-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lec-cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .lec-content {
+                padding: 12px;
+            }
+        }
+
+        /* 6. STUDENT */
+        @media (max-width: 1024px) {
+            .student-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .student-portal {
+                max-width: 420px;
+                margin: 0 auto;
+            }
+
+            .student-header {
+                max-width: 100%;
+                text-align: center;
+                margin: 0 auto 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sp-gpa-row {
+                gap: 12px;
+            }
+
+            .sp-gpa {
+                font-size: 28px;
+            }
+        }
+
+        /* 7. SHOWCASE */
+        @media (max-width: 1024px) {
+            .sc-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sc-main-area {
+                flex-direction: column;
+                min-height: 0;
+            }
+
+            .sc-sidebar {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                padding: 10px 6px;
+            }
+
+            .sc-sb-item {
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+
+            .sc-kpi-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .showcase-tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sc-kpi-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .sc-content {
+                padding: 14px;
+            }
+        }
+
+        /* 8. FEATURES GRID */
+        @media (max-width: 1024px) {
+            .features-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-list {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-tile {
+                padding: 22px;
+            }
+        }
+
+        /* 9. SECURITY */
+        @media (max-width: 1024px) {
+            .security-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .security-visual {
+                max-width: 460px;
+                margin: 0 auto;
+            }
+        }
+
+        /* 10. FAQ */
+        @media (max-width: 1024px) {
+            .faq-layout {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .faq-left {
+                position: static;
+                text-align: center;
+            }
+
+            .faq-left .section-sub {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .faq-contact {
+                max-width: 460px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .faq-q {
+                padding: 16px 18px;
+            }
+
+            .faq-a {
+                padding: 0 18px;
+            }
+
+            .faq-item.open .faq-a {
+                padding: 0 18px 16px;
+            }
+        }
+
+        /* 11. FINAL CTA */
+        @media (max-width: 480px) {
+            .cta-final-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-final-btns .btn {
+                width: auto;
+                max-width: 220px;
+                justify-content: center;
+            }
+
+            .cta-final-trust {
+                gap: 16px;
+            }
+        }
+
+        /* 12. FOOTER */
+        @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                row-gap: 32px;
+            }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+
+            .footer-desc {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: left;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-links {
+                gap: 14px;
+                flex-wrap: wrap;
+            }
+        }
+
+        /* 13. TYPOGRAPHY / BUTTON FLOORS */
+        @media (max-width: 375px) {
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .btn-xl {
+                padding: 14px 26px;
+                font-size: var(--font-base);
+            }
+
+            .btn-lg {
+                padding: 12px 22px;
+            }
+        }
+
+        /* 14. TEXT REFINEMENT */
+        @media (max-width: 480px) {
+            .dash-tb-title {
+                max-width: 140px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .lec-content-hd {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .lec-content-title {
+                max-width: 100%;
+                white-space: normal;
+                line-height: 1.4;
+            }
+
+            .lec-upload-btn {
+                align-self: flex-start;
+            }
+
+            .sp-hd-top {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .sc-section-title {
+                font-size: 12px;
+                line-height: 1.4;
+            }
+
+            .hero-p,
+            .section-sub {
+                font-size: 0.9375rem;
+                line-height: 1.65;
+            }
+
+            .hero-badge {
+                font-size: 0.7rem;
+                text-align: center;
+            }
+
+            .hero-social-proof {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .hero-sp-text {
+                max-width: 280px;
+            }
+
+            .cta-final-sub {
+                font-size: var(--font-base);
+            }
+
+            .cta-final-trust {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+
+        /* 15. LINK / FOCUS STATES */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 4px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 1px;
+            transform: scaleX(0);
+            transform-origin: left;
+            opacity: 0;
+            transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+        }
+
+        .nav-link:hover::after,
+        .nav-link:focus-visible::after,
+        .nav-link.is-active::after {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+
+        .nav-link.is-active {
+            color: #fff;
+        }
+
+        #navbar.scrolled .nav-link.is-active {
+            color: var(--primary);
+        }
+
+        .nav-link:focus-visible,
+        .nav-signin:focus-visible,
+        .nav-login:focus-visible,
+        .footer-soc:focus-visible,
+        .btn:focus-visible,
+        .showcase-tab:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        #navbar.scrolled .nav-link:focus-visible {
+            outline-color: var(--primary);
+        }
+
+        .nav-mobile a {
+            transition: color 0.2s var(--ease), padding-left 0.2s var(--ease);
+        }
+
+        .nav-mobile a:hover,
+        .nav-mobile a:focus-visible {
+            color: var(--primary);
+            padding-left: 6px;
+        }
+
+        .nav-mobile a:active {
+            color: var(--primary-dark);
+        }
+
+        .nav-mobile-close {
+            transition: background 0.2s var(--ease), color 0.2s var(--ease);
+        }
+
+        .nav-mobile-close:hover {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .nav-login {
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: #fff;
+            background: var(--primary);
+            padding: 8px 18px;
+            border-radius: var(--r-md);
+            transition: all var(--dur);
+            box-shadow: 0 2px 8px rgba(27, 42, 74, .3);
+        }
+
+        .nav-login:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(27, 42, 74, .35);
+        }
+
+        .nav-login:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(27, 42, 74, .3);
+        }
+        /* When the mobile menu is open, force the logo text to a color that's
+   visible against whatever background the open nav/overlay uses */
+#navbar.menu-open .wm-result,
+#navbar.menu-open .wm-track,
+.nav-mobile.open ~ #navbar .wm-result,
+.nav-mobile.open ~ #navbar .wm-track {
+    color: var(--text-primary, #111111) !important;
+    -webkit-text-fill-color: var(--text-primary, #111111) !important;
+    background: none !important;
+}
+        
+    </style>
+</head>
+
+<body>
+
+    <!-- ════════════════════════════════════════
+       PAGE LOADER
+  ════════════════════════════════════════ -->
+    <div id="page-loader" role="status" aria-label="Loading ResultTrack">
+        <div class="loader-logo">
+            <span class="wm-result">Result</span><span class="wm-track">Track</span>
+        </div>
+        <div class="loader-bar-track">
+            <div class="loader-bar-fill" id="loaderBarFill"></div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════ -->
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="#" class="nav-logo" aria-label="ResultTrack Home">
+                    <div class="nav-logo-mark" aria-hidden="true">
+                        <i data-lucide="bar-chart-3" style="width:16px;height:16px;stroke-width:2.5"></i>
+                    </div>
+                    <span class="wm-result">Result</span><span class="wm-track">Track</span>
+                </a>
+                <ul class="nav-links" role="list">
+                    <li><a href="#hero" class="nav-link">Home</a></li>
+                    <li><a href="#why" class="nav-link">Features</a></li>
+                    <li><a href="#lecturer" class="nav-link">For Lecturers</a></li>
+                    <li><a href="#student" class="nav-link">For Students</a></li>
+                    <li><a href="#security" class="nav-link">Security</a></li>
+                    <li><a href="#faq" class="nav-link">FAQ</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="#login" class="nav-login">Log In</a>
+                </div>
+                <div class="nav-hamburger" id="navHamburger" aria-label="Open menu" role="button" tabindex="0">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile nav -->
+    <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+        <button class="nav-mobile-close" id="navMobileClose" aria-label="Close menu">✕</button>
+        <a href="#hero" onclick="closeMobNav()">Home</a>
+        <a href="#why" onclick="closeMobNav()">Features</a>
+        <a href="#lecturer" onclick="closeMobNav()">For Lecturers</a>
+        <a href="#student" onclick="closeMobNav()">For Students</a>
+        <a href="#security" onclick="closeMobNav()">Security</a>
+        <a href="#faq" onclick="closeMobNav()">FAQ</a>
+        <div class="mob-btns">
+            <a href="#login" onclick="closeMobNav()" class="btn btn-primary">Log In to ResultTrack</a>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════ -->
+    <section id="hero" aria-label="Hero section">
+        <div class="hero-bg-grid" aria-hidden="true"></div>
+        <div class="hero-bg-orb hero-orb-1" aria-hidden="true"></div>
+        <div class="hero-bg-orb hero-orb-2" aria-hidden="true"></div>
+
+        <div class="container hero-inner">
+            <div class="hero-content">
+                <!-- Left: Copy -->
+                <div class="hero-left" id="heroLeft">
+                    <div class="hero-badge" aria-hidden="true">
+                        <div class="hero-badge-dot"></div>
+                        Built for exam and records offices
+                    </div>
+                    <h1 class="hero-h1">
+                        One place to enter, check, and
+                        <span class="hero-h1-hl">release results</span>
+                    </h1>
+                    <p class="hero-p">
+                        ResultTrack replaces spreadsheets and email attachments with one workflow: lecturers enter CA
+                        and exam
+                        scores, the system computes the grade, and students see it the moment it's approved — with a
+                        clear way
+                        to flag a discrepancy if something looks wrong.
+                    </p>
+                    <div class="hero-btns">
+                        <a href="#login" class="btn btn-white btn-lg">Log In</a>
+                        <a href="#why" class="btn btn-ghost-white btn-lg">See how it works</a>
+                    </div>
+                    <div class="hero-social-proof">
+                        <div class="hero-avatars" aria-hidden="true">
+                            <div class="hero-av">AO</div>
+                            <div class="hero-av">BK</div>
+                            <div class="hero-av">CS</div>
+                            <div class="hero-av">DM</div>
+                        </div>
+                        <span class="hero-sp-text">Piloted with lecturers and students in a real department result
+                            cycle</span>
+                    </div>
+                </div>
+
+                <!-- Right: Dashboard mockup -->
+                <div class="hero-right" id="heroRight" aria-hidden="true">
+                    <!-- Lecturer dashboard -->
+                    <div class="hero-dash-main" id="heroDashMain">
+                        <div class="dash-topbar">
+                            <div class="dash-tb-left">
+                                <div class="dash-tb-logo">RT</div>
+                                <span class="dash-tb-title">Lecturer Portal — ResultTrack</span>
+                            </div>
+                            <div class="dash-tb-right">
+                                <div class="dash-tb-notif"><i data-lucide="bell" style="width:11px;height:11px"></i>
+                                </div>
+                                <div class="dash-tb-av">AO</div>
+                            </div>
+                        </div>
+                        <div class="dash-body">
+                            <div class="dash-sidebar">
+                                <div class="dash-nav-item active"><i data-lucide="layout-dashboard"
+                                        style="width:10px;height:10px"></i>
+                                    Dashboard</div>
+                                <div class="dash-nav-item"><i data-lucide="book-open"
+                                        style="width:10px;height:10px"></i> Courses
+                                </div>
+                                <div class="dash-nav-item"><i data-lucide="upload" style="width:10px;height:10px"></i>
+                                    Upload</div>
+                                <div class="dash-nav-item"><i data-lucide="users" style="width:10px;height:10px"></i>
+                                    Students</div>
+                                <div class="dash-nav-item"><i data-lucide="bar-chart-2"
+                                        style="width:10px;height:10px"></i> Reports
+                                </div>
+                                <div class="dash-nav-item"><i data-lucide="settings" style="width:10px;height:10px"></i>
+                                    Settings
+                                </div>
+                            </div>
+                            <div class="dash-main">
+                                <div class="dash-main-title">
+                                    <i data-lucide="clipboard-list"
+                                        style="width:14px;height:14px;color:var(--primary)"></i>
+                                    Result Submission — 2024/2025 Semester 1
+                                </div>
+                                <div class="dash-stats-row">
+                                    <div class="dash-stat blue">
+                                        <div class="dash-stat-val">4</div>
+                                        <div class="dash-stat-lbl">Courses</div>
+                                    </div>
+                                    <div class="dash-stat green">
+                                        <div class="dash-stat-val">3</div>
+                                        <div class="dash-stat-lbl">Submitted</div>
+                                    </div>
+                                    <div class="dash-stat amber">
+                                        <div class="dash-stat-val">1</div>
+                                        <div class="dash-stat-lbl">Pending</div>
+                                    </div>
+                                </div>
+                                <table class="dash-table">
+                                    <thead class="dash-table-head">
+                                        <tr>
+                                            <th>Course</th>
+                                            <th>Students</th>
+                                            <th>Submitted</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>CSC 301</td>
+                                            <td>120</td>
+                                            <td>120</td>
+                                            <td><span class="status-chip submitted">✓ Submitted</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CSC 303</td>
+                                            <td>98</td>
+                                            <td>98</td>
+                                            <td><span class="status-chip reviewed">Reviewed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CSC 305</td>
+                                            <td>87</td>
+                                            <td>87</td>
+                                            <td><span class="status-chip submitted">✓ Submitted</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CSC 307</td>
+                                            <td>105</td>
+                                            <td>0</td>
+                                            <td><span class="status-chip pending">⏳ Pending</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating student result card -->
+                    <div class="hero-float-student" id="heroFloatStudent">
+                        <div class="hfs-header">
+                            <div class="hfs-av">AM</div>
+                            <div>
+                                <div class="hfs-name">Amaka Okafor</div>
+                                <div class="hfs-dept">Computer Science · 300L</div>
+                            </div>
+                            <div class="verified-stamp sm" style="margin-left:auto" aria-hidden="true">Verified</div>
+                        </div>
+                        <div class="hfs-gpa-row">
+                            <span class="hfs-gpa-label">Current GPA</span>
+                            <span class="hfs-gpa-val">4.21</span>
+                        </div>
+                        <div class="hfs-progress-track">
+                            <div class="hfs-progress-fill"></div>
+                        </div>
+                        <div class="hfs-courses">
+                            <div class="hfs-course"><span class="hfs-course-name">CSC 301</span><span
+                                    class="hfs-course-grade">A</span>
+                            </div>
+                            <div class="hfs-course"><span class="hfs-course-name">CSC 303</span><span
+                                    class="hfs-course-grade">B+</span>
+                            </div>
+                            <div class="hfs-course"><span class="hfs-course-name">CSC 305</span><span
+                                    class="hfs-course-grade">A</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       STATS BAND
+  ════════════════════════════════════════ -->
+    <section id="stats-band" aria-label="Platform statistics">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item rt-reveal">
+                    <span class="stat-num"><span data-count="4">0</span></span>
+                    <div class="stat-lbl">Core workflows in the MVP</div>
+                </div>
+                <div class="stat-item rt-reveal" style="transition-delay:.08s">
+                    <span class="stat-num"><span data-count="30">0</span>:<span data-count="70">0</span></span>
+                    <div class="stat-lbl">CA-to-exam grading weight</div>
+                </div>
+                <div class="stat-item rt-reveal" style="transition-delay:.16s">
+                    <span class="stat-num"><span data-count="1">0</span></span>
+                    <div class="stat-lbl">Grading engine, one source of truth</div>
+                </div>
+                <div class="stat-item rt-reveal" style="transition-delay:.24s">
+                    <span class="stat-num"><span data-count="0">0</span></span>
+                    <div class="stat-lbl">Spreadsheets emailed between offices</div>
+                </div>
+            </div>
+            <div class="stats-logos rt-reveal">
+                <span class="stats-logos-label">Built for Nigerian higher education</span>
+                <div class="institution-badge">
+                    <i data-lucide="graduation-cap"></i>
+                    <span>Universities</span>
+                </div>
+                <div class="institution-badge">
+                    <i data-lucide="building-2"></i>
+                    <span>Polytechnics</span>
+                </div>
+                <div class="institution-badge">
+                    <i data-lucide="book-open"></i>
+                    <span>Colleges of Education</span>
+                </div>
+                <div class="institution-badge">
+                    <i data-lucide="users"></i>
+                    <span>Faculties &amp; Departments</span>
+                </div>
+                <div class="institution-badge">
+                    <i data-lucide="clipboard-check"></i>
+                    <span>Examination Offices</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       WHY RESULTTRACK
+  ════════════════════════════════════════ -->
+    <section id="why" aria-label="Why ResultTrack">
+        <div class="container">
+            <div class="why-header">
+                <div class="section-label" aria-hidden="true"><i data-lucide="sparkles"
+                        style="width:12px;height:12px"></i>
+                    What ResultTrack Does</div>
+                <h2 class="section-title rt-reveal">Four workflows, one grading engine</h2>
+                <p class="section-sub rt-reveal mt-4">Every result in ResultTrack passes through the same grading engine
+                    —
+                    so a score means the same thing whether a lecturer just typed it in or a student is viewing it a
+                    year
+                    later.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card rt-reveal" style="transition-delay:.05s">
+                    <div class="why-icon blue"><i data-lucide="upload-cloud" style="width:22px;height:22px"></i></div>
+                    <h3 class="why-title">Score Entry</h3>
+                    <p class="why-desc">Lecturers enter CA and exam scores per student, per course. Out-of-range values
+                        are
+                        caught before they're saved, not after.</p>
+                </div>
+                <div class="why-card rt-reveal" style="transition-delay:.1s">
+                    <div class="why-icon amber"><i data-lucide="calculator" style="width:22px;height:22px"></i></div>
+                    <h3 class="why-title">Automatic Grading</h3>
+                    <p class="why-desc">A single <code>computeResult()</code> function applies the 30:70 CA-to-exam
+                        weighting
+                        and the grading scale consistently, every time.</p>
+                </div>
+                <div class="why-card rt-reveal" style="transition-delay:.15s">
+                    <div class="why-icon green"><i data-lucide="eye" style="width:22px;height:22px"></i></div>
+                    <h3 class="why-title">Student Result View</h3>
+                    <p class="why-desc">Students see their CA score, exam score, and final grade as soon as it's
+                        approved —
+                        no waiting on a noticeboard.</p>
+                </div>
+                <div class="why-card rt-reveal" style="transition-delay:.2s">
+                    <div class="why-icon blue"><i data-lucide="flag" style="width:22px;height:22px"></i></div>
+                    <h3 class="why-title">Discrepancy Flagging</h3>
+                    <p class="why-desc">If a result looks wrong, a student can flag it directly. The lecturer sees
+                        exactly
+                        which entry is in question and resolves it in place.</p>
+                </div>
+                <div class="why-card rt-reveal" style="transition-delay:.25s">
+                    <div class="why-icon amber"><i data-lucide="settings-2" style="width:22px;height:22px"></i></div>
+                    <h3 class="why-title">One Grading Policy</h3>
+                    <p class="why-desc">The grading scale, weighting, and pass marks live in a single configuration
+                        object —
+                        change it once, and it applies everywhere consistently.</p>
+                </div>
+                <div class="why-card rt-reveal" style="transition-delay:.3s">
+                    <div class="why-icon green"><i data-lucide="plug" style="width:22px;height:22px"></i></div>
+                    <h3 class="why-title">Built to Connect to a Backend</h3>
+                    <p class="why-desc">Every data operation runs through an async request wrapper, so swapping in a
+                        real
+                        backend later doesn't mean rewriting the front end.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       LECTURER EXPERIENCE
+  ════════════════════════════════════════ -->
+    <section id="lecturer" aria-label="Lecturer experience">
+        <div class="container">
+            <div class="why-header">
+                <div class="section-label" aria-hidden="true"><i data-lucide="users" style="width:12px;height:12px"></i>
+                    For
+                    Lecturers</div>
+                <h2 class="section-title rt-reveal">Enter scores once. Nothing to reconcile later.</h2>
+                <p class="section-sub rt-reveal mt-4">Lecturers are usually the ones stuck reconciling result sheets
+                    across
+                    email threads. ResultTrack gives them one entry point and one submission status they can trust.</p>
+            </div>
+
+            <div class="before-after">
+                <div class="ba-card before rt-reveal-l">
+                    <div class="ba-label">Without ResultTrack</div>
+                    <h3 class="ba-title">Spreadsheets, email, and guesswork</h3>
+                    <div class="ba-items">
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✕</div>
+                            <div class="ba-item-text">Result sheets emailed back and forth between department and
+                                registry</div>
+                        </div>
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✕</div>
+                            <div class="ba-item-text">No single view of which courses have been submitted and which
+                                haven't</div>
+                        </div>
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✕</div>
+                            <div class="ba-item-text">Grade computation done by hand, differently, in every spreadsheet
+                            </div>
+                        </div>
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✕</div>
+                            <div class="ba-item-text">Students emailing or calling lecturers directly to ask about a
+                                score</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ba-card after rt-reveal-r">
+                    <div class="ba-label">With ResultTrack</div>
+                    <h3 class="ba-title">One entry point, one source of truth</h3>
+                    <div class="ba-items">
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✓</div>
+                            <div class="ba-item-text">Enter CA and exam scores per course from a single dashboard</div>
+                        </div>
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✓</div>
+                            <div class="ba-item-text">Submission status is visible at a glance — submitted, reviewed, or
+                                pending</div>
+                        </div>
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✓</div>
+                            <div class="ba-item-text">The grading engine computes every grade the same way,
+                                automatically</div>
+                        </div>
+                        <div class="ba-item">
+                            <div class="ba-item-icon">✓</div>
+                            <div class="ba-item-text">Discrepancy flags arrive with the exact score in question, ready
+                                to review</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecturer dashboard big mockup -->
+            <div class="lecturer-dash-wrap rt-reveal mt-16">
+                <div class="lec-dash-bar">
+                    <div class="lec-dash-dots">
+                        <div class="lec-dash-dot r"></div>
+                        <div class="lec-dash-dot y"></div>
+                        <div class="lec-dash-dot g"></div>
+                    </div>
+                    <div class="lec-dash-url">app.resulttrack.edu.ng/lecturer/dashboard</div>
+                </div>
+                <div class="lec-dash-body">
+                    <div class="lec-sb">
+                        <div class="lec-sb-brand">
+                            <div class="lec-sb-logo">RT</div><span class="lec-sb-name">ResultTrack</span>
+                        </div>
+                        <div class="lec-sb-item active"><i data-lucide="layout-dashboard"
+                                style="width:11px;height:11px"></i>
+                            Overview</div>
+                        <div class="lec-sb-item"><i data-lucide="book-open" style="width:11px;height:11px"></i> My
+                            Courses</div>
+                        <div class="lec-sb-item"><i data-lucide="upload-cloud" style="width:11px;height:11px"></i> Enter
+                            Scores</div>
+                        <div class="lec-sb-item"><i data-lucide="users" style="width:11px;height:11px"></i> Student List
+                        </div>
+                        <div class="lec-sb-item"><i data-lucide="flag" style="width:11px;height:11px"></i> Flagged
+                            Results</div>
+                        <div class="lec-sb-item"><i data-lucide="bar-chart-2" style="width:11px;height:11px"></i>
+                            Reports
+                        </div>
+                        <div class="lec-sb-item"><i data-lucide="settings" style="width:11px;height:11px"></i> Settings
+                        </div>
+                    </div>
+                    <div class="lec-content">
+                        <div class="lec-content-hd">
+                            <span class="lec-content-title">Course Result Entry — CSC 301 · 2024/2025 Session</span>
+                            <div class="lec-upload-btn"><i data-lucide="upload" style="width:9px;height:9px"></i> Submit
+                                Results
+                            </div>
+                        </div>
+                        <div class="lec-cards">
+                            <div class="lec-card-mini">
+                                <div class="lec-cm-val">4</div>
+                                <div class="lec-cm-lbl">Assigned Courses</div>
+                                <div class="lec-cm-change">All active</div>
+                            </div>
+                            <div class="lec-card-mini">
+                                <div class="lec-cm-val">410</div>
+                                <div class="lec-cm-lbl">Enrolled Students</div>
+                                <div class="lec-cm-change">Across 4 courses</div>
+                            </div>
+                            <div class="lec-card-mini">
+                                <div class="lec-cm-val">305</div>
+                                <div class="lec-cm-lbl">Scores Entered</div>
+                                <div class="lec-cm-change">74% complete</div>
+                            </div>
+                            <div class="lec-card-mini">
+                                <div class="lec-cm-val">3/4</div>
+                                <div class="lec-cm-lbl">Courses Submitted</div>
+                                <div class="lec-cm-change">1 in progress</div>
+                            </div>
+                        </div>
+                        <table class="lec-result-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Course</th>
+                                    <th>CA Score</th>
+                                    <th>Exam</th>
+                                    <th>Total</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>19/CSC/0421</td>
+                                    <td>Amaka Okafor</td>
+                                    <td>CSC 301</td>
+                                    <td>28</td>
+                                    <td>62</td>
+                                    <td>90</td>
+                                    <td><span class="grade-chip grade-a">A</span></td>
+                                    <td><span class="status-chip submitted">✓ Saved</span></td>
+                                </tr>
+                                <tr>
+                                    <td>19/CSC/0422</td>
+                                    <td>Bayo Adeleke</td>
+                                    <td>CSC 301</td>
+                                    <td>24</td>
+                                    <td>51</td>
+                                    <td>75</td>
+                                    <td><span class="grade-chip grade-b">B</span></td>
+                                    <td><span class="status-chip submitted">✓ Saved</span></td>
+                                </tr>
+                                <tr>
+                                    <td>19/CSC/0423</td>
+                                    <td>Chidi Nwosu</td>
+                                    <td>CSC 301</td>
+                                    <td>19</td>
+                                    <td>44</td>
+                                    <td>63</td>
+                                    <td><span class="grade-chip grade-c">C</span></td>
+                                    <td><span class="status-chip submitted">✓ Saved</span></td>
+                                </tr>
+                                <tr>
+                                    <td>19/CSC/0424</td>
+                                    <td>Damilola Ojo</td>
+                                    <td>CSC 303</td>
+                                    <td>30</td>
+                                    <td>65</td>
+                                    <td>95</td>
+                                    <td><span class="grade-chip grade-a">A</span></td>
+                                    <td><span class="status-chip reviewed">Reviewed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>19/CSC/0425</td>
+                                    <td>Emeka Ihejirika</td>
+                                    <td>CSC 305</td>
+                                    <td>12</td>
+                                    <td>28</td>
+                                    <td>40</td>
+                                    <td><span class="grade-chip grade-f">F</span></td>
+                                    <td><span class="status-chip pending">⏳ Flagged</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       STUDENT EXPERIENCE
+  ════════════════════════════════════════ -->
+    <section id="student" aria-label="Student experience">
+        <div class="student-bg-dots" aria-hidden="true"></div>
+        <div class="container student-inner">
+            <div class="student-header">
+                <div class="section-label"><i data-lucide="graduation-cap" style="width:12px;height:12px"></i> For
+                    Students
+                </div>
+                <h2 class="section-title rt-reveal">See exactly what makes up your grade</h2>
+                <p class="section-sub rt-reveal mt-4">No more guessing at a final letter grade. Students see the CA
+                    score,
+                    the exam score, and the computed total — the same numbers the lecturer entered.</p>
+            </div>
+            <div class="student-layout">
+                <div class="rt-reveal-l">
+                    <div class="student-portal">
+                        <div class="sp-header">
+                            <div class="sp-hd-top">
+                                <span class="sp-hd-title">Student Academic Portal</span>
+                                <span class="sp-hd-sem">Semester 1 · 2024/2025</span>
+                            </div>
+                            <div class="sp-gpa-row">
+                                <div class="sp-gpa">4.21</div>
+                                <div class="sp-gpa-meta">
+                                    <div class="sp-gpa-label">Cumulative GPA</div>
+                                    <div class="sp-gpa-change">↑ +0.14 from last semester</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sp-progress-section">
+                            <div class="sp-prog-row"><span>Credits Completed</span><span>82 / 120</span></div>
+                            <div class="sp-prog-bar">
+                                <div class="sp-prog-fill" style="width:68%"></div>
+                            </div>
+                            <div class="sp-prog-row"><span>Academic Standing</span><span
+                                    style="color:#8a6f1e;font-weight:700">First Class</span></div>
+                        </div>
+                        <div class="sp-courses">
+                            <div class="sp-course-row">
+                                <div>
+                                    <div class="sp-course-name">CSC 301 — Data Structures</div>
+                                    <div class="sp-course-units">3 Units · CA 28/30 · Exam 62/70</div>
+                                </div>
+                                <div class="sp-course-score">
+                                    <div class="sp-course-grade">A</div>
+                                    <div class="sp-course-score-num">90/100</div>
+                                </div>
+                            </div>
+                            <div class="sp-course-row">
+                                <div>
+                                    <div class="sp-course-name">CSC 303 — Operating Systems</div>
+                                    <div class="sp-course-units">3 Units · CA 29/30 · Exam 66/70</div>
+                                </div>
+                                <div class="sp-course-score">
+                                    <div class="sp-course-grade">A</div>
+                                    <div class="sp-course-score-num">95/100</div>
+                                </div>
+                            </div>
+                            <div class="sp-course-row">
+                                <div>
+                                    <div class="sp-course-name">CSC 305 — Database Systems</div>
+                                    <div class="sp-course-units">3 Units · CA 24/30 · Exam 54/70</div>
+                                </div>
+                                <div class="sp-course-score">
+                                    <div class="sp-course-grade">B+</div>
+                                    <div class="sp-course-score-num">78/100</div>
+                                </div>
+                            </div>
+                            <div class="sp-course-row">
+                                <div>
+                                    <div class="sp-course-name">CSC 307 — Networks</div>
+                                    <div class="sp-course-units">3 Units · Awaiting exam entry</div>
+                                </div>
+                                <div class="sp-course-score">
+                                    <div class="sp-course-grade" style="color:var(--accent)">⏳</div>
+                                    <div class="sp-course-score-num">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="student-features rt-reveal-r">
+                    <div class="sf-item">
+                        <div class="sf-icon blue"><i data-lucide="eye" style="width:20px;height:20px"></i></div>
+                        <div>
+                            <h3 class="sf-title">See a Result the Moment It's Approved</h3>
+                            <p class="sf-desc">No noticeboard, no waiting on the registry. A result appears in the
+                                portal as soon
+                                as a lecturer submits and it's reviewed.</p>
+                        </div>
+                    </div>
+                    <div class="sf-item">
+                        <div class="sf-icon green"><i data-lucide="activity" style="width:20px;height:20px"></i></div>
+                        <div>
+                            <h3 class="sf-title">GPA That Updates With Every Result</h3>
+                            <p class="sf-desc">Cumulative GPA recalculates as results come in, so students always know
+                                where they
+                                stand for the semester.</p>
+                        </div>
+                    </div>
+                    <div class="sf-item">
+                        <div class="sf-icon amber"><i data-lucide="flag" style="width:20px;height:20px"></i></div>
+                        <div>
+                            <h3 class="sf-title">Flag a Result That Looks Wrong</h3>
+                            <p class="sf-desc">If a CA score, exam score, or grade doesn't match what's expected, a
+                                student flags
+                                it directly and tracks the response.</p>
+                        </div>
+                    </div>
+                    <div class="sf-item">
+                        <div class="sf-icon violet"><i data-lucide="history" style="width:20px;height:20px"></i></div>
+                        <div>
+                            <h3 class="sf-title">Every Semester, in One Place</h3>
+                            <p class="sf-desc">Results from year one onward stay organised and accessible — no digging
+                                through
+                                old noticeboards or lost printouts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       PRODUCT SHOWCASE (Analytics screen)
+  ════════════════════════════════════════ -->
+    <section id="showcase" aria-label="Product showcase">
+        <div class="container">
+            <div class="showcase-header">
+                <div class="section-label"><i data-lucide="monitor" style="width:12px;height:12px"></i> Platform
+                    Overview
+                </div>
+                <h2 class="section-title rt-reveal">What a registry sees, department by department</h2>
+                <p class="section-sub rt-reveal mt-4">A single analytics view shows submission progress and grade
+                    distribution across departments, so nothing gets lost between offices.</p>
+            </div>
+            <div class="showcase-screen rt-reveal">
+                <div class="sc-topbar" aria-hidden="true">
+                    <div class="sc-dots">
+                        <div class="sc-dot r"></div>
+                        <div class="sc-dot y"></div>
+                        <div class="sc-dot g"></div>
+                    </div>
+                    <div
+                        style="font-family:var(--font-mono);font-size:10px;color:rgba(255,255,255,.5);margin-left:12px">
+                        app.resulttrack.edu.ng/admin/analytics</div>
+                </div>
+                <div class="sc-main-area" aria-hidden="true">
+                    <div class="sc-sidebar">
+                        <div class="sc-sb-item active"><i data-lucide="bar-chart-3" style="width:10px;height:10px"></i>
+                            Analytics</div>
+                        <div class="sc-sb-item"><i data-lucide="users" style="width:10px;height:10px"></i> Students
+                        </div>
+                        <div class="sc-sb-item"><i data-lucide="book-open" style="width:10px;height:10px"></i> Courses
+                        </div>
+                        <div class="sc-sb-item"><i data-lucide="file-text" style="width:10px;height:10px"></i> Results
+                        </div>
+                        <div class="sc-sb-item"><i data-lucide="settings" style="width:10px;height:10px"></i> Admin
+                        </div>
+                    </div>
+                    <div class="sc-content">
+                        <div class="sc-section-title">Department Performance — 2024/2025</div>
+                        <div class="sc-kpi-row">
+                            <div class="sc-kpi">
+                                <div class="sc-kpi-val">3,240</div>
+                                <div class="sc-kpi-lbl">Total Students</div>
+                                <div class="sc-kpi-trend">↑ +12%</div>
+                            </div>
+                            <div class="sc-kpi">
+                                <div class="sc-kpi-val">3.74</div>
+                                <div class="sc-kpi-lbl">Avg. GPA</div>
+                                <div class="sc-kpi-trend">↑ +0.08</div>
+                            </div>
+                            <div class="sc-kpi">
+                                <div class="sc-kpi-val">98.2%</div>
+                                <div class="sc-kpi-lbl">Submission Rate</div>
+                                <div class="sc-kpi-trend">↑ +3%</div>
+                            </div>
+                            <div class="sc-kpi">
+                                <div class="sc-kpi-val">147</div>
+                                <div class="sc-kpi-lbl">Courses Active</div>
+                                <div class="sc-kpi-trend">↑ 15 new</div>
+                            </div>
+                        </div>
+                        <div class="sc-grid-2">
+                            <div class="sc-chart-box">
+                                <div class="sc-chart-title">Grade Distribution — Computer Science Dept</div>
+                                <div class="sc-bars">
+                                    <div class="sc-bar" style="height:82%" title="A — 82%"></div>
+                                    <div class="sc-bar" style="height:64%;opacity:.6" title="B — 64%"></div>
+                                    <div class="sc-bar" style="height:45%;opacity:.5" title="C — 45%"></div>
+                                    <div class="sc-bar" style="height:22%;opacity:.4" title="D — 22%"></div>
+                                    <div class="sc-bar" style="height:8%;opacity:.6;background:var(--accent)"
+                                        title="F — 8%">
+                                    </div>
+                                </div>
+                                <div class="sc-bar-labels">
+                                    <div class="sc-bar-lbl">A</div>
+                                    <div class="sc-bar-lbl">B</div>
+                                    <div class="sc-bar-lbl">C</div>
+                                    <div class="sc-bar-lbl">D</div>
+                                    <div class="sc-bar-lbl">F</div>
+                                </div>
+                            </div>
+                            <div class="sc-dist">
+                                <div class="sc-chart-title">Submission Rate by Department</div>
+                                <div class="sc-dist-row">
+                                    <span class="sc-dist-label">Computer Sci</span>
+                                    <div class="sc-dist-bar-wrap">
+                                        <div class="sc-dist-bar" style="width:98%;background:var(--secondary)"></div>
+                                    </div>
+                                    <span class="sc-dist-pct">98%</span>
+                                </div>
+                                <div class="sc-dist-row">
+                                    <span class="sc-dist-label">Engineering</span>
+                                    <div class="sc-dist-bar-wrap">
+                                        <div class="sc-dist-bar" style="width:95%;background:var(--primary-light)">
+                                        </div>
+                                    </div>
+                                    <span class="sc-dist-pct">95%</span>
+                                </div>
+                                <div class="sc-dist-row">
+                                    <span class="sc-dist-label">Medicine</span>
+                                    <div class="sc-dist-bar-wrap">
+                                        <div class="sc-dist-bar" style="width:91%;background:var(--accent)"></div>
+                                    </div>
+                                    <span class="sc-dist-pct">91%</span>
+                                </div>
+                                <div class="sc-dist-row">
+                                    <span class="sc-dist-label">Law</span>
+                                    <div class="sc-dist-bar-wrap">
+                                        <div class="sc-dist-bar" style="width:88%;background:var(--primary)"></div>
+                                    </div>
+                                    <span class="sc-dist-pct">88%</span>
+                                </div>
+                                <div class="sc-dist-row">
+                                    <span class="sc-dist-label">Sciences</span>
+                                    <div class="sc-dist-bar-wrap">
+                                        <div class="sc-dist-bar" style="width:84%;background:var(--secondary)"></div>
+                                    </div>
+                                    <span class="sc-dist-pct">84%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       CORE FEATURES GRID
+  ════════════════════════════════════════ -->
+    <section id="features-grid" aria-label="Core features">
+        <div class="container">
+            <div class="fg-header">
+                <div class="section-label"><i data-lucide="grid" style="width:12px;height:12px"></i> Core Features</div>
+                <h2 class="section-title rt-reveal">What's in the platform today</h2>
+                <p class="section-sub rt-reveal mt-4">Every feature below maps to a real step in a Nigerian university's
+                    result cycle — nothing added for the sake of a longer list.</p>
+            </div>
+            <div class="features-list rt-reveal">
+                <div class="feature-tile">
+                    <div class="feature-tile-icon blue"><i data-lucide="upload-cloud"
+                            style="width:20px;height:20px"></i>
+                    </div>
+                    <h3 class="feature-tile-title">Score Entry</h3>
+                    <p class="feature-tile-desc">Manual or bulk CA and exam score entry per course, with range
+                        validation
+                        before anything is saved.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-tile-icon amber"><i data-lucide="calculator" style="width:20px;height:20px"></i>
+                    </div>
+                    <h3 class="feature-tile-title">Grade Computation</h3>
+                    <p class="feature-tile-desc">A single grading engine applies the 30:70 CA-to-exam weighting and
+                        grade
+                        scale to every result.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-tile-icon green"><i data-lucide="key" style="width:20px;height:20px"></i></div>
+                    <h3 class="feature-tile-title">Role Permissions</h3>
+                    <p class="feature-tile-desc">Lecturers see their own courses, HODs their department, students only
+                        their
+                        own record.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-tile-icon violet"><i data-lucide="flag" style="width:20px;height:20px"></i>
+                    </div>
+                    <h3 class="feature-tile-title">Discrepancy Flagging</h3>
+                    <p class="feature-tile-desc">Students flag a result in question; lecturers see the exact score entry
+                        and
+                        resolve it in place.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-tile-icon blue"><i data-lucide="bell" style="width:20px;height:20px"></i></div>
+                    <h3 class="feature-tile-title">Result Notifications</h3>
+                    <p class="feature-tile-desc">Students are notified when a result is published, so they're not
+                        refreshing the portal to check.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-tile-icon green"><i data-lucide="lock" style="width:20px;height:20px"></i></div>
+                    <h3 class="feature-tile-title">Secure Access</h3>
+                    <p class="feature-tile-desc">Encrypted sessions and role-based sign-in for every account on the
+                        platform.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-tile-icon amber"><i data-lucide="trending-up"
+                            style="width:20px;height:20px"></i>
+                    </div>
+                    <h3 class="feature-tile-title">GPA Tracking</h3>
+                    <p class="feature-tile-desc">Students see a running cumulative GPA that updates as new results are
+                        approved.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-tile-icon violet"><i data-lucide="plug" style="width:20px;height:20px"></i>
+                    </div>
+                    <h3 class="feature-tile-title">Backend-Ready Architecture</h3>
+                    <p class="feature-tile-desc">Data operations run through a single async wrapper, ready to point at a
+                        real API when one exists.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       SECURITY SECTION
+  ════════════════════════════════════════ -->
+    <section id="security" aria-label="Security">
+        <div class="security-bg" aria-hidden="true"></div>
+        <div class="container security-inner">
+            <div class="security-layout">
+                <div class="security-left">
+                    <div class="section-label"><i data-lucide="shield" style="width:12px;height:12px"></i> Security
+                        First
+                    </div>
+                    <h2 class="section-title rt-reveal">Result data is treated like the record it is</h2>
+                    <p class="section-sub rt-reveal mt-4">A result is a permanent academic record. ResultTrack is built
+                        so
+                        only the right person can enter it, change it, or see it.</p>
+                    <div class="security-points rt-reveal">
+                        <div class="sec-point">
+                            <div class="sec-pt-icon"><i data-lucide="lock" style="width:18px;height:18px"></i></div>
+                            <div>
+                                <div class="sec-pt-title">Encryption in Transit and at Rest</div>
+                                <div class="sec-pt-desc">Result data is encrypted end to end, using the same AES-256
+                                    standard
+                                    common across financial systems.</div>
+                            </div>
+                        </div>
+                        <div class="sec-point">
+                            <div class="sec-pt-icon"><i data-lucide="users" style="width:18px;height:18px"></i></div>
+                            <div>
+                                <div class="sec-pt-title">Role-Based Access Control</div>
+                                <div class="sec-pt-desc">Lecturers see only their own courses, HODs their department,
+                                    and students
+                                    only their own record.</div>
+                            </div>
+                        </div>
+                        <div class="sec-point">
+                            <div class="sec-pt-icon"><i data-lucide="file-check" style="width:18px;height:18px"></i>
+                            </div>
+                            <div>
+                                <div class="sec-pt-title">A Full Audit Trail</div>
+                                <div class="sec-pt-desc">Every entry, edit, and submission is logged with a timestamp
+                                    and a user —
+                                    so a changed score is always traceable.</div>
+                            </div>
+                        </div>
+                        <div class="sec-point">
+                            <div class="sec-pt-icon"><i data-lucide="server" style="width:18px;height:18px"></i></div>
+                            <div>
+                                <div class="sec-pt-title">Backups Built In</div>
+                                <div class="sec-pt-desc">Daily encrypted backups mean a result, once entered, is never
+                                    dependent on
+                                    a single machine or sheet.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="security-visual rt-reveal-r">
+                    <div class="sv-card">
+                        <div class="sv-card-title">Security Status</div>
+                        <div class="sv-shield">
+                            <div class="sv-shield-icon" aria-label="Security shield"><i data-lucide="shield-check"
+                                    style="width:28px;height:28px;color:var(--secondary-light)"></i></div>
+                            <div>
+                                <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px">All Systems
+                                    Secure</div>
+                                <div style="font-size:11px;color:rgba(255,255,255,.5)">Last scan: 2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="sv-certs">
+                            <div class="sv-cert">
+                                <div class="sv-cert-dot"></div><span class="sv-cert-label">Data Encryption
+                                    (AES-256)</span><span class="sv-cert-status">✓ Active</span>
+                            </div>
+                            <div class="sv-cert">
+                                <div class="sv-cert-dot"></div><span class="sv-cert-label">Two-Factor
+                                    Authentication</span><span class="sv-cert-status">✓ Active</span>
+                            </div>
+                            <div class="sv-cert">
+                                <div class="sv-cert-dot"></div><span class="sv-cert-label">Session Timeout
+                                    Controls</span><span class="sv-cert-status">✓ Active</span>
+                            </div>
+                            <div class="sv-cert">
+                                <div class="sv-cert-dot"></div><span class="sv-cert-label">Role-Based Access</span><span
+                                    class="sv-cert-status">✓ Active</span>
+                            </div>
+                            <div class="sv-cert">
+                                <div class="sv-cert-dot"></div><span class="sv-cert-label">Automated Backups</span><span
+                                    class="sv-cert-status">✓ Daily</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sv-card">
+                        <div class="sv-card-title">Platform Uptime — Last 30 Days</div>
+                        <div class="sv-uptime">
+                            <div>
+                                <div class="sv-uptime-val">99.9%</div>
+                                <div class="sv-uptime-label">Uptime this month</div>
+                            </div>
+                            <div class="sv-uptime-bars" aria-hidden="true">
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                                <div class="sv-uptime-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       FAQ
+  ════════════════════════════════════════ -->
+    <section id="faq" aria-label="Frequently asked questions">
+        <div class="container">
+            <div class="faq-layout">
+                <div class="faq-left">
+                    <div class="section-label"><i data-lucide="help-circle" style="width:12px;height:12px"></i> FAQs
+                    </div>
+                    <h2 class="section-title rt-reveal">Common questions, straight answers</h2>
+                    <p class="section-sub rt-reveal mt-4">What ResultTrack does, who it's for, and how it fits into an
+                        existing result cycle.</p>
+                    <div class="faq-contact rt-reveal mt-8">
+                        <div class="faq-contact-title">Still have questions?</div>
+                        <div class="faq-contact-sub">Get in touch and we'll walk through how ResultTrack fits your
+                            department's actual workflow.</div>
+                        <a href="#cta-final" class="btn btn-primary">Talk to us →</a>
+                    </div>
+                </div>
+                <div class="faq-list" id="faqList" role="list">
+                    <div class="faq-item" role="listitem">
+                        <div class="faq-q" onclick="toggleFaq(this)" role="button" aria-expanded="false" tabindex="0">
+                            <span class="faq-q-text">What is ResultTrack, exactly?</span>
+                            <span class="faq-q-icon" aria-hidden="true">+</span>
+                        </div>
+                        <div class="faq-a" role="region">
+                            <p>ResultTrack is a result management system for Nigerian universities and higher
+                                institutions. It
+                                covers four things: a lecturer enters CA and exam scores, the platform computes the
+                                grade
+                                automatically, students see their result the moment it's approved, and a student can
+                                flag a result
+                                that looks wrong so a lecturer can review it.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)" role="button" aria-expanded="false" tabindex="0">
+                            <span class="faq-q-text">How does grading actually work?</span>
+                            <span class="faq-q-icon" aria-hidden="true">+</span>
+                        </div>
+                        <div class="faq-a">
+                            <p>Every result runs through one grading engine, so a score is computed the same way whether
+                                it's
+                                typed in manually or uploaded in bulk. The current MVP uses a 30:70 CA-to-exam
+                                weighting, with the
+                                scale kept in a single configuration so it can be adjusted for a specific institution's
+                                policy.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)" role="button" aria-expanded="false" tabindex="0">
+                            <span class="faq-q-text">What happens if a student disagrees with a result?</span>
+                            <span class="faq-q-icon" aria-hidden="true">+</span>
+                        </div>
+                        <div class="faq-a">
+                            <p>The student flags the specific result directly from their portal. The flag goes to the
+                                lecturer
+                                who entered it, with the exact CA score, exam score, and computed grade attached — so
+                                there's no
+                                back-and-forth trying to figure out which entry is being questioned.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)" role="button" aria-expanded="false" tabindex="0">
+                            <span class="faq-q-text">Is student information kept secure and private?</span>
+                            <span class="faq-q-icon" aria-hidden="true">+</span>
+                        </div>
+                        <div class="faq-a">
+                            <p>Result data is encrypted at rest and in transit. Students can only see their own record;
+                                lecturers
+                                see only their own courses; role-based permissions and an audit trail apply across the
+                                platform.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)" role="button" aria-expanded="false" tabindex="0">
+                            <span class="faq-q-text">Is ResultTrack connected to a live backend yet?</span>
+                            <span class="faq-q-icon" aria-hidden="true">+</span>
+                        </div>
+                        <div class="faq-a">
+                            <p>The current build is a working front-end MVP with a request layer built to swap in a real
+                                backend
+                                without a rewrite. That integration — and university-specific onboarding — is the next
+                                stage of the
+                                project.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       FINAL CTA
+  ════════════════════════════════════════ -->
+    <section id="cta-final" aria-label="Call to action">
+        <div class="cta-final-bg" aria-hidden="true"></div>
+        <div class="container">
+            <div class="cta-final-inner">
+                <h2 class="cta-final-title rt-reveal">See the result cycle<br>without the spreadsheets</h2>
+                <p class="cta-final-sub rt-reveal">ResultTrack is built for lecturers, students, and registry staff who
+                    are
+                    tired of results living in scattered files. Log in to see the workflow end to end.</p>
+                <div class="cta-final-btns rt-reveal">
+                    <a href="#login" class="btn btn-white btn-xl">Log In to ResultTrack</a>
+                    <a href="#" class="btn btn-ghost-white btn-xl">Contact Support</a>
+                </div>
+                <div class="cta-final-trust rt-reveal">
+                    <div class="cta-trust-item"><span style="color:var(--secondary-light)">✓</span> One grading engine,
+                        applied consistently</div>
+                    <div class="cta-trust-item"><span style="color:var(--secondary-light)">✓</span> Built for the
+                        CA:Exam weighting model</div>
+                    <div class="cta-trust-item"><span style="color:var(--secondary-light)">✓</span> Ready to connect to
+                        a backend</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo" style="margin-bottom:14px;display:inline-flex">
+                        <div class="nav-logo-mark"><i data-lucide="bar-chart-3"
+                                style="width:16px;height:16px;stroke-width:2.5"></i>
+                        </div>
+                        <span class="wm-result">Result</span><span class="wm-track">Track</span>
+                    </a>
+                    <p class="footer-desc">A result management system for Nigerian universities — built around one
+                        grading
+                        engine, one status a lecturer can trust, and one view a student can check.</p>
+                    <div class="footer-social">
+                        <a href="#" class="footer-soc" aria-label="Twitter">𝕏</a>
+                        <a href="#" class="footer-soc" aria-label="LinkedIn">in</a>
+                        <a href="#" class="footer-soc" aria-label="Email">✉</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5>Product</h5>
+                    <ul>
+                        <li><a href="#why">Features</a></li>
+                        <li><a href="#showcase">Platform Overview</a></li>
+                        <li><a href="#security">Security</a></li>
+                        <li><a href="#faq">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>For</h5>
+                    <ul>
+                        <li><a href="#lecturer">Lecturers</a></li>
+                        <li><a href="#student">Students</a></li>
+                        <li><a href="#showcase">Registrars</a></li>
+                        <li><a href="#showcase">Administrators</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span class="footer-copy">© 2025 ResultTrack. All rights reserved.</span>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT — GSAP + INTERACTIONS
+════════════════════════════════════════ -->
+<script>
+    /* ── Lucide icon hydration ── */
+    lucide.createIcons();
+
+    /* ── GSAP setup ── */
+    gsap.registerPlugin(ScrollTrigger);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ────────────────────────────
+       MOBILE NAV / HAMBURGER — single source of truth
+    ──────────────────────────── */
+    const navHamburger = document.getElementById('navHamburger');
+    const mobNav = document.getElementById('navMobile'); // ⚠️ confirm this matches your actual mobile menu element's id
+
+    function openMobNav() {
+        navHamburger.classList.add('active');
+        mobNav?.classList.add('open');
+        navHamburger.setAttribute('aria-expanded', 'true');
+        navHamburger.setAttribute('aria-label', 'Close menu');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobNav() {
+        navHamburger.classList.remove('active');
+        mobNav?.classList.remove('open');
+        navHamburger.setAttribute('aria-expanded', 'false');
+        navHamburger.setAttribute('aria-label', 'Open menu');
+        document.body.style.overflow = '';
+    }
+
+    function toggleMobNav() {
+        navHamburger.classList.contains('active') ? closeMobNav() : openMobNav();
+    }
+
+    navHamburger.addEventListener('click', toggleMobNav);
+
+    navHamburger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleMobNav();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMobNav();
+    });
+
+    // Dedicated close (X) button inside the mobile menu panel, if present
+    document.getElementById('navMobileClose')?.addEventListener('click', closeMobNav);
+
+    /* ────────────────────────────
+       PAGE LOADER
+    ──────────────────────────── */
+    (function initLoader() {
+        const loader = document.getElementById('page-loader');
+        const logoEl = loader.querySelector('.loader-logo');
+        const barTrack = loader.querySelector('.loader-bar-track');
+        const barFill = document.getElementById('loaderBarFill');
+
+        if (prefersReducedMotion) { loader.remove(); return; }
+
+        gsap.to(logoEl, { opacity: 1, y: 0, duration: .5, ease: 'power2.out', delay: .1 });
+        gsap.to(barTrack, { opacity: 1, duration: .4, delay: .3 });
+
+        let pct = 0;
+        const interval = setInterval(() => {
+            pct += Math.random() * 22 + 8;
+            if (pct >= 100) { pct = 100; clearInterval(interval); }
+            barFill.style.width = pct + '%';
+        }, 180);
+
+        setTimeout(() => {
+            gsap.to(loader, {
+                opacity: 0, duration: .55, ease: 'power2.inOut',
+                onComplete: () => loader.remove()
+            });
+            startHeroAnimation();
+        }, 1600);
+    })();
+
+    /* ────────────────────────────
+       HERO ANIMATION
+    ──────────────────────────── */
+    function startHeroAnimation() {
+        if (prefersReducedMotion) return;
+        const heroLeft = document.getElementById('heroLeft');
+        const heroRight = document.getElementById('heroRight');
+        const dashMain = document.getElementById('heroDashMain');
+        const floatCard = document.getElementById('heroFloatStudent');
+
+        const heroChildren = heroLeft.children;
+        gsap.set(heroChildren, { opacity: 0, y: 28 });
+        gsap.to(heroChildren, {
+            opacity: 1, y: 0,
+            duration: .75, ease: 'power3.out',
+            stagger: .12, delay: .15
+        });
+
+        if (heroRight && dashMain) {
+            gsap.set(dashMain, { opacity: 0, y: 36, scale: .96 });
+            gsap.set(floatCard, { opacity: 0, x: -24 });
+            gsap.to(dashMain, { opacity: 1, y: 0, scale: 1, duration: .85, ease: 'power3.out', delay: .5 });
+            gsap.to(floatCard, { opacity: 1, x: 0, duration: .7, ease: 'power3.out', delay: .9 });
+
+            document.querySelectorAll('.hero-float-stat').forEach((el, i) => {
+                gsap.set(el, { opacity: 0, x: 20 });
+                gsap.to(el, { opacity: 1, x: 0, duration: .6, ease: 'power2.out', delay: 1.1 + i * .15 });
+            });
+        }
+    }
+
+    /* ────────────────────────────
+       NAVBAR SCROLL BEHAVIOUR + ACTIVE LINK
+    ──────────────────────────── */
+    (function initNavbar() {
+        const navbar = document.getElementById('navbar');
+        const sections = ['hero', 'why', 'lecturer', 'student', 'security', 'faq']
+            .map(id => document.getElementById(id))
+            .filter(Boolean);
+        const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+
+        window.addEventListener('scroll', () => {
+            const y = window.scrollY;
+            if (y > 60) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+
+            let current = sections[0];
+            sections.forEach(sec => {
+                if (sec.getBoundingClientRect().top - 120 <= 0) current = sec;
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle('is-active', link.getAttribute('href') === '#' + current.id);
+            });
+        }, { passive: true });
+    })();
+
+    /* ────────────────────────────
+       SCROLL REVEAL (generic)
+    ──────────────────────────── */
+    function initScrollReveal() {
+        if (prefersReducedMotion) {
+            document.querySelectorAll('.rt-reveal,.rt-reveal-l,.rt-reveal-r').forEach(el => {
+                el.style.opacity = 1; el.style.transform = 'none';
+            });
+            return;
+        }
+        const revealConfig = [
+            { selector: '.rt-reveal', vars: { opacity: 0, y: 28 } },
+            { selector: '.rt-reveal-l', vars: { opacity: 0, x: -28 } },
+            { selector: '.rt-reveal-r', vars: { opacity: 0, x: 28 } },
+        ];
+        revealConfig.forEach(({ selector, vars }) => {
+            document.querySelectorAll(selector).forEach(el => {
+                gsap.set(el, vars);
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: 'top 88%',
+                    once: true,
+                    onEnter: () => {
+                        const delay = parseFloat(el.style.transitionDelay) || 0;
+                        gsap.to(el, { opacity: 1, x: 0, y: 0, duration: .7, ease: 'power3.out', delay });
+                    }
+                });
+            });
+        });
+    }
+    window.addEventListener('load', initScrollReveal);
+
+    /* ────────────────────────────
+       COUNTER ANIMATION
+    ──────────────────────────── */
+    (function initCounters() {
+        const counters = document.querySelectorAll('[data-count]');
+        counters.forEach(el => {
+            const target = parseInt(el.getAttribute('data-count'), 10);
+            const suffix = el.getAttribute('data-suffix') || '';
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top 85%',
+                once: true,
+                onEnter: () => {
+                    if (prefersReducedMotion) { el.textContent = target + suffix; return; }
+                    gsap.to({ val: 0 }, {
+                        val: target,
+                        duration: 1.4,
+                        ease: 'power2.out',
+                        onUpdate: function () {
+                            el.textContent = Math.round(this.targets()[0].val).toLocaleString() + suffix;
+                        }
+                    });
+                }
+            });
+        });
+    })();
+
+    /* ────────────────────────────
+       WHY CARDS — stagger on enter
+    ──────────────────────────── */
+    (function initWhyCards() {
+        if (prefersReducedMotion) return;
+        const cards = document.querySelectorAll('.why-card');
+        if (!cards.length) return;
+        ScrollTrigger.create({
+            trigger: '.why-grid',
+            start: 'top 82%',
+            once: true,
+            onEnter: () => {
+                gsap.fromTo(cards,
+                    { opacity: 0, y: 24 },
+                    { opacity: 1, y: 0, duration: .6, stagger: .09, ease: 'power3.out' }
+                );
+            }
+        });
+    })();
+
+    /* ────────────────────────────
+       FEATURES TILES — stagger
+    ──────────────────────────── */
+    (function initFeatureTiles() {
+        if (prefersReducedMotion) return;
+        const tiles = document.querySelectorAll('.feature-tile');
+        if (!tiles.length) return;
+        ScrollTrigger.create({
+            trigger: '.features-list',
+            start: 'top 80%',
+            once: true,
+            onEnter: () => {
+                gsap.fromTo(tiles,
+                    { opacity: 0, y: 16 },
+                    { opacity: 1, y: 0, duration: .5, stagger: .07, ease: 'power2.out' }
+                );
+            }
+        });
+    })();
+
+    /* ────────────────────────────
+       FAQ ACCORDION
+    ──────────────────────────── */
+    function toggleFaq(qEl) {
+        const item = qEl.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => {
+            i.classList.remove('open');
+            i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+            item.classList.add('open');
+            qEl.setAttribute('aria-expanded', 'true');
+        }
+    }
+    document.querySelectorAll('.faq-q').forEach(q => {
+        q.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleFaq(q); }
+        });
+    });
+
+    /* ────────────────────────────
+       SHOWCASE TABS
+    ──────────────────────────── */
+    document.querySelectorAll('.showcase-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.showcase-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
+
+    /* ────────────────────────────
+       SMOOTH ANCHOR SCROLL
+    ──────────────────────────── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const href = a.getAttribute('href');
+            if (href === '#' || href === '#login') return;
+            const target = document.querySelector(href);
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+    });
+
+    /* ────────────────────────────
+       LECTURER DASHBOARD — row hover highlight
+    ──────────────────────────── */
+    document.querySelectorAll('.lec-result-table tbody tr').forEach(row => {
+        row.style.cursor = 'pointer';
+        row.style.transition = 'background .15s';
+    });
+
+    /* ────────────────────────────
+       STUDENT PORTAL — progress bar animate on scroll
+    ──────────────────────────── */
+    ScrollTrigger.create({
+        trigger: '#student',
+        start: 'top 75%',
+        once: true,
+        onEnter: () => {
+            const fill = document.querySelector('.sp-prog-fill');
+            if (fill && !prefersReducedMotion) {
+                gsap.from(fill, { width: '0%', duration: 1.2, ease: 'power3.out' });
+            }
+        }
+    });
+
+    /* ────────────────────────────
+       SECURITY CARD — stagger in
+    ──────────────────────────── */
+    (function initSecGlow() {
+        if (prefersReducedMotion) return;
+        ScrollTrigger.create({
+            trigger: '#security',
+            start: 'top 70%',
+            once: true,
+            onEnter: () => {
+                gsap.fromTo('.sv-cert', { opacity: 0, x: 16 }, {
+                    opacity: 1, x: 0, duration: .5, stagger: .12, ease: 'power2.out', delay: .4
+                });
+            }
+        });
+    })();
+
+    /* ────────────────────────────
+       HERO DASHBOARD — column hover
+    ──────────────────────────── */
+    document.querySelectorAll('.dash-nav-item:not(.active)').forEach(item => {
+        item.addEventListener('mouseenter', () => { if (!prefersReducedMotion) gsap.to(item, { x: 3, duration: .2 }); });
+        item.addEventListener('mouseleave', () => { if (!prefersReducedMotion) gsap.to(item, { x: 0, duration: .2 }); });
+    });
+
+    /* Reload Lucide icons that may have been added dynamically */
+    setTimeout(() => lucide.createIcons(), 100);
+</script>
+</body>
+
+</html>
