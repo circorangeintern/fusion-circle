@@ -2,12 +2,21 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import sessionHandler from "./shared/middlewares/sessions";
+import { globalLimiter } from "./shared/middlewares/rateLimit.middleware"
+import { setupSwagger } from "./contracts/swagger"
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 import router from './routes/index';
 
 app.use(express.json());
+app.use(globalLimiter);
+app.use(sessionHandler);
+
+// Swagger
+setupSwagger(app);
+
 
 // Root endpoint
 app.get("/", (req, res) => {

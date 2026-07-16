@@ -5,7 +5,8 @@ services:
     plan: free
     rootDir: backend
     buildCommand: npm install && npx prisma generate && npm run build
-    startCommand: npx prisma migrate deploy && npm start
+    preDeployCommand: npx prisma migrate deploy && npm run seed
+    startCommand: npm start
     envVars:
       # - key: PORT
       #   value: 5000
@@ -13,7 +14,7 @@ services:
         value: production
       - key: DATABASE_URL
         sync: false
-      - key: JWT_SECRET
+      - key: SESSION_SECRET
         sync: false
       - key: EMAIL_HOST
         sync: false
@@ -22,4 +23,10 @@ services:
       - key: EMAIL_USER
         sync: false
       - key: EMAIL_PASS
+        sync: false
+      - key: SUPER_ADMIN_PASSWORD
+        sync: false
+      - key: SUPER_ADMIN_FIRST_NAME
+        sync: false
+      - key: SUPER_ADMIN_EMAIL
         sync: false
