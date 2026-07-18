@@ -6,34 +6,50 @@ import bcrypt from "bcrypt";
 import "express-session";
 import { log } from "node:console";
 import { UserArgs } from "@prisma/client/runtime/client";
+import { welcomeAdminTemplate } from "../email/templates/welcome";
+import { sendEmail } from "../email/email.service"
+
+
 
 
 
 
 export const getUser = async (email: string, res: Response) => {
-    const user = await getUserByEmail(prisma.superAdmin, email);
-    if (!user) {
-        return res.status(401).json({
+    try {
+        const user = await getUserByEmail(prisma.superAdmin, email);
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                code: "UNAUTHORIZED",
+                message: "User not found",
+                error: null
+            })
+        }
+
+        return user
+    } catch (error) {
+        return res.status(500).json({
             success: false,
-            code: "UNAUTHORIZED",
-            message: "User not found",
-            error: null
+            code: "INTERNAL SERVER ERROR",
+            message: "internal server error",
+            error: error
         })
     }
 
-    return user
 }
 
-export const comparePassword = async (hashedPassword: string, userPassword: string, res: Response) => {
+export const comparePassword = async (hashedPassword: string, userPassword: string, res: Response): Promise<boolean> => {
     const isCorrectPassword = await bcrypt.compare(userPassword, hashedPassword);
     if (!isCorrectPassword) {
-        return res.status(401).json({
+        res.status(401).json({
             success: false,
             code: "UNAUTHORIZED",
             message: "Invalid password",
             error: null
         })
+        return false
     }
+    return true
 }
 
 
@@ -59,6 +75,11 @@ export const createAdmin = async (res: Response, dataObj: any, password: string)
         }
 
         await createObject(prisma.user, data);
+        await sendEmail(
+            data.email,
+            "Welcome to ResultTrack",
+            welcomeAdminTemplate(data.firstName, data.email, responseData.temporaryPassword)
+        );
 
         return res.status(201).json({
             success: true,
@@ -195,3 +216,4 @@ export const superAdminLogoutService = (
         return res.status(204).send();
     });
 };
+

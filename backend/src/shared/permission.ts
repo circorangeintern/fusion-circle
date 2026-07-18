@@ -22,6 +22,7 @@ export enum Permission {
 
     CREATE_SCHOOL = "create:school",
     UPDATE_SCHOOL = "update:school",
+    LOGOUT_USER = "logout:user"
 }
 
 export const RolePermissions: Record<Role, Permission[]> = {
@@ -34,11 +35,12 @@ export const RolePermissions: Record<Role, Permission[]> = {
     [Role.ADMIN]: [
         Permission.CREATE_SCHOOL,
         Permission.UPDATE_SCHOOL,
+        Permission.LOGOUT_USER
     ],
     [Role.TEACHER]: [
-        // whatever teachers can do
+        Permission.LOGOUT_USER
     ],
     [Role.STUDENT]: [
-        // whatever a base user can do
+        Permission.LOGOUT_USER
     ],
 };

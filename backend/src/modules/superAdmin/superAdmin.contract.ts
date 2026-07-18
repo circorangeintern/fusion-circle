@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
     loginValidator,
     CreateAdminValidator,
-} from "./validator/validator";
+} from "../../shared/validator/validator";
 
 import {
     ErrorResponseSchema,

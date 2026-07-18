@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { loginValidator, CreateAdminValidator } from "./validator/validator";
-import { validate } from "./superAdmin.middleware";
+import { loginValidator, CreateAdminValidator } from "../../shared/validator/validator";
+import { validate } from "../../shared/middlewares/auth.middleware";
 import {
     loginController, CreateAdmin, DeactivateAdmin,
     getAllAdmins, getAdminById, logoutController

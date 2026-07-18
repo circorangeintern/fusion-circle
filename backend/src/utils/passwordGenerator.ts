@@ -1,26 +1,41 @@
 import { randomInt } from "crypto";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+
 
 const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
 const NUMBERS = "0123456789";
 const SPECIAL = "!@#$%^&*()-_=+[]{}<>?";
 
-const ALL = UPPERCASE + LOWERCASE + NUMBERS + SPECIAL;
+export function generatePassword(
+    length: number = 14,
+    includeSpecial: boolean = true
+): string {
+    const all = includeSpecial
+        ? UPPERCASE + LOWERCASE + NUMBERS + SPECIAL
+        : UPPERCASE + LOWERCASE + NUMBERS;
 
-export function generatePassword(length = 14): string {
-    if (length < 4) {
-        throw new Error("Password length must be at least 4.");
-    }
-
-    const password = [
+    const password: string[] = [
         UPPERCASE[randomInt(UPPERCASE.length)],
         LOWERCASE[randomInt(LOWERCASE.length)],
         NUMBERS[randomInt(NUMBERS.length)],
-        SPECIAL[randomInt(SPECIAL.length)],
     ];
 
-    for (let i = password.length; i < length; i++) {
-        password.push(ALL[randomInt(ALL.length)]);
+    if (includeSpecial) {
+        password.push(SPECIAL[randomInt(SPECIAL.length)]);
+    }
+
+    const minimumLength = includeSpecial ? 4 : 3;
+
+    if (length < minimumLength) {
+        throw new Error(
+            `Password length must be at least ${minimumLength}.`
+        );
+    }
+
+    while (password.length < length) {
+        password.push(all[randomInt(all.length)]);
     }
 
     // Fisher-Yates shuffle
@@ -31,3 +46,25 @@ export function generatePassword(length = 14): string {
 
     return password.join("");
 }
+
+
+export const generateResetToken = (userId: number) => {
+    const jti = crypto.randomUUID();
+
+    const token = jwt.sign(
+        {
+            sub: userId,
+            purpose: "password-reset",
+            jti,
+        },
+        process.env.JWT_RESET_SECRET!,
+        {
+            expiresIn: "15m",
+        }
+    );
+
+    return {
+        token,
+        jti,
+    };
+};
