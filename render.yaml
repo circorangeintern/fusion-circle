@@ -34,3 +34,5 @@ services:
         sync: false
       - key: JWT_RESET_SECRET
         sync: false
+      - key: API_URL
+  value: https://resulttrack-backend.onrender.com/api/v1
