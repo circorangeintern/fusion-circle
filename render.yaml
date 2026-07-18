@@ -30,3 +30,7 @@ services:
         sync: false
       - key: SUPER_ADMIN_EMAIL
         sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: JWT_RESET_SECRET
+        sync: false
