@@ -21,7 +21,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
     if (!isCorrectPassword) { return }
     await createSession(req, { id: user.id, role: user.role });
     return res.status(200).json({
-        status: "sucess",
+        status: "success",
         statusCode: 200,
         message: "Login successful",
         data: {
