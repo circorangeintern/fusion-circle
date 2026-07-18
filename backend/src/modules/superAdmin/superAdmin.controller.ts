@@ -14,13 +14,12 @@ import { hashPassword } from "../../utils/passwordHandler";
 
 
 
-
 export const loginController = async (req: Request, res: Response, next: NextFunction) => {
 
     const user = await getUser(req.body.email, res);
-    await comparePassword(user.password, req.body.password, res);
+    const isCorrectPassword = await comparePassword(user.password, req.body.password, res);
+    if (!isCorrectPassword) { return }
     await createSession(req, { id: user.id, role: user.role });
-
     return res.status(200).json({
         status: "sucess",
         statusCode: 200,
@@ -43,8 +42,6 @@ export const CreateAdmin = async (req: Request, res: Response) => {
     data.passwordHash = passwordHash;
 
     await createAdmin(res, data, password);
-
-
 }
 
 

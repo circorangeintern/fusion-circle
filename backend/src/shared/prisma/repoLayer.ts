@@ -8,6 +8,7 @@ type PrismaModel = {
     create: (args: any) => Promise<any>;
     update: (args: any) => Promise<any>;
     delete: (args: any) => Promise<any>;
+    upsert: (args: any) => Promise<any>;
 };
 
 export const getUserByEmail = async (model: PrismaModel, email: string) => {
@@ -34,6 +35,16 @@ export const createObject = async (model: PrismaModel, data: object) => {
     });
 };
 
+export const upsertObject = async (
+    model: PrismaModel, where: object,
+    create: object, update: object) => {
+    return model.upsert({
+        where,
+        create,
+        update,
+    });
+};
+
 
 export const findAndDeleteByEmail = async (model: PrismaModel, email: string) => {
     return model.delete({
@@ -43,6 +54,16 @@ export const findAndDeleteByEmail = async (model: PrismaModel, email: string) =>
     });
 };
 
+export const findAndDeleteById = async (
+    model: PrismaModel,
+    id: string
+) => {
+    return model.delete({
+        where: {
+            id,
+        },
+    });
+};
 
 
 export const deactivateAccountById = async (model: PrismaModel, id: number) => {
@@ -61,5 +82,35 @@ export const getObjectsByField = async (
         where: {
             [field]: value,
         },
+    });
+};
+
+export const updateObject = async (
+    model: PrismaModel,
+    where: object,
+    data: object
+) => {
+    return model.update({
+        where,
+        data,
+    });
+};
+
+
+export const findUniqueObject = async (
+    model: PrismaModel,
+    where: object
+) => {
+    return model.findUnique({
+        where,
+    });
+};
+
+export const findAndDeleteObject = async (
+    model: PrismaModel,
+    where: object
+) => {
+    await model.delete({
+        where,
     });
 };

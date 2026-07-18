@@ -5,6 +5,8 @@ import { getObjectById } from "../prisma/repoLayer"
 import { prisma } from "../prisma/prisma";
 import { AccountStatus } from "@prisma/client";
 import { log } from "node:console";
+import { ZodSchema } from "zod";
+import { success } from "zod/v4";
 
 
 export const authenticate = async (
@@ -16,6 +18,7 @@ export const authenticate = async (
         if (!req.session.userId || !req.session.role) {
             return res.status(401).json({ message: "Unauthorized" });
         }
+
 
         const account =
             req.session.role === "SUPER_ADMIN"
@@ -57,3 +60,30 @@ export function authorize(requiredPermission: Permission) {
         next();
     };
 }
+
+
+
+
+export const validate = (schema: ZodSchema) => {
+    return (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+        const result = schema.safeParse(req.body);
+
+
+        if (!result.success) {
+            return res.status(400).json({
+                success: false,
+                code: "BAD_REQUEST",
+                message: "Validation failed",
+                errors: result.error.flatten()
+            });
+        }
+
+        req.body = result.data;
+        next();
+    };
+};
+
