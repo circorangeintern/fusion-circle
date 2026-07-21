@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Log in to ResultTrack — secure access to your academic workspace." />
+    <title>Log In — ResultTrack</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;600;700;800&family=Work+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        :root {
+            /* Core brand — Ink Navy carries all chrome, navigation, the wordmark */
+            --primary: #1B2A4A;
+            --primary-dark: #101a30;
+            --primary-light: #2f4470;
+            --primary-50: #eef1f6;
+            --primary-100: #d7deea;
+
+            /* Result Gold — confirmed / positive / resolved states only */
+            --secondary: #BF9B30;
+            --secondary-light: #d4b352;
+            --secondary-50: #fbf6e8;
+
+            /* Marking Red — the signature accent. Flags, corrections, the stamp motif.
+         Reserved for moments that need attention, never decoration. */
+            --accent: #A63D3D;
+            --accent-light: #c15a5a;
+            --accent-50: #f9ecec;
+            /* Lighter tint used only where Marking Red sits on a dark navy field */
+            --accent-on-dark: #e3a3a3;
+
+            /* Surfaces — Ledger Paper is the background; worn paper, not warm cream */
+            --bg: #EEEDE6;
+            --surface: #ffffff;
+            --surface-2: #f7f6f1;
+            --surface-3: #efeee7;
+            --border: #ddd9cd;
+            --border-strong: #c7c2b2;
+
+            /* Typography — Ink Grey carries body text throughout */
+            --text-primary: #1B2A4A;
+            --text-secondary: #383C42;
+            --text-tertiary: #7a7d84;
+            --text-inverse: #ffffff;
+
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(27, 42, 74, .06);
+            --shadow-sm: 0 1px 3px rgba(27, 42, 74, .12), 0 1px 2px rgba(27, 42, 74, .07);
+            --shadow-md: 0 4px 6px rgba(27, 42, 74, .08), 0 2px 4px rgba(27, 42, 74, .07);
+            --shadow-lg: 0 10px 15px rgba(27, 42, 74, .12), 0 4px 6px rgba(27, 42, 74, .06);
+            --shadow-xl: 0 20px 25px rgba(27, 42, 74, .12), 0 10px 10px rgba(27, 42, 74, .05);
+            --shadow-2xl: 0 25px 50px rgba(27, 42, 74, .16);
+            --shadow-blue: 0 20px 40px rgba(27, 42, 74, .18);
+
+            /* Radius — squared-off, closer to a ledger card than a soft app tile */
+            --r-sm: 5px;
+            --r-md: 8px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 22px;
+            --r-full: 50px;
+
+            /* Typography scale */
+            --font-xs: 0.75rem;
+            --font-sm: 0.875rem;
+            --font-base: 1rem;
+            --font-lg: 1.125rem;
+            --font-xl: 1.25rem;
+            --font-2xl: 1.5rem;
+            --font-3xl: 1.875rem;
+            --font-4xl: 2.25rem;
+            --font-5xl: 3rem;
+            --font-6xl: 3.75rem;
+            --font-7xl: 4.5rem;
+
+            /* Transitions */
+            --ease: cubic-bezier(.4, 0, .2, 1);
+            --dur: .25s;
+            --dur-md: .35s;
+
+            /* Type roles */
+            --font-display: 'Roboto Slab', Georgia, serif;
+            --font-body: 'Work Sans', system-ui, -apple-system, sans-serif;
+            --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+        }
+
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: var(--font-display);
+            color: var(--text-primary);
+        }
+
+        /* ── Utility ── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        /* Section label pill */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--font-body);
+            font-size: var(--font-xs);
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--primary);
+            background: var(--primary-50);
+            border: 1px solid var(--primary-100);
+            padding: 5px 13px;
+            border-radius: var(--r-full);
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3.5vw, var(--font-4xl));
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -.01em;
+            line-height: 1.18;
+        }
+
+        .section-sub {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            line-height: 1.75;
+            max-width: 560px;
+        }
+
+        .text-gradient {
+            background: linear-gradient(120deg, var(--accent-on-dark) 0%, #f0c4c4 60%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .mt-6 {
+            margin-top: 24px;
+        }
+
+        .mt-8 {
+            margin-top: 32px;
+        }
+
+        .mt-10 {
+            margin-top: 40px;
+        }
+
+        .mt-12 {
+            margin-top: 48px;
+        }
+
+        .mt-16 {
+            margin-top: 64px;
+        }
+
+        /* ── Buttons ──
+       One system: primary (navy fill), secondary (gold fill, used sparingly
+       for confirm/positive actions), outline, and ghost-on-dark. */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 22px;
+            border-radius: var(--r-md);
+            font-family: var(--font-body);
+            font-size: var(--font-sm);
+            font-weight: 600;
+            transition: all var(--dur) var(--ease);
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1.5px solid transparent;
+        }
+
+        .btn:disabled,
+        .btn[aria-disabled="true"] {
+            opacity: .5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--text-inverse);
+            border-color: var(--primary);
+            box-shadow: 0 1px 3px rgba(27, 42, 74, .3), 0 4px 12px rgba(27, 42, 74, .18);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(27, 42, 74, .32), 0 8px 20px rgba(27, 42, 74, .2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .btn-outline:hover {
+            background: var(--surface);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: var(--font-base);
+            border-radius: var(--r-lg);
+        }
+
+        .btn-xl {
+            padding: 16px 34px;
+            font-size: var(--font-lg);
+            border-radius: var(--r-lg);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: #2b2205;
+            border-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(191, 155, 48, .3);
+        }
+
+        .btn-white {
+            background: var(--surface);
+            color: var(--primary);
+            border-color: var(--surface);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-white:hover {
+            background: var(--primary-50);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-ghost-white {
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(8px);
+            color: var(--text-inverse);
+            border-color: rgba(255, 255, 255, .25);
+        }
+
+        .btn-ghost-white:hover {
+            background: rgba(255, 255, 255, .16);
+            transform: translateY(-1px);
+        }
+
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-inverse);
+            letter-spacing: -.01em;
+            flex-shrink: 0;
+            transition: color var(--dur);
+        }
+
+        .wm-result {
+            color: currentColor;
+        }
+
+        .wm-track {
+            color: var(--accent-on-dark);
+        }
+
+        #navbar.scrolled .wm-track {
+            color: var(--accent);
+        }
+
+        #navbar.scrolled .nav-logo {
+            color: var(--text-primary);
+        }
+
+        .nav-logo-mark {
+            width: 34px;
+            height: 34px;
+            background: var(--primary);
+            border: 1.5px solid rgba(255, 255, 255, .18);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(27, 42, 74, .35);
+            flex-shrink: 0;
+        }
+
+
+        /* ════════════════════════════════════════════════════════════
+   RESULTTRACK — AUTHENTICATION PAGES (login.html / signup.html)
+   Reuses design tokens from css/styles.css (:root vars, .btn,
+   .nav-logo, .wm-result/.wm-track). This file only adds the
+   auth-page layout, form system, and page-specific components.
+════════════════════════════════════════════════════════════ */
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body.auth-body {
+            background: var(--bg);
+            min-height: 100vh;
+        }
+
+        /* ── Two-panel layout ── */
+        .auth-shell {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        /* Left — brand panel */
+        .auth-brand-panel {
+            background: linear-gradient(165deg, var(--primary-dark) 0%, #16233f 40%, var(--primary) 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px 56px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-brand-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+            background-size: 56px 56px;
+            pointer-events: none;
+        }
+
+        .auth-brand-top {
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-brand-panel .nav-logo {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 64px;
+        }
+
+        .auth-brand-tagline {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 2.6vw, 2rem);
+            font-weight: 700;
+            line-height: 1.3;
+            max-width: 420px;
+            margin-bottom: 32px;
+        }
+
+        .auth-brand-points {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-brand-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: var(--font-sm);
+            color: rgba(255, 255, 255, .75);
+            line-height: 1.6;
+        }
+
+        .auth-brand-point i {
+            flex-shrink: 0;
+            margin-top: 2px;
+            color: var(--secondary-light);
+        }
+
+        .auth-brand-quote {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid rgba(255, 255, 255, .12);
+            padding-top: 24px;
+            margin-top: 40px;
+        }
+
+        .auth-brand-quote p {
+            font-size: var(--font-sm);
+            color: rgba(255, 255, 255, .65);
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .auth-brand-quote-name {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .auth-brand-quote-role {
+            font-size: 11.5px;
+            color: rgba(255, 255, 255, .5);
+        }
+
+        /* Right — form panel */
+        .auth-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 32px;
+            background: var(--bg);
+        }
+
+        .auth-form-wrap {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .auth-mobile-logo {
+            display: none;
+        }
+
+        .auth-back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--font-xs);
+            font-weight: 600;
+            color: var(--text-tertiary);
+            margin-bottom: 28px;
+            transition: color var(--dur) var(--ease);
+        }
+
+        .auth-back-home:hover {
+            color: var(--primary);
+        }
+
+        .auth-header {
+            margin-bottom: 30px;
+        }
+
+        .auth-title {
+            font-family: var(--font-display);
+            font-size: var(--font-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -.01em;
+        }
+
+        .auth-subtitle {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .auth-subtitle a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .auth-subtitle a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Server-level status banner (network/server errors) ── */
+        .auth-status-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: var(--font-sm);
+            padding: 12px 14px;
+            border-radius: var(--r-md);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .auth-status-banner.is-error {
+            background: var(--accent-50);
+            border: 1px solid rgba(166, 61, 61, .25);
+            color: var(--accent);
+        }
+
+        .auth-status-banner.is-info {
+            background: var(--primary-50);
+            border: 1px solid var(--primary-100);
+            color: var(--primary);
+        }
+
+        .auth-status-banner i {
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .auth-status-banner .retry-btn {
+            margin-left: auto;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: inherit;
+            text-decoration: underline;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        /* ── Form system ── */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .auth-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .auth-field label {
+            font-size: var(--font-xs);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .auth-input-wrap {
+            position: relative;
+        }
+
+        .auth-field input,
+        .auth-field select {
+            font-family: var(--font-body);
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px 14px;
+            width: 100%;
+            transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+        }
+
+        .auth-field input[type="password"],
+        .auth-field input.has-toggle {
+            padding-right: 44px;
+        }
+
+        .auth-field input:hover,
+        .auth-field select:hover {
+            border-color: var(--border-strong);
+        }
+
+        .auth-field input:focus,
+        .auth-field select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-50);
+        }
+
+        .auth-field.has-error input,
+        .auth-field.has-error select {
+            border-color: var(--accent);
+        }
+
+        .auth-field.has-error input:focus,
+        .auth-field.has-error select:focus {
+            box-shadow: 0 0 0 3px var(--accent-50);
+        }
+
+        .auth-field.is-valid input {
+            border-color: var(--secondary);
+        }
+
+        .auth-field-error {
+            font-size: 12px;
+            color: var(--accent);
+            min-height: 14px;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Password visibility toggle */
+        .auth-pw-toggle {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+        }
+
+        .auth-pw-toggle:hover {
+            color: var(--primary);
+            background: var(--primary-50);
+        }
+
+        .auth-pw-toggle:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 1px;
+        }
+
+        /* Caps Lock indicator */
+        .auth-capslock-hint {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .auth-capslock-hint.is-visible {
+            display: flex;
+        }
+
+        /* Password strength meter (signup only) */
+        .auth-strength {
+            margin-top: 4px;
+        }
+
+        .auth-strength-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .auth-strength-seg {
+            height: 4px;
+            flex: 1;
+            border-radius: 2px;
+            background: var(--border);
+            transition: background var(--dur) var(--ease);
+        }
+
+        .auth-strength-seg.weak {
+            background: var(--accent);
+        }
+
+        .auth-strength-seg.fair {
+            background: #c98a3a;
+        }
+
+        .auth-strength-seg.good {
+            background: var(--secondary);
+        }
+
+        .auth-strength-seg.strong {
+            background: #6b9c5f;
+        }
+
+        .auth-strength-label {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            margin-bottom: 10px;
+        }
+
+        .auth-checklist {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 12px;
+        }
+
+        .auth-check-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11.5px;
+            color: var(--text-tertiary);
+            transition: color var(--dur) var(--ease);
+        }
+
+        .auth-check-item i {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+            color: var(--border-strong);
+            transition: color var(--dur) var(--ease);
+        }
+
+        .auth-check-item.is-met {
+            color: var(--text-secondary);
+        }
+
+        .auth-check-item.is-met i {
+            color: var(--secondary);
+        }
+
+        /* Role selector (custom) */
+        .auth-role-select {
+            position: relative;
+        }
+
+        .auth-role-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+        }
+
+        .auth-role-trigger[aria-expanded="true"],
+        .auth-role-trigger:focus-visible {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-50);
+        }
+
+        .auth-role-trigger .placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .auth-role-trigger i {
+            color: var(--text-tertiary);
+            transition: transform var(--dur) var(--ease);
+            flex-shrink: 0;
+        }
+
+        .auth-role-trigger[aria-expanded="true"] i {
+            transform: rotate(180deg);
+        }
+
+        .auth-role-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            box-shadow: var(--shadow-lg);
+            padding: 6px;
+            z-index: 20;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+
+        .auth-role-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            transition: background var(--dur) var(--ease);
+        }
+
+        .auth-role-option:hover,
+        .auth-role-option.is-active {
+            background: var(--primary-50);
+        }
+
+        .auth-role-option.is-selected {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .auth-role-option i {
+            width: 16px;
+            height: 16px;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+
+        .auth-role-option.is-selected i {
+            color: var(--primary);
+        }
+
+        /* Checkbox rows */
+        .auth-checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+        }
+
+        .auth-checkbox-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 1px;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .auth-checkbox-row label {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.55;
+            cursor: pointer;
+        }
+
+        .auth-checkbox-row a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .auth-checkbox-row a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-form-row-split {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .auth-forgot-link {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .auth-forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Submit button with loading state */
+        .auth-submit-btn {
+            position: relative;
+            width: 100%;
+            justify-content: center;
+            padding: 13px 20px;
+            font-size: var(--font-base);
+            margin-top: 4px;
+        }
+
+        .auth-submit-btn:disabled {
+            background: var(--border-strong);
+            border-color: var(--border-strong);
+            color: var(--text-tertiary);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .auth-submit-spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, .4);
+            border-top-color: #fff;
+            border-radius: 50%;
+        }
+
+        .auth-submit-btn.is-loading .auth-submit-label {
+            visibility: hidden;
+        }
+
+        .auth-submit-btn.is-loading .auth-submit-spinner {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -8px 0 0 -8px;
+            animation: authSpin .7s linear infinite;
+        }
+
+        @keyframes authSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .auth-divider span {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        /* Social buttons — disabled placeholders until backend integration */
+        .auth-social-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .auth-social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 11px 14px;
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: var(--text-tertiary);
+            background: var(--surface-2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            cursor: not-allowed;
+            opacity: .6;
+            position: relative;
+        }
+
+        .auth-social-btn svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .auth-social-btn::after {
+            content: 'Coming soon';
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-dark);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: var(--r-sm);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--dur) var(--ease);
+        }
+
+        .auth-social-btn:hover::after {
+            opacity: 1;
+        }
+
+        /* Success state (post-signup) */
+        .auth-success-panel {
+            text-align: center;
+            padding: 20px 0 4px;
+        }
+
+        .auth-success-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--secondary-50);
+            color: #8a6f1e;
+            border: 1.5px solid rgba(191, 155, 48, .35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .auth-success-title {
+            font-family: var(--font-display);
+            font-size: var(--font-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .auth-success-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 340px;
+            margin: 0 auto 26px;
+        }
+
+        /* Footer note */
+        .auth-footer-note {
+            margin-top: 28px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .auth-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-brand-panel {
+                display: none;
+            }
+
+            .auth-mobile-logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 24px;
+            }
+
+            .auth-form-panel {
+                padding: 32px 20px 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-form-panel {
+                padding: 24px 16px 40px;
+            }
+
+            .auth-title {
+                font-size: var(--font-2xl);
+            }
+
+            .auth-social-row {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-form-row-split {
+                flex-wrap: wrap;
+            }
+
+            /* Prevent iOS zoom-on-focus */
+            .auth-field input,
+            .auth-field select,
+            .auth-role-trigger {
+                font-size: 16px;
+            }
+
+            .auth-checklist {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .auth-form-wrap {
+                max-width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .auth-submit-spinner,
+            .auth-pw-toggle,
+            .auth-role-trigger i {
+                transition: none;
+                animation: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-shell">
+
+        <!-- ════════════════════════════════════════
+             LEFT — BRAND PANEL (hidden under 1024px)
+        ════════════════════════════════════════ -->
+        <aside class="auth-brand-panel" aria-hidden="true">
+            <div class="auth-brand-top">
+                <a href="index.html" class="nav-logo">
+                    <div class="nav-logo-mark">
+                        <i data-lucide="bar-chart-3" style="width:16px;height:16px;stroke-width:2.5"></i>
+                    </div>
+                    <span class="wm-result">Result</span><span class="wm-track">Track</span>
+                </a>
+
+                <h2 class="auth-brand-tagline">Secure access to your academic workspace.</h2>
+
+                <div class="auth-brand-points">
+                    <div class="auth-brand-point">
+                        <i data-lucide="shield-check" style="width:16px;height:16px"></i>
+                        <span>Every result is encrypted, access-controlled, and traceable to the person who entered
+                            it.</span>
+                    </div>
+                    <div class="auth-brand-point">
+                        <i data-lucide="calculator" style="width:16px;height:16px"></i>
+                        <span>One grading engine computes every score consistently — no manual recalculation.</span>
+                    </div>
+                    <div class="auth-brand-point">
+                        <i data-lucide="flag" style="width:16px;height:16px"></i>
+                        <span>Students can flag a result directly; lecturers see exactly which entry is in
+                            question.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-brand-quote">
+                <p>"I stopped second-guessing my own arithmetic once the CA and exam weighting were computed
+                    automatically."</p>
+                <div class="auth-brand-quote-name">Dr. Aisha Okonkwo</div>
+                <div class="auth-brand-quote-role">Department of Computer Science</div>
+            </div>
+        </aside>
+
+        <!-- ════════════════════════════════════════
+             RIGHT — LOGIN FORM
+        ════════════════════════════════════════ -->
+        <main class="auth-form-panel">
+            <div class="auth-form-wrap">
+
+                <div class="auth-mobile-logo">
+                    <a href="index.html" class="nav-logo" style="color:var(--text-primary)">
+                        <div class="nav-logo-mark">
+                            <i data-lucide="bar-chart-3" style="width:16px;height:16px;stroke-width:2.5"></i>
+                        </div>
+                        <span class="wm-result">Result</span><span class="wm-track"
+                            style="color:var(--accent)">Track</span>
+                    </a>
+                </div>
+
+                <a href="index.html" class="auth-back-home">
+                    <i data-lucide="arrow-left" style="width:13px;height:13px"></i>
+                    Back to home
+                </a>
+
+                <header class="auth-header">
+                    <h1 class="auth-title">Welcome back</h1>
+                    <p class="auth-subtitle">
+                        Don't have an account? <a href="signup.html">Create one</a>
+                    </p>
+                </header>
+
+                <div class="auth-status-banner" id="loginStatusBanner" role="alert" hidden></div>
+
+                <form class="auth-form" id="loginForm" novalidate>
+
+                    <div class="auth-field" id="loginEmailField">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" name="email" autocomplete="email" required
+                            aria-describedby="loginEmailError">
+                        <span class="auth-field-error" id="loginEmailError" role="alert"></span>
+                    </div>
+
+                    <div class="auth-field" id="loginPasswordField">
+                        <div class="auth-form-row-split">
+                            <label for="loginPassword">Password</label>
+                            <a href="#" class="auth-forgot-link" id="forgotPasswordLink">Forgot password?</a>
+                        </div>
+                        <div class="auth-input-wrap">
+                            <input type="password" id="loginPassword" name="password" class="has-toggle"
+                                autocomplete="current-password" required aria-describedby="loginPasswordError">
+                            <button type="button" class="auth-pw-toggle" id="loginPasswordToggle"
+                                aria-label="Show password">
+                                <i data-lucide="eye" style="width:17px;height:17px"></i>
+                            </button>
+                        </div>
+                        <span class="auth-capslock-hint" id="loginCapsHint">
+                            <i data-lucide="alert-triangle" style="width:12px;height:12px"></i> Caps Lock is on
+                        </span>
+                        <span class="auth-field-error" id="loginPasswordError" role="alert"></span>
+                    </div>
+
+                    <div class="auth-checkbox-row">
+                        <input type="checkbox" id="loginRemember" name="remember">
+                        <label for="loginRemember">Keep me signed in on this device</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary auth-submit-btn" id="loginSubmitBtn" disabled>
+                        <span class="auth-submit-label">Sign In</span>
+                        <span class="auth-submit-spinner" aria-hidden="true"></span>
+                    </button>
+                </form>
+
+                <div class="auth-divider"><span>Or continue with</span></div>
+
+                <div class="auth-social-row">
+                    <button type="button" class="auth-social-btn" disabled aria-disabled="true">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
+                            <path fill="currentColor"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.25 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.85A11 11 0 0 0 12 23z" />
+                            <path fill="currentColor"
+                                d="M5.84 14.09A6.6 6.6 0 0 1 5.5 12c0-.73.12-1.43.34-2.09V7.06H2.18A11 11 0 0 0 1 12c0 1.77.42 3.45 1.18 4.94l3.66-2.85z" />
+                            <path fill="currentColor"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1a11 11 0 0 0-9.82 6.06l3.66 2.85C6.71 7.31 9.14 5.38 12 5.38z" />
+                        </svg>
+                        Google
+                    </button>
+                    <button type="button" class="auth-social-btn" disabled aria-disabled="true">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor" d="M11.4 11.4H2V2h9.4v9.4z" />
+                            <path fill="currentColor" d="M22 11.4h-9.4V2H22v9.4z" />
+                            <path fill="currentColor" d="M11.4 22H2v-9.4h9.4V22z" />
+                            <path fill="currentColor" d="M22 22h-9.4v-9.4H22V22z" />
+                        </svg>
+                        Microsoft
+                    </button>
+                </div>
+
+                <p class="auth-footer-note">
+                    By signing in, you agree to ResultTrack's Terms of Service and Privacy Policy.
+                </p>
+
+            </div>
+        </main>
+    </div>
+
+    <script>if (window.lucide) { lucide.createIcons(); }</script>
+    <script>
+        /* ════════════════════════════════════════════════════════════
+           RESULTTRACK — AUTHENTICATION (login.html + signup.html)
+           Single shared file. Detects which page it's running on and
+           wires up only the relevant form. Backend integration = flip
+           USE_MOCK_API to false and point the three endpoints at real
+           routes. No other structural change required.
+        ════════════════════════════════════════════════════════════ */
+
+        /* ── Backend contract — the only block a backend dev should touch ── */
+        const AUTH_CONFIG = {
+            LOGIN_ENDPOINT: '/api/auth/login',
+            SIGNUP_ENDPOINT: '/api/auth/signup',
+            FORGOT_PASSWORD_ENDPOINT: '/api/auth/forgot-password',
+            METHOD: 'POST',
+            USE_MOCK_API: true // flip to false once real endpoints exist
+        };
+
+        /* ── Role → dashboard route map ──
+           The frontend never decides a user's role. The backend returns
+           it in the login response; this map only decides WHERE to send
+           each role once it's known. Update paths here as real dashboard
+           routes are built — nothing else in this file needs to change. */
+        const DASHBOARD_ROUTES = {
+            student: '/dashboard/student',
+            lecturer: '/dashboard/lecturer',
+            hod: '/dashboard/hod',
+            examination_officer: '/dashboard/examination-officer',
+            administrator: '/dashboard/administrator'
+        };
+
+        function redirectToDashboard(role) {
+            const target = DASHBOARD_ROUTES[role] || '/dashboard';
+            window.location.href = target;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           MOCK API — simulates the backend contract exactly.
+           Delete this whole block (and the branches that call it) once
+           USE_MOCK_API is false.
+        ════════════════════════════════════════════════════════════ */
+        const MOCK_DELAY_MS = 1100;
+
+        function mockLogin(payload) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (payload.email === 'fail@resulttrack.ng') {
+                        reject({ success: false, message: 'Invalid credentials.' });
+                        return;
+                    }
+                    resolve({
+                        success: true,
+                        token: 'mock-jwt-token',
+                        user: {
+                            id: 'usr_001',
+                            name: 'Amaka Okafor',
+                            email: payload.email,
+                            role: 'student'
+                        }
+                    });
+                }, MOCK_DELAY_MS);
+            });
+        }
+
+        function mockSignup(payload) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (payload.email === 'taken@resulttrack.ng') {
+                        reject({ success: false, message: 'An account with this email already exists.' });
+                        return;
+                    }
+                    resolve({ success: true, message: 'Account created successfully.' });
+                }, MOCK_DELAY_MS);
+            });
+        }
+
+        function mockForgotPassword(payload) {
+            return new Promise((resolve) => {
+                setTimeout(() => resolve({ success: true, message: 'Reset link sent.' }), MOCK_DELAY_MS);
+            });
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           REAL API CALLS
+           credentials: 'include' is set because ResultTrack authenticates
+           via session cookies. Tokens returned by the backend are held
+           only in memory for this page's lifetime (see currentSession
+           below) — never written to localStorage, per security policy.
+        ════════════════════════════════════════════════════════════ */
+        let currentSession = null; // in-memory only; cleared on page unload
+
+        async function callAuthAPI(endpoint, payload, mockFn) {
+            if (AUTH_CONFIG.USE_MOCK_API) {
+                return mockFn(payload);
+            }
+
+            let response;
+            try {
+                response = await fetch(endpoint, {
+                    method: AUTH_CONFIG.METHOD,
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(payload)
+                });
+            } catch (networkErr) {
+                throw { success: false, message: 'NETWORK_ERROR' };
+            }
+
+            let data;
+            try {
+                data = await response.json();
+            } catch (parseErr) {
+                data = {};
+            }
+
+            if (!response.ok || data.success === false) {
+                throw {
+                    success: false,
+                    message: data.message || `Request failed with status ${response.status}`
+                };
+            }
+
+            return data;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           SHARED VALIDATION HELPERS
+        ════════════════════════════════════════════════════════════ */
+        const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const PHONE_RE = /^[+]?[\d\s-()]{7,20}$/;
+
+        function setFieldError(fieldEl, errEl, message) {
+            errEl.textContent = message;
+            fieldEl.classList.toggle('has-error', Boolean(message));
+            fieldEl.classList.toggle('is-valid', !message && fieldEl.querySelector('input, select').value.trim() !== '');
+        }
+
+        function passwordChecks(pw) {
+            return {
+                length: pw.length >= 8,
+                upper: /[A-Z]/.test(pw),
+                lower: /[a-z]/.test(pw),
+                number: /\d/.test(pw),
+                special: /[^A-Za-z0-9]/.test(pw)
+            };
+        }
+
+        function passwordStrengthScore(pw) {
+            const checks = passwordChecks(pw);
+            return Object.values(checks).filter(Boolean).length; // 0–5
+        }
+
+        /* ── Password show/hide toggle — reusable across both pages ── */
+        function initPasswordToggle(inputEl, toggleBtnEl) {
+            if (!inputEl || !toggleBtnEl) return;
+            toggleBtnEl.addEventListener('click', () => {
+                const isHidden = inputEl.type === 'password';
+                inputEl.type = isHidden ? 'text' : 'password';
+                toggleBtnEl.innerHTML = isHidden
+                    ? '<i data-lucide="eye-off" style="width:17px;height:17px"></i>'
+                    : '<i data-lucide="eye" style="width:17px;height:17px"></i>';
+                toggleBtnEl.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+                if (window.lucide) lucide.createIcons();
+                inputEl.focus();
+            });
+        }
+
+        /* ── Caps Lock indicator — reusable ── */
+        function initCapsLockHint(inputEl, hintEl) {
+            if (!inputEl || !hintEl) return;
+            inputEl.addEventListener('keyup', (e) => {
+                if (typeof e.getModifierState === 'function') {
+                    hintEl.classList.toggle('is-visible', e.getModifierState('CapsLock'));
+                }
+            });
+            inputEl.addEventListener('blur', () => hintEl.classList.remove('is-visible'));
+        }
+
+        /* ── Custom accessible role dropdown — reusable ── */
+        function initRoleDropdown(rootEl, onSelect) {
+            if (!rootEl) return;
+            const trigger = rootEl.querySelector('.auth-role-trigger');
+            const menu = rootEl.querySelector('.auth-role-menu');
+            const options = Array.from(rootEl.querySelectorAll('.auth-role-option'));
+            const hiddenInput = rootEl.querySelector('input[type="hidden"]');
+            const label = trigger.querySelector('.auth-role-label');
+
+            function closeMenu() {
+                menu.hidden = true;
+                trigger.setAttribute('aria-expanded', 'false');
+            }
+            function openMenu() {
+                menu.hidden = false;
+                trigger.setAttribute('aria-expanded', 'true');
+            }
+
+            trigger.addEventListener('click', () => {
+                menu.hidden ? openMenu() : closeMenu();
+            });
+
+            trigger.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' && menu.hidden) {
+                    e.preventDefault();
+                    openMenu();
+                    options[0] && options[0].focus();
+                }
+                if (e.key === 'Escape') closeMenu();
+            });
+
+            options.forEach((opt, i) => {
+                opt.setAttribute('tabindex', '-1');
+                opt.addEventListener('click', () => selectOption(opt));
+                opt.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOption(opt); }
+                    if (e.key === 'ArrowDown') { e.preventDefault(); (options[i + 1] || options[0]).focus(); }
+                    if (e.key === 'ArrowUp') { e.preventDefault(); (options[i - 1] || options[options.length - 1]).focus(); }
+                    if (e.key === 'Escape') { closeMenu(); trigger.focus(); }
+                });
+            });
+
+            function selectOption(opt) {
+                options.forEach(o => o.classList.remove('is-selected'));
+                opt.classList.add('is-selected');
+                label.textContent = opt.textContent.trim();
+                label.classList.remove('placeholder');
+                hiddenInput.value = opt.dataset.value;
+                closeMenu();
+                trigger.focus();
+                if (typeof onSelect === 'function') onSelect(opt.dataset.value);
+            }
+
+            document.addEventListener('click', (e) => {
+                if (!rootEl.contains(e.target)) closeMenu();
+            });
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           LOGIN PAGE
+        ════════════════════════════════════════════════════════════ */
+        function initLoginPage() {
+            const form = document.getElementById('loginForm');
+            if (!form) return;
+
+            const emailField = document.getElementById('loginEmailField');
+            const emailInput = document.getElementById('loginEmail');
+            const emailError = document.getElementById('loginEmailError');
+
+            const pwField = document.getElementById('loginPasswordField');
+            const pwInput = document.getElementById('loginPassword');
+            const pwError = document.getElementById('loginPasswordError');
+            const pwToggle = document.getElementById('loginPasswordToggle');
+            const capsHint = document.getElementById('loginCapsHint');
+
+            const submitBtn = document.getElementById('loginSubmitBtn');
+            const statusBanner = document.getElementById('loginStatusBanner');
+
+            initPasswordToggle(pwInput, pwToggle);
+            initCapsLockHint(pwInput, capsHint);
+
+            function validateEmail() {
+                const v = emailInput.value.trim();
+                let msg = '';
+                if (!v) msg = 'Email address is required.';
+                else if (!EMAIL_RE.test(v)) msg = 'Enter a valid email address.';
+                setFieldError(emailField, emailError, msg);
+                return !msg;
+            }
+
+            function validatePassword() {
+                const v = pwInput.value;
+                let msg = '';
+                if (!v) msg = 'Password is required.';
+                setFieldError(pwField, pwError, msg);
+                return !msg;
+            }
+
+            function updateSubmitState() {
+                const filled = emailInput.value.trim() && pwInput.value;
+                submitBtn.disabled = !filled;
+            }
+
+            emailInput.addEventListener('input', () => {
+                if (emailField.classList.contains('has-error')) validateEmail();
+                updateSubmitState();
+            });
+            emailInput.addEventListener('blur', validateEmail);
+
+            pwInput.addEventListener('input', () => {
+                if (pwField.classList.contains('has-error')) validatePassword();
+                updateSubmitState();
+            });
+            pwInput.addEventListener('blur', validatePassword);
+
+            function showBanner(type, message, showRetry) {
+                statusBanner.className = `auth-status-banner is-${type}`;
+                statusBanner.innerHTML = `
+      <i data-lucide="${type === 'error' ? 'alert-triangle' : 'info'}" style="width:16px;height:16px"></i>
+      <span>${message}</span>
+      ${showRetry ? '<button type="button" class="retry-btn" id="loginRetryBtn">Try again</button>' : ''}
+    `;
+                statusBanner.hidden = false;
+                if (window.lucide) lucide.createIcons();
+                if (showRetry) {
+                    document.getElementById('loginRetryBtn').addEventListener('click', () => form.requestSubmit());
+                }
+            }
+
+            let isSubmitting = false;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isSubmitting) return;
+
+                const emailOk = validateEmail();
+                const pwOk = validatePassword();
+                if (!emailOk || !pwOk) return;
+
+                isSubmitting = true;
+                submitBtn.disabled = true;
+                submitBtn.classList.add('is-loading');
+                statusBanner.hidden = true;
+
+                const payload = {
+                    email: emailInput.value.trim(),
+                    password: pwInput.value
+                };
+
+                try {
+                    const result = await callAuthAPI(AUTH_CONFIG.LOGIN_ENDPOINT, payload, mockLogin);
+                    currentSession = result; // in-memory only
+                    showBanner('info', `Welcome back — redirecting to your ${result.user.role} dashboard…`, false);
+                    setTimeout(() => redirectToDashboard(result.user.role), 900);
+                } catch (err) {
+                    const message = err && err.message === 'NETWORK_ERROR'
+                        ? 'No internet connection. Check your network and try again.'
+                        : (err && err.message) || 'Something went wrong. Please try again.';
+                    showBanner('error', message, true);
+                    submitBtn.classList.remove('is-loading');
+                    submitBtn.disabled = false;
+                    isSubmitting = false;
+                }
+            });
+
+            updateSubmitState();
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           SIGNUP PAGE
+        ════════════════════════════════════════════════════════════ */
+        function initSignupPage() {
+            const form = document.getElementById('signupForm');
+            if (!form) return;
+
+            const formView = document.getElementById('signupFormView');
+            const successView = document.getElementById('signupSuccessView');
+            const statusBanner = document.getElementById('signupStatusBanner');
+            const submitBtn = document.getElementById('signupSubmitBtn');
+
+            const fields = {
+                fullName: { el: document.getElementById('signupFullName'), field: document.getElementById('signupFullNameField'), err: document.getElementById('signupFullNameError') },
+                email: { el: document.getElementById('signupEmail'), field: document.getElementById('signupEmailField'), err: document.getElementById('signupEmailError') },
+                phone: { el: document.getElementById('signupPhone'), field: document.getElementById('signupPhoneField'), err: document.getElementById('signupPhoneError') },
+                university: { el: document.getElementById('signupUniversity'), field: document.getElementById('signupUniversityField'), err: document.getElementById('signupUniversityError') },
+                department: { el: document.getElementById('signupDepartment'), field: document.getElementById('signupDepartmentField'), err: document.getElementById('signupDepartmentError') },
+                role: { el: document.getElementById('signupRoleValue'), field: document.getElementById('signupRoleField'), err: document.getElementById('signupRoleError') },
+                password: { el: document.getElementById('signupPassword'), field: document.getElementById('signupPasswordField'), err: document.getElementById('signupPasswordError') },
+                confirmPassword: { el: document.getElementById('signupConfirmPassword'), field: document.getElementById('signupConfirmPasswordField'), err: document.getElementById('signupConfirmPasswordError') }
+            };
+
+            const termsCheckbox = document.getElementById('signupTerms');
+            const termsError = document.getElementById('signupTermsError');
+
+            const pwToggle = document.getElementById('signupPasswordToggle');
+            const confirmToggle = document.getElementById('signupConfirmPasswordToggle');
+            const capsHint = document.getElementById('signupCapsHint');
+
+            const strengthBar = document.getElementById('signupStrengthBar');
+            const strengthLabel = document.getElementById('signupStrengthLabel');
+            const checklistEls = {
+                length: document.getElementById('checkLength'),
+                upper: document.getElementById('checkUpper'),
+                lower: document.getElementById('checkLower'),
+                number: document.getElementById('checkNumber'),
+                special: document.getElementById('checkSpecial')
+            };
+
+            initPasswordToggle(fields.password.el, pwToggle);
+            initPasswordToggle(fields.confirmPassword.el, confirmToggle);
+            initCapsLockHint(fields.password.el, capsHint);
+            initRoleDropdown(document.getElementById('signupRoleDropdown'), () => validateField('role'));
+
+            function validateField(key) {
+                const { el, field, err } = fields[key];
+                const value = (el.value || '').trim();
+                let msg = '';
+
+                if (key === 'fullName' && !value) msg = 'Full name is required.';
+                if (key === 'email') {
+                    if (!value) msg = 'Email address is required.';
+                    else if (!EMAIL_RE.test(value)) msg = 'Enter a valid email address.';
+                }
+                if (key === 'phone') {
+                    if (!value) msg = 'Phone number is required.';
+                    else if (!PHONE_RE.test(value)) msg = 'Enter a valid phone number.';
+                }
+                if (key === 'university' && !value) msg = 'University is required.';
+                if (key === 'department' && !value) msg = 'Department is required.';
+                if (key === 'role' && !value) msg = 'Please select a role.';
+                if (key === 'password') {
+                    const checks = passwordChecks(value);
+                    if (!value) msg = 'Password is required.';
+                    else if (!Object.values(checks).every(Boolean)) msg = 'Password does not meet all requirements.';
+                }
+                if (key === 'confirmPassword') {
+                    if (!value) msg = 'Please confirm your password.';
+                    else if (value !== fields.password.el.value) msg = 'Passwords do not match.';
+                }
+
+                if (key === 'role') {
+                    field.classList.toggle('has-error', Boolean(msg));
+                } else {
+                    setFieldError(field, err, msg);
+                }
+                if (key === 'role') err.textContent = msg;
+
+                return !msg;
+            }
+
+            function validateTerms() {
+                const ok = termsCheckbox.checked;
+                termsError.textContent = ok ? '' : 'You must accept the Terms & Conditions to continue.';
+                return ok;
+            }
+
+            function validateAll() {
+                const fieldResults = Object.keys(fields).map(validateField);
+                const termsOk = validateTerms();
+                return fieldResults.every(Boolean) && termsOk;
+            }
+
+            function updatePasswordUI() {
+                const pw = fields.password.el.value;
+                const checks = passwordChecks(pw);
+                const score = passwordStrengthScore(pw);
+
+                Object.keys(checklistEls).forEach(key => {
+                    checklistEls[key].classList.toggle('is-met', checks[key]);
+                });
+
+                const segs = strengthBar.querySelectorAll('.auth-strength-seg');
+                const level = score <= 1 ? 'weak' : score <= 3 ? 'fair' : score === 4 ? 'good' : 'strong';
+                const labelText = { weak: 'Weak', fair: 'Fair', good: 'Good', strong: 'Strong' }[level];
+
+                segs.forEach((seg, i) => {
+                    seg.className = 'auth-strength-seg';
+                    if (pw && i < Math.max(1, score)) seg.classList.add(level);
+                });
+                strengthLabel.textContent = pw ? `Password strength: ${labelText}` : 'Password strength';
+            }
+
+            function updateSubmitState() {
+                const allFilled = Object.values(fields).every(f => (f.el.value || '').trim() !== '')
+                    && termsCheckbox.checked;
+                submitBtn.disabled = !allFilled;
+            }
+
+            Object.keys(fields).forEach(key => {
+                const { el, field } = fields[key];
+                if (!el) return;
+                el.addEventListener('input', () => {
+                    if (key === 'password') updatePasswordUI();
+                    if (key === 'confirmPassword' || key === 'password') {
+                        // Re-validate confirm password live once it has content
+                        if (fields.confirmPassword.el.value) validateField('confirmPassword');
+                    }
+                    if (field && field.classList.contains('has-error')) validateField(key);
+                    updateSubmitState();
+                });
+                el.addEventListener('blur', () => validateField(key));
+            });
+
+            termsCheckbox.addEventListener('change', () => {
+                validateTerms();
+                updateSubmitState();
+            });
+
+            function showBanner(message) {
+                statusBanner.innerHTML = `
+      <i data-lucide="alert-triangle" style="width:16px;height:16px"></i>
+      <span>${message}</span>
+      <button type="button" class="retry-btn" id="signupRetryBtn">Try again</button>
+    `;
+                statusBanner.className = 'auth-status-banner is-error';
+                statusBanner.hidden = false;
+                if (window.lucide) lucide.createIcons();
+                document.getElementById('signupRetryBtn').addEventListener('click', () => form.requestSubmit());
+            }
+
+            let isSubmitting = false;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isSubmitting) return;
+                if (!validateAll()) return;
+
+                isSubmitting = true;
+                submitBtn.disabled = true;
+                submitBtn.classList.add('is-loading');
+                statusBanner.hidden = true;
+
+                const payload = {
+                    fullName: fields.fullName.el.value.trim(),
+                    email: fields.email.el.value.trim(),
+                    phone: fields.phone.el.value.trim(),
+                    university: fields.university.el.value.trim(),
+                    department: fields.department.el.value.trim(),
+                    role: fields.role.el.value,
+                    password: fields.password.el.value
+                };
+
+                try {
+                    await callAuthAPI(AUTH_CONFIG.SIGNUP_ENDPOINT, payload, mockSignup);
+                    formView.hidden = true;
+                    successView.hidden = false;
+                } catch (err) {
+                    const message = err && err.message === 'NETWORK_ERROR'
+                        ? 'No internet connection. Check your network and try again.'
+                        : (err && err.message) || 'Something went wrong. Please try again.';
+                    showBanner(message);
+                    submitBtn.classList.remove('is-loading');
+                    submitBtn.disabled = false;
+                    isSubmitting = false;
+                }
+            });
+
+            updateSubmitState();
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           INIT
+        ════════════════════════════════════════════════════════════ */
+        document.addEventListener('DOMContentLoaded', () => {
+            initLoginPage();
+            initSignupPage();
+            if (window.lucide) lucide.createIcons();
+        });
+
+        /* Clear in-memory session on unload, per "never persist tokens
+           in mock mode" security requirement. */
+        window.addEventListener('beforeunload', () => { currentSession = null; });
+
+    </script>
+</body>
+
+</html>
