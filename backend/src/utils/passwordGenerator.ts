@@ -1,6 +1,7 @@
 import { randomInt } from "crypto";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { prisma } from "../shared/prisma/prisma";
 
 
 const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -68,3 +69,22 @@ export const generateResetToken = (userId: number) => {
         jti,
     };
 };
+
+
+const PIN_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no O/0, I/1 — avoids ambiguity
+
+export async function createUniqueSchoolPin(length: number = 8): Promise<string> {
+    let pin: string;
+    let exists = true;
+
+    while (exists) {
+        pin = "";
+        for (let i = 0; i < length; i++) {
+            pin += PIN_CHARS[randomInt(PIN_CHARS.length)];
+        }
+        const existing = await prisma.school.findUnique({ where: { pin } });
+        exists = !!existing;
+    }
+
+    return pin!;
+}

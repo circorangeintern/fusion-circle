@@ -28,5 +28,19 @@ router.get("/admins", authenticate, authorize(Permission.READ_ADMIN), getAllAdmi
 router.get("/admins/:id", authenticate, authorize(Permission.READ_ADMIN), getAdminById)
 router.post("/logout", authenticate, authorize(Permission.LOGOUT_SUPERADMIN), logoutController)
 
+// Mock/placeholder routes returning descriptions
+router.patch("/admins/:id/activate", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "This route is currently in development. It will activate a deactivated admin account by their ID."
+    });
+});
+
+router.patch("/admins/:id/deactivate", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "This route is currently in development. It will deactivate an active admin account by their ID."
+    });
+});
 
 export default router;

@@ -6,7 +6,7 @@ export const sendEmail = async (
     html: string
 ) => {
     return await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
+        from: `"ResultTrack" <${process.env.EMAIL_FROM}>`,
         to,
         subject,
         html,
