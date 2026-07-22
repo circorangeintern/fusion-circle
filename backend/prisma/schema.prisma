@@ -20,6 +20,9 @@ model School {
   id         Int      @id @default(autoincrement())
   name       String
   pin        String   @unique
+  address    String?
+  state      String?
+  country    String?
   caWeight   Int      @default(30)
   examWeight Int      @default(70)
   createdAt  DateTime @default(now())
@@ -51,6 +54,7 @@ model User {
   schoolsCreated School[] @relation("SchoolCreator")
 
   PasswordResetToken PasswordResetToken?
+  auditLogs          AuditLog[]
 }
 
 model Student {
@@ -120,4 +124,19 @@ enum Year {
   YEAR_5
   YEAR_6
   YEAR_7
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   Int?
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
 }
