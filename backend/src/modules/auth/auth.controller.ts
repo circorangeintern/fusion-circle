@@ -62,7 +62,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
             const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
 
             try {
-                await sendEmail(user.email, "Reset your password", resetPasswordTemplate(user.firstName, resetUrl));
+                sendEmail(user.email, "Reset your password", resetPasswordTemplate(user.firstName, resetUrl));
             } catch (emailError) {
                 console.error("Failed to send reset email:", emailError);
                 // don't let email failure change the response
