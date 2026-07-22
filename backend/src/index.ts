@@ -2,14 +2,39 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import cors from "cors";
 import sessionHandler from "./shared/middlewares/sessions";
 import { globalLimiter } from "./shared/middlewares/rateLimit.middleware"
+import { requestLogger } from "./shared/middlewares/requestLogger";
 import { setupSwagger } from "./contracts/swagger"
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 import router from './routes/index';
 
+app.use(requestLogger);
+app.use(cors({
+  origin: (origin, callback) => {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://localhost:5000",
+      "http://127.0.0.1:5500",
+      "http://localhost:5500",
+    ].filter(Boolean) as string[];
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(globalLimiter);
 app.use(sessionHandler);
