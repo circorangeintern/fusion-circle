@@ -42,102 +42,102 @@ router.patch(
 
 // Schools
 router.get("/schools", (req, res) => {
-    res.status(200).json({ success: true, message: "This route retrieves all schools." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all schools." });
 });
 
 router.get("/schools/:pin", (req, res) => {
-    res.status(200).json({ success: true, message: `This route retrieves a specific school by its PIN: ${req.params.pin}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific school by its PIN: ${req.params.pin}` });
 });
 
 // Students
 router.post("/students", (req, res) => {
-    res.status(200).json({ success: true, message: "This route creates a new student." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a new student." });
 });
 
 router.post("/students/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route performs bulk import/creation of students." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk import/creation of students." });
 });
 
 router.post("/students/custom", (req, res) => {
-    res.status(200).json({ success: true, message: "This route creates a custom amount of student." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a custom amount of student." });
 });
 
 router.get("/students", (req, res) => {
-    res.status(200).json({ success: true, message: "This route retrieves all students." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all students." });
 });
 
 router.get("/students/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route retrieves a specific student by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific student by ID: ${req.params.id}` });
 });
 
 router.patch("/students/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route updates student details by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route updates student details by ID: ${req.params.id}` });
 });
 
 router.patch("/students/:id/activate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route activates a student account by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route activates a student account by ID: ${req.params.id}` });
 });
 
 router.patch("/students/:id/deactivate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route deactivates a student account by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route deactivates a student account by ID: ${req.params.id}` });
 });
 
 // Teachers
 router.post("/teachers", (req, res) => {
-    res.status(200).json({ success: true, message: "This route creates a new teacher." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a new teacher." });
 });
 
 router.post("/teachers/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route performs bulk import/creation of teachers." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk import/creation of teachers." });
 });
 
 router.post("/teachers/custom", (req, res) => {
-    res.status(200).json({ success: true, message: "This route creates a custom amount of teachers." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a custom amount of teachers." });
 });
 
 router.get("/teachers", (req, res) => {
-    res.status(200).json({ success: true, message: "This route retrieves all teachers." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all teachers." });
 });
 
 router.get("/teachers/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route retrieves a specific teacher by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific teacher by ID: ${req.params.id}` });
 });
 
 router.patch("/teachers/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route updates teacher details by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route updates teacher details by ID: ${req.params.id}` });
 });
 
 router.patch("/teachers/:id/activate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route activates a teacher account by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route activates a teacher account by ID: ${req.params.id}` });
 });
 
 router.patch("/teachers/:id/deactivate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route deactivates a teacher account by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route deactivates a teacher account by ID: ${req.params.id}` });
 });
 
 // Courses
 router.post("/courses", (req, res) => {
-    res.status(200).json({ success: true, message: "This route creates a new course." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a new course." });
 });
 
 router.post("/courses/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route performs bulk import/creation of courses." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk import/creation of courses." });
 });
 
 router.post("/courses/custom", (req, res) => {
-    res.status(200).json({ success: true, message: "This route creates custom amount of  courses ." });
+    res.status(200).json({ success: true, message: "This route is currently in development.This route creates custom amount of  courses ." });
 });
 
 router.get("/courses", (req, res) => {
-    res.status(200).json({ success: true, message: "This route retrieves all courses." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all courses." });
 });
 
 router.get("/courses/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route retrieves a specific course by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific course by ID: ${req.params.id}` });
 });
 
 router.patch("/courses/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route updates course details by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route updates course details by ID: ${req.params.id}` });
 });
 
 // Departments
@@ -167,15 +167,15 @@ router.patch("/departments/:id", (req, res) => {
 
 // Classes
 router.get("/classes", (req, res) => {
-    res.status(200).json({ success: true, message: "This route retrieves all classes and details." });
+    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all classes and details." });
 });
 
 router.get("/classes/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route retrieves a specific class and its details by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific class and its details by ID: ${req.params.id}` });
 });
 
 router.patch("/classes/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route updates class details by ID: ${req.params.id}` });
+    res.status(200).json({ success: true, message: `This route is currently in development. This route updates class details by ID: ${req.params.id}` });
 });
 
 export default router;
