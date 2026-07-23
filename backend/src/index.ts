@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import { corsOptions } from "../src/shared/middlewares/cors";
+import { corsOptions } from "./shared/middlewares/cors";
 import sessionHandler from "./shared/middlewares/sessions";
 import { globalLimiter } from "./shared/middlewares/rateLimit.middleware"
 import { requestLogger } from "./shared/middlewares/requestLogger";
