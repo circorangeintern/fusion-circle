@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 import router from './routes/index';
 import pinoHttp from "pino-http";
-import { logger } from "../src/shared/logger";
+import { logger } from "./shared/logger";
 
 app.use(requestLogger);
 app.use(cors(corsOptions));
