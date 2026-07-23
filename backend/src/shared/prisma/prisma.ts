@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
-import { log } from "node:console";
+import { logger } from "../logger";
 
 // const connectionString = process.env.DATABASE_URL;
 
@@ -23,10 +23,10 @@ export const prisma = new PrismaClient({
 
 export const connectDB = async () => {
     await prisma.$connect();
-    console.log("Database connected.");
+    logger.info({ db: "postgres" }, "Database connected");
 };
 
 export const disconnectDB = async () => {
     await prisma.$disconnect();
-    console.log("Database disconnected.");
-};
+    logger.info({ db: "postgres" }, "Database disconnected");
+};

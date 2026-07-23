@@ -4,7 +4,6 @@ import { logAudit } from "../../../utils/auditLogger";
 import { createUniqueSchoolPin } from "../../../utils/passwordGenerator"
 import { createSchoolService, updateSchoolService } from "./admin.services"
 import { success } from "zod/v4";
-import { log } from "node:console";
 
 export const createSchoolController = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -43,7 +42,7 @@ export const createSchoolController = async (req: Request, res: Response, next: 
             data: school,
         });
     } catch (error) {
-        console.log(error);
+        req.log.error({ err: error, userId: req.user?.id }, "createSchoolController failed");
 
         return res.status(500).json({
             success: false,
@@ -89,7 +88,7 @@ export const updateSchoolController = async (
                 details: req.body,
             });
         } catch (error) {
-            console.error("Failed to write audit log:", error);
+            req.log.error({ err: error, userId: req.user?.id }, "Failed to write audit log for updateSchoolController");
         }
 
         return res.status(200).json(result);

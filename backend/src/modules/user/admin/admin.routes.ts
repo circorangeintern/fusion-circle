@@ -10,13 +10,12 @@ import {
 } from "./admin.controller"
 import { loginLimiter } from "../../../shared/middlewares/rateLimit.middleware"
 import { authenticate, authorize } from "../../../shared/middlewares/auth.middleware"
-import { log } from "console";
 import { Permission } from "../../../shared/permission";
 
 const router = Router();
 
 router.get("/", (req, res) => {
-    console.log("Admin routes are ready for development.");
+    req.log.info("Admin routes health check");
 
     res.status(200).json({
         success: true,

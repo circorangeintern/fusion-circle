@@ -1,4 +1,5 @@
 import { prisma } from "../shared/prisma/prisma";
+import { logger } from "../shared/logger";
 
 export interface AuditLogParams {
     userId?: number | null;
@@ -8,14 +9,10 @@ export interface AuditLogParams {
     details?: Record<string, any>;
 }
 
-/**
- * Log a high-value business action into PostgreSQL (AuditLog).
- * Safe, asynchronous, and non-blocking.
- */
+
 export const logAudit = async (params: AuditLogParams): Promise<void> => {
     const { userId, action, entityType, entityId, details } = params;
 
-    // Fire and forget so business logic doesn't block or fail
     Promise.resolve().then(async () => {
         try {
             await prisma.auditLog.create({
@@ -28,11 +25,15 @@ export const logAudit = async (params: AuditLogParams): Promise<void> => {
                 },
             });
 
-            console.log(
-                `[AUDIT LOG] Action: ${action} | Entity: ${entityType}:${entityId ?? "N/A"} | User: ${userId ?? "System"}`
+            logger.info(
+                { action, entityType, entityId: entityId ?? null, userId: userId ?? null },
+                "Audit log recorded"
             );
         } catch (error) {
-            console.error("[AUDIT LOG ERROR] Failed to record audit entry:", error);
+            logger.error(
+                { err: error, action, entityType, entityId: entityId ?? null, userId: userId ?? null },
+                "[AUDIT LOG ERROR] Failed to record audit entry"
+            );
         }
     });
 };

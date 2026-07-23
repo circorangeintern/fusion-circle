@@ -1,5 +1,5 @@
-import { error, log } from "console";
 import { Request, Response, NextFunction } from "express";
+
 import {
     getUser,
     comparePassword, checkActivatedStatus,
@@ -61,12 +61,15 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
 
             const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
 
-            try {
-                sendEmail(user.email, "Reset your password", resetPasswordTemplate(user.firstName, resetUrl));
-            } catch (emailError) {
-                console.error("Failed to send reset email:", emailError);
-                // don't let email failure change the response
-            }
+            // try {
+            void sendEmail(user.email, "Reset your password", resetPasswordTemplate(user.firstName, resetUrl)).catch((err) => {
+                req.log.error({ err, userId: user.id }, "Failed to send password reset email");
+            });
+
+            //     } catch (emailError) {
+            //         console.error("Failed to send reset email:", emailError);
+            //         // don't let email failure change the response
+            //     }
         }
 
         return res.status(200).json({
@@ -76,7 +79,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
             error: null,
         });
     } catch (error) {
-        console.error("forgotPasswordController error:", error);
+        req.log.error({ err: error, userId: req.user?.id }, "forgotPasswordController failed");
         return res.status(500).json({
             success: false,
             code: "INTERNAL_SERVER_ERROR",
@@ -154,7 +157,7 @@ export const resetPasswordController = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        console.error("resetPasswordController error:", error);
+        req.log.error({ err: error, userId: req.user?.id }, "resetPasswordController failed");
         return res.status(401).json({
             success: false,
             code: "INVALID_TOKEN",
