@@ -15,6 +15,7 @@ import { resetPasswordTemplate } from "../email/templates/passwordreset";
 import jwt from "jsonwebtoken";
 import { getObjectById, updateObject, findAndDeleteById, findUniqueObject, findAndDeleteObject } from "../../shared/prisma/repoLayer";
 import { prisma } from "../../shared/prisma/prisma";
+import { logAudit } from "../../utils/auditLogger";
 
 export const loginController = async (req: Request, res: Response) => {
     const user = await getUser(req.body.email, res);
@@ -24,6 +25,14 @@ export const loginController = async (req: Request, res: Response) => {
     if (!isActivated) { return }
 
     await createSession(req, { id: user.id, role: user.role });
+
+    logAudit({
+        userId: user.id,
+        action: "USER_LOGIN",
+        entityType: "USER",
+        entityId: user.id,
+        details: { email: user.email, role: user.role },
+    });
 
     return res.status(200).json({
         status: "success",
