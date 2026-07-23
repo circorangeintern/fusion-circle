@@ -17,8 +17,25 @@ import { logger } from "../src/shared/logger";
 
 app.use(requestLogger);
 app.use(cors(corsOptions));
-
-app.use(pinoHttp({ logger }));
+app.use(
+  pinoHttp({
+    logger,
+    serializers: {
+      req: (req) => ({
+        method: req.method,
+        url: req.url,
+        userAgent: req.headers["user-agent"],
+      }),
+      res: (res) => ({
+        statusCode: res.statusCode,
+      }),
+    },
+    customLogLevel: (req, res, err) => {
+      if (err || res.statusCode >= 500) return "error";
+      return "info";
+    },
+  })
+);
 app.use(express.json());
 app.use(globalLimiter);
 app.use(sessionHandler);

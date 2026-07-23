@@ -57,14 +57,16 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
         if (user) {
             const { token, jti } = generateResetToken(user.id);
             const jtiHash = await hashPassword(jti);
+            console.time("save otp to db")
             await saveOtpToDb(jtiHash, user.id);
-
+            console.timeEnd("save otp to db")
             const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
-
+            console.time("send email")
             // try {
             void sendEmail(user.email, "Reset your password", resetPasswordTemplate(user.firstName, resetUrl)).catch((err) => {
                 req.log.error({ err, userId: user.id }, "Failed to send password reset email");
             });
+            console.timeEnd("send email")
 
             //     } catch (emailError) {
             //         console.error("Failed to send reset email:", emailError);
