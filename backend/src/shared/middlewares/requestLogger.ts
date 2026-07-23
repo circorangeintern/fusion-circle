@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import { logger } from "../logger";
 
-/**
- * Lightweight HTTP request logger middleware for stdout console streaming.
- * Ideal for Render real-time dashboard log tailing.
- */
+
 export const requestLogger = (req: Request, res: Response, next: NextFunction) => {
     const startTime = Date.now();
     const { method, originalUrl } = req;
@@ -12,11 +10,23 @@ export const requestLogger = (req: Request, res: Response, next: NextFunction) =
     res.on("finish", () => {
         const duration = Date.now() - startTime;
         const statusCode = res.statusCode;
-        const statusIcon = statusCode >= 500 ? " " : statusCode >= 400 ? "⚠️" : "✅";
 
-        console.log(
-            `[HTTP] ${statusIcon} ${method} ${originalUrl} ${statusCode} - ${duration}ms - ${ip}`
-        );
+        const logPayload = {
+            method,
+            url: originalUrl,
+            statusCode,
+            responseTime: `${duration}ms`,
+            ip,
+            userId: (req as any).user?.id ?? null,
+        };
+
+        if (statusCode >= 500) {
+            logger.error(logPayload, "HTTP request completed with server error");
+        } else if (statusCode >= 400) {
+            logger.warn(logPayload, "HTTP request completed with client error");
+        } else {
+            logger.info(logPayload, "HTTP request completed");
+        }
     });
 
     next();

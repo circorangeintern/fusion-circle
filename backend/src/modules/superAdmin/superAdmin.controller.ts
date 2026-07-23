@@ -1,4 +1,5 @@
 import { error, log } from "console";
+import { logAudit } from "../../utils/auditLogger";
 import { Request, Response, NextFunction } from "express";
 import {
     getUser, comparePassword, createAdmin,
@@ -15,14 +16,28 @@ import { hashPassword } from "../../utils/passwordHandler";
 
 
 export const loginController = async (req: Request, res: Response, next: NextFunction) => {
-
+    console.time("find user");
     const user = await getUser(req.body.email, res);
+    console.timeEnd("find user");
+    console.time("compare password")
     const isCorrectPassword = await comparePassword(user.password, req.body.password, res);
     if (!isCorrectPassword) { return }
+    console.timeEnd("compare password")
+    console.time("create session")
     await createSession(req, { id: user.id, role: user.role });
+    console.timeEnd("create session")
+    console.time("audit log")
+    logAudit({
+        userId: user.id,
+        action: "SUPER_ADMIN_LOGIN",
+        entityType: "SUPER_ADMIN",
+        entityId: user.id,
+        details: { email: user.email, role: user.role },
+    });
+    console.timeEnd("audit log")
     return res.status(200).json({
-        status: "success",
-        statusCode: 200,
+        success: true,
+        code: "SUCCESS",
         message: "Login successful",
         data: {
             id: user.id,

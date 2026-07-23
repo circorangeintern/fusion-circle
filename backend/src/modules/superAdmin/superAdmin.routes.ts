@@ -7,13 +7,12 @@ import {
 } from "./superAdmin.controller"
 import { loginLimiter } from "../../shared/middlewares/rateLimit.middleware"
 import { authenticate, authorize } from "../../shared/middlewares/auth.middleware"
-import { log } from "console";
 import { Permission } from "../../shared/permission";
 
 const router = Router();
 
 router.get("/", (req, res) => {
-    console.log("SuperAdmin routes are ready for development.");
+    req.log.info("SuperAdmin routes health check");
 
     res.status(200).json({
         success: true,

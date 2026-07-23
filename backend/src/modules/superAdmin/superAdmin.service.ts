@@ -4,10 +4,10 @@ import { getUserByEmail, createObject, deactivateAccountById, getObjectsByField 
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import "express-session";
-import { log } from "node:console";
 import { UserArgs } from "@prisma/client/runtime/client";
 import { welcomeAdminTemplate } from "../email/templates/welcome";
 import { sendEmail } from "../email/email.service"
+import { logger } from "../../shared/logger";
 
 
 
@@ -147,7 +147,7 @@ export const getAdminsService = async (res: Response) => {
             data: safeAdmins,
         });
     } catch (error) {
-        console.error("getAdminsService error:", error);
+        logger.error({ err: error }, "getAdminsService failed");
         return res.status(500).json({
             status: "error",
             statusCode: 500,
@@ -182,7 +182,7 @@ export const getAdminByIdService = async (id: number, res: Response) => {
             data: safeAdmin,
         });
     } catch (error) {
-        console.error("getAdminByIdService error:", error);
+        logger.error({ err: error }, "getAdminByIdService failed");
         return res.status(500).json({
             status: "error",
             statusCode: 500,
