@@ -8,6 +8,11 @@ import { success } from "zod/v4";
 export const createSchoolController = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
+
+        if (!req.user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
         if (req.user?.schoolId) {
             return res.status(400).json({
                 success: false,
@@ -18,6 +23,8 @@ export const createSchoolController = async (req: Request, res: Response, next: 
         }
 
         const pin = await createUniqueSchoolPin();
+
+
         const userId = req.user?.id;
 
         const school = await createSchoolService(req.body, { userId, pin })
@@ -29,9 +36,15 @@ export const createSchoolController = async (req: Request, res: Response, next: 
             entityType: "SCHOOL",
             entityId: school.id,
             details: {
-                schoolName: school.name,
-                caWeight: school.caWeight,
-                examWeight: school.examWeight,
+                name: school.name,
+                pin: pin,
+                email: school.email,
+                address: school.address,
+                city: school.city,
+                state: school.state,
+                country: school.country,
+                schoolType: school.schoolType,
+                description: school.description,
             },
         });
 

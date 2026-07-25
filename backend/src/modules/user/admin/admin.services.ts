@@ -1,37 +1,44 @@
 import { prisma } from "../../../shared/prisma/prisma";
 import { Prisma } from "@prisma/client";
 import { updateObject } from "../../../shared/prisma/repoLayer"
-
 type CreateSchoolInput = {
-    schoolName: string;
-    address?: string;
-    state?: string;
-    country?: string;
-    caWeight?: number;
-    examWeight?: number;
-    createdById: number;
+    name: string;
+    email: string;
+    website?: string;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    schoolType: "UNIVERSITY" | "SECONDARY_SCHOOL";
+    description?: string;
 };
 
-
-export const createSchoolService = async (input: CreateSchoolInput, data: any) => {
-
+export const createSchoolService = async (
+    input: CreateSchoolInput,
+    data: { pin: string; userId: number }
+) => {
     return prisma.$transaction(async (tx) => {
         const newSchool = await tx.school.create({
             data: {
                 pin: data.pin,
-                name: input.schoolName,
+                name: input.name,
+                email: input.email,
+                website: input.website,
                 address: input.address,
+                city: input.city,
                 state: input.state,
                 country: input.country,
-                caWeight: input.caWeight ?? 30,
-                examWeight: input.examWeight ?? 70,
+                schoolType: input.schoolType,
+                description: input.description,
                 createdById: data.userId,
             },
         });
 
         await tx.user.update({
             where: { id: data.userId },
-            data: { schoolId: newSchool.id },
+            data: {
+                schoolId: newSchool.id,
+            },
         });
 
         return newSchool;

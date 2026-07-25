@@ -16,22 +16,34 @@ model SuperAdmin {
   updatedAt DateTime @updatedAt
 }
 
+enum SchoolType {
+  UNIVERSITY
+  SECONDARY_SCHOOL
+}
+
 model School {
-  id         Int      @id @default(autoincrement())
-  name       String
-  pin        String   @unique
-  address    String?
-  state      String?
-  country    String?
-  caWeight   Int      @default(30)
-  examWeight Int      @default(70)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          Int         @id @default(autoincrement())
+
+  name        String
+  pin         String      @unique
+  email       String      @unique
+  website     String?
+
+  address     String
+  city        String
+  state       String
+  country     String
+
+  schoolType  SchoolType
+  description String?
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   createdById Int
-  createdBy   User @relation("SchoolCreator", fields: [createdById], references: [id])
+  createdBy   User        @relation("SchoolCreator", fields: [createdById], references: [id])
 
-  users User[]
+  users       User[]
 }
 
 model User {
