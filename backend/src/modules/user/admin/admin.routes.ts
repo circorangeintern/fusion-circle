@@ -5,6 +5,7 @@ import { validate } from "../../../shared/middlewares/auth.middleware";
 import {
     createSchoolController,
     updateSchoolController,
+    readSchoolController
     // CreateAdmin, DeactivateAdmin,
     //getAllAdmins, getAdminById, logoutController
 } from "./admin.controller"
@@ -40,9 +41,11 @@ router.patch(
 );
 
 // Schools
-router.get("/schools", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all schools." });
-});
+router.get("/schools",
+    authenticate,
+    authorize(Permission.READ_SCHOOL),
+    readSchoolController
+);
 
 router.get("/schools/:pin", (req, res) => {
     res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific school by its PIN: ${req.params.pin}` });
