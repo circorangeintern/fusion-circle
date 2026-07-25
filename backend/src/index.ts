@@ -38,6 +38,7 @@ app.use(
 );
 app.use(express.json());
 app.use(globalLimiter);
+app.set("trust proxy", 1);
 app.use(sessionHandler);
 
 
