@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 import router from './routes/index';
 import pinoHttp from "pino-http";
-import { logger } from "../src/shared/logger";
+import { logger } from "./shared/logger";
 
 app.use(requestLogger);
 app.use(cors(corsOptions));
@@ -38,6 +38,7 @@ app.use(
 );
 app.use(express.json());
 app.use(globalLimiter);
+app.set("trust proxy", 1);
 app.use(sessionHandler);
 
 
