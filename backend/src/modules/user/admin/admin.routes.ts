@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { CreateSchoolValidator, updateSchoolValidator } from "../../../shared/validator/validator";
+import { CreateSchoolValidator, UpdateSchoolValidator } from "../../../shared/validator/validator";
 import { validate } from "../../../shared/middlewares/auth.middleware";
 import {
     createSchoolController,
@@ -36,7 +36,7 @@ router.patch(
     "/schools/:id",
     authenticate,
     authorize(Permission.UPDATE_SCHOOL),
-    validate(updateSchoolValidator),
+    validate(UpdateSchoolValidator),
     updateSchoolController
 );
 

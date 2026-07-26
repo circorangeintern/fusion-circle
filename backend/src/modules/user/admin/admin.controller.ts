@@ -117,6 +117,17 @@ export const updateSchoolController = async (
 ) => {
     try {
         const schoolId = Number(req.params.id);
+        const userSchoolId = Number(req.user?.schoolId);
+
+
+        if (!userSchoolId) {
+            return res.status(403).json({
+                success: false,
+                code: "FORBIDDEN",
+                message: "You do not manage a school.",
+                error: null,
+            });
+        }
 
         if (!schoolId) {
             return res.status(400).json({
@@ -126,6 +137,19 @@ export const updateSchoolController = async (
                 error: null,
             });
         }
+
+        if (schoolId !== userSchoolId) {
+            return res.status(403).json({
+                success: false,
+                code: "NOT_AUTHORIZED",
+                message: "You do not manage this school.",
+                error: null,
+            });
+        }
+
+
+
+
 
         const result = await updateSchoolService(schoolId, req.body);
 
@@ -139,8 +163,8 @@ export const updateSchoolController = async (
                 userId: req.user?.id,
                 action: "UPDATE_SCHOOL",
                 entityType: "SCHOOL",
-                entityId: result.data.id,
-                details: req.body,
+                entityId: schoolId,
+                details: result.data,
             });
         } catch (error) {
             req.log.error({ err: error, userId: req.user?.id }, "Failed to write audit log for updateSchoolController");
@@ -148,6 +172,7 @@ export const updateSchoolController = async (
 
         return res.status(200).json(result);
     } catch (error) {
+        req.log.error({ err: error, userId: req.user?.id }, "updateSchoolController failed");
         next(error);
     }
 };
