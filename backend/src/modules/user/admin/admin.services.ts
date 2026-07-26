@@ -46,11 +46,11 @@ export const createSchoolService = async (
 };
 
 
-export const updateSchoolService = async (pin: string, data: object) => {
+export const updateSchoolService = async (id: number, data: object) => {
     try {
         const result = await updateObject(
             prisma.school,
-            { pin },
+            { id },
             data
         );
 

@@ -33,7 +33,7 @@ router.post("/schools",
 
 
 router.patch(
-    "/schools/:pin",
+    "/schools/:id",
     authenticate,
     authorize(Permission.UPDATE_SCHOOL),
     validate(updateSchoolValidator),
