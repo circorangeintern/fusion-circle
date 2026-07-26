@@ -21,6 +21,7 @@ export enum Permission {
     LOGOUT_SUPERADMIN = "logout:superadmin",
 
     CREATE_SCHOOL = "create:school",
+    READ_SCHOOL = "read:school",
     UPDATE_SCHOOL = "update:school",
     LOGOUT_USER = "logout:user"
 }
@@ -35,7 +36,8 @@ export const RolePermissions: Record<Role, Permission[]> = {
     [Role.ADMIN]: [
         Permission.CREATE_SCHOOL,
         Permission.UPDATE_SCHOOL,
-        Permission.LOGOUT_USER
+        Permission.LOGOUT_USER,
+        Permission.READ_SCHOOL
     ],
     [Role.TEACHER]: [
         Permission.LOGOUT_USER

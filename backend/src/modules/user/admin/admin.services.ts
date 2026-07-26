@@ -1,6 +1,6 @@
 import { prisma } from "../../../shared/prisma/prisma";
 import { Prisma } from "@prisma/client";
-import { updateObject } from "../../../shared/prisma/repoLayer"
+import { updateObject, getObjectsByField } from "../../../shared/prisma/repoLayer"
 type CreateSchoolInput = {
     name: string;
     email: string;
@@ -83,3 +83,34 @@ export const updateSchoolService = async (pin: string, data: object) => {
         };
     }
 };
+
+
+export const readSchoolService = async (id: number) => {
+    try {
+        const school = await getObjectsByField(prisma.school, "createdById", id);
+        if (!school[0]) {
+            return {
+                success: false as const,
+                statusCode: 404,
+                code: "NOT_FOUND",
+                message: "You do not manage any school",
+                error: null,
+            };
+        }
+
+        return {
+            success: true as const,
+            code: "OK",
+            message: "School fetched successfully",
+            data: school
+        };
+    } catch (error) {
+        return {
+            success: false as const,
+            statusCode: 500,
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Failed to read school.",
+            error: error
+        };
+    }
+}
