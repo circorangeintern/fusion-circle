@@ -46,11 +46,11 @@ export const createSchoolService = async (
 };
 
 
-export const updateSchoolService = async (id: number, data: object) => {
+export const updateSchoolService = async (id: number, data: Prisma.SchoolUpdateInput) => {
     try {
         const result = await updateObject(
             prisma.school,
-            { id },
+            { id: id },
             data
         );
 
@@ -69,7 +69,7 @@ export const updateSchoolService = async (id: number, data: object) => {
                 success: false as const,
                 statusCode: 404,
                 code: "NOT_FOUND",
-                message: "The school with the provided pin does not exist.",
+                message: "The school with the provided id does not exist.",
                 error: null,
             };
         }

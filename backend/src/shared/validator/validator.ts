@@ -113,35 +113,51 @@ export const CreateSchoolValidator = z.object({
 });
 
 
-export const updateSchoolValidator = z.object({
-    name: z.string().min(2).optional(),
-    address: z.string().optional(),
-    state: z.string().optional(),
-    country: z.string().optional(),
+export const UpdateSchoolValidator = z.object({
+    name: z
+        .string()
+        .min(1, "School name is required")
+        .optional(),
 
-    caWeight: z.number().int().min(0).max(100).optional(),
-    examWeight: z.number().int().min(0).max(100).optional(),
-}).superRefine((data, ctx) => {
-    const hasCa = data.caWeight !== undefined;
-    const hasExam = data.examWeight !== undefined;
+    email: z
+        .string()
+        .email("Invalid school email")
+        .optional(),
 
-    if (hasCa !== hasExam) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "caWeight and examWeight must be updated together.",
-            path: hasCa ? ["examWeight"] : ["caWeight"],
-        });
+    website: z
+        .string()
+        .url("Invalid website URL")
+        .optional()
+        .or(z.literal("")),
 
-        return;
-    }
+    address: z
+        .string()
+        .min(1, "Address is required")
+        .optional(),
 
-    if (hasCa && hasExam && data.caWeight! + data.examWeight! !== 100) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "caWeight and examWeight must sum to 100.",
-            path: ["caWeight"],
-        });
-    }
+    city: z
+        .string()
+        .min(1, "City is required")
+        .optional(),
+
+    state: z
+        .string()
+        .min(1, "State is required")
+        .optional(),
+
+    country: z
+        .string()
+        .min(1, "Country is required")
+        .optional(),
+
+    schoolType: z
+        .enum(["UNIVERSITY", "SECONDARY_SCHOOL"])
+        .optional(),
+
+    description: z
+        .string()
+        .optional()
+        .or(z.literal("")),
 });
 
 export type LoginInput = z.infer<typeof loginValidator>;
@@ -149,4 +165,4 @@ export type CreateAdminInput = z.infer<typeof CreateAdminValidator>;
 export type forgotPasswordInput = z.infer<typeof forgotPasswordValidator>;
 export type resetPasswordInput = z.infer<typeof resetPasswordValidator>;
 export type CreateSchoolInput = z.infer<typeof CreateSchoolValidator>;
-export type updateSchoolInput = z.infer<typeof updateSchoolValidator>;
+export type UpdateSchoolInput = z.infer<typeof UpdateSchoolValidator>;
