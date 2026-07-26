@@ -66,12 +66,6 @@ export const CreateSchoolValidator = z.object({
         })
         .min(1, "School name is required"),
 
-    pin: z
-        .string({
-            required_error: "School PIN is required",
-        })
-        .min(1, "School PIN is required"),
-
     email: z
         .string({
             required_error: "School email is required",
