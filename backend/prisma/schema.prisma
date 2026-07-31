@@ -35,15 +35,17 @@ model School {
   country     String
 
   schoolType  SchoolType
+  schoolConfig SchoolConfig? 
   description String?
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   createdById Int
-  createdBy   User        @relation("SchoolCreator", fields: [createdById], references: [id])
+  createdBy   User        @relation("SchoolCreator", fields: [createdById], references: [id], onDelete: Cascade)
 
   users       User[]
+  courses     Course[]
 }
 
 model User {
@@ -61,7 +63,7 @@ model User {
   teacher      Teacher?
 
   schoolId Int?
-  school   School? @relation(fields: [schoolId], references: [id])
+  school   School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
 
   schoolsCreated School[] @relation("SchoolCreator")
 
@@ -71,21 +73,38 @@ model User {
 
 model Student {
   userId Int    @id
-  regNo  String @unique
+  regNo  String? @unique
+  department   String?
   year   Year?
   class  Class?
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Teacher {
   userId       Int      @id
   department   String?
-  level        Year?
   studentClass Class?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courses      Course[]
 }
+
+model Course {
+  id        Int      @id @default(autoincrement())
+  name      String
+  year      Year?
+  class     Class?
+  department String?
+  isActive   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  teachers Teacher[]
+  schoolId Int
+  school   School @relation(fields: [schoolId], references: [id])
+  @@unique([name, schoolId, year, class])
+}
+
 
 model Session {
   sid    String   @id @db.VarChar
@@ -104,6 +123,20 @@ model PasswordResetToken {
 
   userId Int  @unique
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model SchoolConfig {
+  id       Int    @id @default(autoincrement())
+  schoolId Int    @unique
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  gradingBands Json @default("[{\"min\":70,\"max\":100,\"grade\":\"A\",\"point\":5},{\"min\":60,\"max\":69,\"grade\":\"B\",\"point\":4},{\"min\":50,\"max\":59,\"grade\":\"C\",\"point\":3},{\"min\":45,\"max\":49,\"grade\":\"D\",\"point\":2},{\"min\":40,\"max\":44,\"grade\":\"E\",\"point\":1},{\"min\":0,\"max\":39,\"grade\":\"F\",\"point\":0}]")
+
+  cgpa Json @default("{\"caWeight\":30,\"examWeight\":70,\"passMark\":40}")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
