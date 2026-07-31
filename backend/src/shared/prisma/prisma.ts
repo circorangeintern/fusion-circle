@@ -14,11 +14,17 @@ import { logger } from "../logger";
 const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 10000,
 });
 
 
 export const prisma = new PrismaClient({
-    adapter
+    adapter,
+    log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
 });
 
 export const connectDB = async () => {
@@ -29,4 +35,4 @@ export const connectDB = async () => {
 export const disconnectDB = async () => {
     await prisma.$disconnect();
     logger.info({ db: "postgres" }, "Database disconnected");
-};
+};

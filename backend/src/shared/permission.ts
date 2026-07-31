@@ -13,6 +13,7 @@
 // }
 
 import { Role } from "@prisma/client";
+import { permission } from "node:process";
 
 export enum Permission {
     CREATE_ADMIN = "create:admin",
@@ -21,9 +22,25 @@ export enum Permission {
     LOGOUT_SUPERADMIN = "logout:superadmin",
 
     CREATE_SCHOOL = "create:school",
+    CREATE_STUDENT = "create:student",
     READ_SCHOOL = "read:school",
     UPDATE_SCHOOL = "update:school",
-    LOGOUT_USER = "logout:user"
+
+    LOGOUT_USER = "logout:user",
+    READ_USER = "read:user",
+    UPDATE_USER = "update:user",
+    READ_STUDENT = "read:student",
+    UPDATE_STUDENT = "update:student",
+
+    CREATE_TEACHER = "create:teacher",
+    READ_TEACHER = "read:teacher",
+    UPDATE_TEACHER = "update:teacher",
+
+    CREATE_COURSE = "create:course",
+    UPDATE_COURSE = "update:course",
+    READ_COURSE = "read:course",
+    DELETE_COURSE = "delete:course",
+
 }
 
 export const RolePermissions: Record<Role, Permission[]> = {
@@ -31,13 +48,25 @@ export const RolePermissions: Record<Role, Permission[]> = {
         Permission.CREATE_ADMIN,
         Permission.DELETE_ADMIN,
         Permission.READ_ADMIN,
-        Permission.LOGOUT_SUPERADMIN
+        Permission.LOGOUT_SUPERADMIN,
+        Permission.READ_USER
     ],
     [Role.ADMIN]: [
         Permission.CREATE_SCHOOL,
         Permission.UPDATE_SCHOOL,
         Permission.LOGOUT_USER,
-        Permission.READ_SCHOOL
+        Permission.READ_SCHOOL,
+        Permission.CREATE_STUDENT,
+        Permission.READ_STUDENT,
+        Permission.UPDATE_STUDENT,
+        Permission.CREATE_TEACHER,
+        Permission.READ_TEACHER,
+        Permission.UPDATE_TEACHER,
+        Permission.CREATE_COURSE,
+        Permission.UPDATE_COURSE,
+        Permission.READ_COURSE,
+        Permission.DELETE_COURSE,
+        Permission.UPDATE_USER
     ],
     [Role.TEACHER]: [
         Permission.LOGOUT_USER

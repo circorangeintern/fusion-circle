@@ -1,17 +1,34 @@
 
 import { Router } from "express";
-import { CreateSchoolValidator, UpdateSchoolValidator } from "../../../shared/validator/validator";
+import {
+    CreateSchoolValidator, UpdateSchoolValidator,
+    studentRowSchema, updateStudentSchema,
+    teacherRowSchema, updateTeacherSchema,
+    createCourseSchema, updateCourseSchema,
+    updateSchoolConfigSchema
+} from "../../../shared/validator/validator";
 import { validate } from "../../../shared/middlewares/auth.middleware";
 import {
     createSchoolController,
     updateSchoolController,
-    readSchoolController
+    readSchoolController,
+    CreateBulkStudentsController, createStudentController,
+    getStudentsController, getStudentByIdController, updateStudentController,
+    CreateBulkTeachersController, createTeacherController,
+    getTeachersController, getTeacherByIdController, updateTeacherController,
+    bulkUploadCoursesController, createCourseController, updateCourseController,
+    getCoursesController, getCourseByIdController, deleteCourseByIdController,
+    addTeacherToCourseController, removeTeacherFromCourseController,
+    activateUserController, deactivateUserController,
+    getSchoolConfigController, updateSchoolConfigController
     // CreateAdmin, DeactivateAdmin,
     //getAllAdmins, getAdminById, logoutController
 } from "./admin.controller"
 import { loginLimiter } from "../../../shared/middlewares/rateLimit.middleware"
 import { authenticate, authorize } from "../../../shared/middlewares/auth.middleware"
 import { Permission } from "../../../shared/permission";
+import { upload } from "../../../shared/middlewares/csvFilter";
+
 
 const router = Router();
 
@@ -47,112 +64,163 @@ router.get("/schools",
     readSchoolController
 );
 
-router.get("/schools/:pin", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific school by its PIN: ${req.params.pin}` });
-});
+router.get("/schools/config",
+    authenticate,
+    authorize(Permission.READ_SCHOOL),
+    getSchoolConfigController
+);
+
+router.put("/schools/config",
+    authenticate,
+    authorize(Permission.UPDATE_SCHOOL),
+    validate(updateSchoolConfigSchema),
+    updateSchoolConfigController
+);
+
+
+
+//auth
+router.patch("/users/:id/activate",
+    authenticate,
+    authorize(Permission.UPDATE_USER),
+    activateUserController
+
+);
+
+router.patch("/users/:id/deactivate",
+    authenticate,
+    authorize(Permission.UPDATE_USER),
+    deactivateUserController
+);
+
 
 // Students
-router.post("/students", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a new student." });
-});
+router.post("/students",
+    authenticate,
+    authorize(Permission.CREATE_STUDENT),
+    validate(studentRowSchema),
+    createStudentController);
 
-router.post("/students/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk import/creation of students." });
-});
 
-router.post("/students/custom", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a custom amount of student." });
-});
+router.post(
+    "/students/bulk",
+    authenticate,
+    authorize(Permission.CREATE_STUDENT),
+    upload.single("resultTrackStudent"),
+    CreateBulkStudentsController
+);
 
-router.get("/students", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all students." });
-});
+;
 
-router.get("/students/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific student by ID: ${req.params.id}` });
-});
+router.get("/students",
+    authenticate,
+    authorize(Permission.READ_STUDENT),
+    getStudentsController
+);
 
-router.patch("/students/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route updates student details by ID: ${req.params.id}` });
-});
+router.get("/students/:id",
+    authenticate,
+    authorize(Permission.READ_STUDENT),
+    getStudentByIdController);
 
-router.patch("/students/:id/activate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route activates a student account by ID: ${req.params.id}` });
-});
+router.patch("/students/:id",
+    authenticate,
+    authorize(Permission.UPDATE_STUDENT),
+    validate(updateStudentSchema),
+    updateStudentController);
 
-router.patch("/students/:id/deactivate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route deactivates a student account by ID: ${req.params.id}` });
-});
+
 
 // Teachers
-router.post("/teachers", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a new teacher." });
-});
+router.post("/teachers",
+    authenticate,
+    authorize(Permission.CREATE_TEACHER),
+    validate(teacherRowSchema),
+    createTeacherController);
 
-router.post("/teachers/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk import/creation of teachers." });
-});
+router.post("/teachers/bulk",
+    authenticate,
+    authorize(Permission.CREATE_TEACHER),
+    upload.single("resultTrackTeacher"),
+    CreateBulkTeachersController);
 
-router.post("/teachers/custom", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a custom amount of teachers." });
-});
 
-router.get("/teachers", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all teachers." });
-});
 
-router.get("/teachers/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific teacher by ID: ${req.params.id}` });
-});
+router.get("/teachers",
+    authenticate,
+    authorize(Permission.READ_TEACHER),
+    getTeachersController
+);
 
-router.patch("/teachers/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route updates teacher details by ID: ${req.params.id}` });
-});
+router.get("/teachers/:id",
+    authenticate,
+    authorize(Permission.READ_TEACHER),
+    getTeacherByIdController);
 
-router.patch("/teachers/:id/activate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route activates a teacher account by ID: ${req.params.id}` });
-});
+router.patch("/teachers/:id",
+    authenticate,
+    authorize(Permission.UPDATE_TEACHER),
+    validate(updateTeacherSchema),
+    updateTeacherController);
 
-router.patch("/teachers/:id/deactivate", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route deactivates a teacher account by ID: ${req.params.id}` });
-});
+router.put('/courses/:courseId/teachers/:teacherId',
+    authenticate,
+    authorize(Permission.UPDATE_COURSE),
+    addTeacherToCourseController);
+
+
+router.delete('/courses/:courseId/teachers/:teacherId',
+    authenticate,
+    authorize(Permission.UPDATE_COURSE),
+    removeTeacherFromCourseController
+)
+
 
 // Courses
-router.post("/courses", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route creates a new course." });
-});
+router.post("/courses",
+    authenticate,
+    authorize(Permission.CREATE_COURSE),
+    validate(createCourseSchema),
+    createCourseController
+);
 
-router.post("/courses/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk import/creation of courses." });
-});
+router.post("/courses/bulk",
+    authenticate,
+    authorize(Permission.CREATE_COURSE),
+    upload.single("resultTrackCourse"),
+    bulkUploadCoursesController
+);
 
-router.post("/courses/custom", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development.This route creates custom amount of  courses ." });
-});
 
-router.get("/courses", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all courses." });
-});
 
-router.get("/courses/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific course by ID: ${req.params.id}` });
-});
+router.get("/courses",
+    authenticate,
+    authorize(Permission.READ_COURSE),
+    getCoursesController
+);
 
-router.patch("/courses/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route updates course details by ID: ${req.params.id}` });
-});
+router.get("/courses/:id",
+    authenticate,
+    authorize(Permission.READ_COURSE),
+    getCourseByIdController
+);
+
+router.patch("/courses/:id",
+    authenticate,
+    authorize(Permission.UPDATE_COURSE),
+    validate(updateCourseSchema),
+    updateCourseController
+);
+
+router.delete("/courses/:id",
+    authenticate,
+    authorize(Permission.DELETE_COURSE),
+    deleteCourseByIdController
+);
 
 // Departments
 router.post("/departments", (req, res) => {
     res.status(200).json({ success: true, message: "This route is currently in development. This route creates a new department." });
-});
-
-router.post("/departments/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk import/creation of departments." });
-});
-
-router.post("/departments/custom", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development.This route creates a department with custom parameters." });
 });
 
 router.get("/departments", (req, res) => {
@@ -163,9 +231,6 @@ router.get("/departments/:id", (req, res) => {
     res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves a specific department by ID: ${req.params.id}` });
 });
 
-router.patch("/departments/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route updates department details by ID: ${req.params.id}` });
-});
 
 // Classes
 router.get("/classes", (req, res) => {
