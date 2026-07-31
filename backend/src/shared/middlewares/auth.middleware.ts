@@ -22,8 +22,8 @@ export const authenticate = async (
 
         const account =
             req.session.role === "SUPER_ADMIN"
-                ? await getObjectById(prisma.superAdmin, req.session.userId)
-                : await getObjectById(prisma.user, req.session.userId);
+                ? await getObjectById(prisma.superAdmin, Number(req.session.userId))
+                : await getObjectById(prisma.user, Number(req.session.userId));
 
         if (!account) {
             req.session.destroy(() => { });

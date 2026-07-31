@@ -9,10 +9,7 @@ export const errorHandler = (
 ) => {
     const status = err.status || 500;
 
-    logger.error(
-        { err, statusCode: status, method: req.method, url: req.originalUrl, userId: (req as any).user?.id ?? null },
-        "Unhandled error caught by global error handler"
-    );
+    req.log.error({ err, statusCode: status, method: req.method, url: req.originalUrl, userId: (req as any).user?.id ?? null }, "Unhandled error caught by global error handler");
 
     res.status(status).json({
         success: false,

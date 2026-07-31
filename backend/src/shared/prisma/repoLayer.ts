@@ -19,7 +19,7 @@ export const getUserByEmail = async (model: PrismaModel, email: string) => {
     });
 }
 
-export const getObjectById = async (model: PrismaModel, id: string) => {
+export const getObjectById = async (model: PrismaModel, id: number) => {
     return model.findUnique({
         where: {
             id: id,

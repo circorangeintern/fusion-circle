@@ -15,6 +15,15 @@
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"ediangmiracle@gmail.com\",\r\n    \"password\": \"tY#D?=5pRE6CAe\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
               "host": [
@@ -274,6 +283,15 @@
               "request": {
                 "method": "POST",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"African University of Science and Technology\",\r\n  \"email\": \"admissions@aust.edu.ng\",\r\n  \"website\": \"https://www.aust.edu.ng\",\r\n  \"address\": \"Plot 12, Technology Road, Lugbe\",\r\n  \"city\": \"Abuja\",\r\n  \"state\": \"Federal Capital Territory\",\r\n  \"country\": \"Nigeria\",\r\n  \"schoolType\": \"UNIVERSITY\",\r\n  \"description\": \"A world-class university focused on postgraduate STEM education and research.\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/schools",
                   "host": [
@@ -354,6 +372,42 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "Get Schools Config Data",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "Update School config Data",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"gradingBands\": [\r\n    { \"min\": 70, \"max\": 100, \"grade\": \"A\", \"point\": 5 },\r\n    { \"min\": 60, \"max\": 75, \"grade\": \"B\", \"point\": 4 },\r\n    { \"min\": 50, \"max\": 59, \"grade\": \"C\", \"point\": 3 },\r\n    { \"min\": 45, \"max\": 49, \"grade\": \"D\", \"point\": 2 },\r\n    { \"min\": 40, \"max\": 44, \"grade\": \"E\", \"point\": 1 },\r\n    { \"min\": 0, \"max\": 39, \"grade\": \"F\", \"point\": 0 }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/schools/config",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "schools",
+                    "config"
+                  ]
+                }
+              },
+              "response": []
             }
           ]
         },
@@ -365,6 +419,15 @@
               "request": {
                 "method": "POST",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\": \"Jane\",\r\n  \"lastName\": \"Smith\",\r\n  \"email\": \"jane.smith2@example.com\",\r\n  \"phoneNumber\": \"08030000002\",\r\n  \"year\": \"YEAR_3\",\r\n  \"department\": \"Marine Engineering\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/students",
                   "host": [
@@ -464,6 +527,15 @@
               "request": {
                 "method": "PATCH",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"class\": \"SS_2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/students/:id",
                   "host": [
@@ -477,7 +549,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "1"
+                      "value": "100"
                     }
                   ]
                 }
@@ -546,6 +618,15 @@
               "request": {
                 "method": "POST",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\": \"Samuel\",\r\n  \"lastName\": \"Okonkwo\",\r\n  \"email\": \"samuel.okonkwo@example.com\",\r\n  \"phoneNumber\": \"08033334444\",\r\n  \"department\": \"Marine Engineering\",\r\n  \"year\": \"YEAR_3\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/teachers",
                   "host": [
@@ -645,6 +726,15 @@
               "request": {
                 "method": "PATCH",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\": \"Samuel\",\r\n  \"lastName\": \"Okonkwo\",\r\n  \"email\": \"samel.okonkwo@example.com\",\r\n  \"phoneNumber\": \"08033334444\",\r\n  \"department\": \"Civil Engineering\",\r\n  \"year\": \"YEAR_3\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/teachers/:id",
                   "host": [
@@ -658,7 +748,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "1"
+                      "value": "1282"
                     }
                   ]
                 }
@@ -716,6 +806,45 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "Assign Teacher to a Course",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "{{BaseUrl}}/admin/courses/:courseId/teachers/:teacherId'",
+                  "host": [
+                    "{{BaseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "courses",
+                    ":courseId",
+                    "teachers",
+                    ":teacherId'"
+                  ],
+                  "variable": [
+                    {
+                      "key": "courseId",
+                      "value": "45"
+                    },
+                    {
+                      "key": "teacherId'",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Remove teacher from a course",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
             }
           ]
         },
@@ -727,6 +856,15 @@
               "request": {
                 "method": "POST",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"INTRODUCTION TO PROGRAMMING\",\r\n  \"year\": \"YEAR_1\",\r\n  \"department\": \"GENERAL STUDIES\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses",
                   "host": [
@@ -825,6 +963,40 @@
               "name": "Update Course By ID",
               "request": {
                 "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"INTRODUCTION TO PROGRAMMING\",\r\n  \"year\": \"YEAR_2\",\r\n  \"department\": \"GENERAL STUDIES\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/courses/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "courses",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Course By Id",
+              "request": {
+                "method": "DELETE",
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses/:id",
@@ -1105,6 +1277,40 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "Activate User Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/:id/activate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                ":id",
+                "activate"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate User Account",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
         }
       ]
     },
@@ -1561,6 +1767,30 @@
           "response": []
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
     }
   ],
   "variable": [

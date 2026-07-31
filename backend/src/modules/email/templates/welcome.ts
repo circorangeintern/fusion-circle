@@ -79,7 +79,7 @@ export const welcomeAdminTemplate = (
         <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
             <tr>
                 <td style="background-color:#1B2A4A; border-radius:8px;">
-                    <a href="${process.env.CLIENT_URL}/login"
+                    <a href="${process.env.CLIENT_URL}"
                        style="display:inline-block; padding:13px 30px; font-family:'Work Sans', Arial, sans-serif; font-size:14px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:8px;">
                         Log In and Set Up Your School →
                     </a>
