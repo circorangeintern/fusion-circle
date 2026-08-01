@@ -145,6 +145,37 @@ const CreateCourseResponseSchema = z.object({
 	data: CourseSchema,
 });
 
+const BulkUploadFailedRowSchema = z.object({
+	row: z.number(),
+	data: z.any(),
+	reason: z.string(),
+});
+
+const BulkUploadResponseSchema = z.object({
+	success: z.boolean(),
+	code: z.string(),
+	message: z.string(),
+	data: z.object({
+		totalRows: z.number(),
+		inserted: z.number(),
+		failed: z.number(),
+		interrupted: z.boolean(),
+		failedRows: z.array(BulkUploadFailedRowSchema).optional(),
+	}),
+});
+
+const BulkUploadStudentsRequestSchema = z.object({
+	resultTrackStudent: z.any().openapi({ type: "string", format: "binary" }),
+});
+
+const BulkUploadTeachersRequestSchema = z.object({
+	resultTrackTeacher: z.any().openapi({ type: "string", format: "binary" }),
+});
+
+const BulkUploadCoursesRequestSchema = z.object({
+	resultTrackCourse: z.any().openapi({ type: "string", format: "binary" }),
+});
+
 const GetCoursesResponseSchema = z.object({
 	success: z.literal(true),
 	code: z.literal("OK"),
@@ -210,6 +241,11 @@ registry.register("CreateCourseRequest", createCourseSchema);
 registry.register("CreateCourseResponse", CreateCourseResponseSchema);
 registry.register("GetCoursesResponse", GetCoursesResponseSchema);
 registry.register("UpdateCourseRequest", updateCourseSchema);
+
+registry.register("BulkUploadStudentsRequest", BulkUploadStudentsRequestSchema);
+registry.register("BulkUploadTeachersRequest", BulkUploadTeachersRequestSchema);
+registry.register("BulkUploadCoursesRequest", BulkUploadCoursesRequestSchema);
+registry.register("BulkUploadResponse", BulkUploadResponseSchema);
 
 registry.register("ActivateUserResponse", ActivateUserResponseSchema);
 
@@ -338,6 +374,34 @@ registry.registerPath({
 });
 
 registry.registerPath({
+	method: "post",
+	path: "/admin/students/bulk",
+	tags: ["Admin"],
+	operationId: "bulkUploadStudents",
+	summary: "Bulk Upload Students",
+	description: "Upload a CSV file containing students for the authenticated admin's school.",
+	security: [{ sessionAuth: [] }],
+	request: {
+		body: {
+			description: "Field name: resultTrackStudent. CSV file (UTF-8, comma separated). Expected headers examples:\n- University: firstName,lastName,email,phoneNumber,year,department\n- Secondary: firstName,lastName,email,phoneNumber,studentClass\nAccepts either (department + year) for university schools, or only `studentClass` for secondary schools. Fields may be quoted.",
+			required: true,
+			content: {
+				"multipart/form-data": {
+					schema: BulkUploadStudentsRequestSchema,
+				},
+			},
+		},
+	},
+	responses: {
+		200: { description: "Bulk upload processed", content: { "application/json": { schema: BulkUploadResponseSchema } } },
+		207: { description: "Partial failure", content: { "application/json": { schema: BulkUploadResponseSchema } } },
+		400: { description: "Validation failed or bad request", content: { "application/json": { schema: ValidationErrorSchema } } },
+		401: { description: "Unauthorized", content: { "application/json": { schema: ErrorResponseSchema } } },
+		500: { description: "Internal server error", content: { "application/json": { schema: ErrorResponseSchema } } },
+	},
+});
+
+registry.registerPath({
 	method: "get",
 	path: "/admin/students",
 	tags: ["Admin"],
@@ -401,6 +465,35 @@ registry.registerPath({
 	responses: {
 		201: { description: "Teacher created", content: { "application/json": { schema: TeacherResponseSchema } } },
 		400: { description: "Validation failed", content: { "application/json": { schema: ValidationErrorSchema } } },
+		401: { description: "Unauthorized", content: { "application/json": { schema: ErrorResponseSchema } } },
+		500: { description: "Internal server error", content: { "application/json": { schema: ErrorResponseSchema } } },
+	},
+});
+
+registry.registerPath({
+	method: "post",
+	path: "/admin/teachers/bulk",
+	tags: ["Admin"],
+	operationId: "bulkUploadTeachers",
+	summary: "Bulk Upload Teachers",
+	description: "Upload a CSV file containing teachers for the authenticated admin's school.",
+	security: [{ sessionAuth: [] }],
+	request: {
+		body: {
+			description: "CSV file (UTF-8, comma separated). Expected headers (example in development/teacher.csv): firstName,lastName,email,phoneNumber,department,year. For secondary schools use `studentClass` instead of (department+year). The import accepts either (department + year) or `studentClass`. Fields may be quoted.",
+			required: true,
+			content: {
+				"multipart/form-data": {
+					schema: BulkUploadTeachersRequestSchema,
+
+				},
+			},
+		},
+	},
+	responses: {
+		200: { description: "Bulk upload processed", content: { "application/json": { schema: BulkUploadResponseSchema } } },
+		207: { description: "Partial failure", content: { "application/json": { schema: BulkUploadResponseSchema } } },
+		400: { description: "Validation failed or bad request", content: { "application/json": { schema: ValidationErrorSchema } } },
 		401: { description: "Unauthorized", content: { "application/json": { schema: ErrorResponseSchema } } },
 		500: { description: "Internal server error", content: { "application/json": { schema: ErrorResponseSchema } } },
 	},
@@ -476,38 +569,160 @@ registry.registerPath({
 });
 
 registry.registerPath({
-	method: "get",
-	path: "/admin/courses",
+	method: "post",
+	path: "/admin/courses/bulk",
 	tags: ["Admin"],
-	operationId: "getCourses",
-	summary: "Get Courses",
-	description: "Retrieve courses for the authenticated admin's school.",
+	operationId: "bulkUploadCourses",
+	summary: "Bulk Upload Courses",
+	description: "Upload a CSV file containing courses for the authenticated admin's school.",
 	security: [{ sessionAuth: [] }],
+	request: {
+		body: {
+			description: "Field name: resultTrackCourse. CSV file (UTF-8, comma separated). Expected headers examples:\n- University: name,year,department\n- Secondary: name,studentClass\nThe import accepts either (year + department) for university schools, or only `studentClass` for secondary schools. Fields may be quoted.",
+			required: true,
+			content: {
+				"multipart/form-data": {
+					schema: BulkUploadCoursesRequestSchema,
+				},
+			},
+		},
+	},
 	responses: {
-		200: { description: "Courses retrieved", content: { "application/json": { schema: GetCoursesResponseSchema } } },
-		401: { description: "Unauthorized", content: { "application/json": { schema: ErrorResponseSchema } } },
-		500: { description: "Internal server error", content: { "application/json": { schema: ErrorResponseSchema } } },
+		200: {
+			description: "Bulk upload processed successfully.",
+			content: {
+				"application/json": {
+					schema: BulkUploadResponseSchema,
+				},
+			},
+		},
+		207: {
+			description: "Bulk upload completed with partial failures.",
+			content: {
+				"application/json": {
+					schema: BulkUploadResponseSchema,
+				},
+			},
+		},
+		400: {
+			description: "Validation failed or bad request.",
+			content: {
+				"application/json": {
+					schema: ValidationErrorSchema,
+				},
+			},
+		},
+		401: {
+			description: "Unauthorized.",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error.",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
 	},
 });
 
 registry.registerPath({
 	method: "get",
-	path: "/admin/courses/:id",
+	path: "/admin/courses",
 	tags: ["Admin"],
-	operationId: "getCourseById",
-	summary: "Get Course by ID",
-	description: "Retrieve a course by id for the authenticated admin's school.",
+	operationId: "getCourses",
+	summary: "Get Courses",
+	description: "Retrieve all courses for the authenticated admin's school.",
 	security: [{ sessionAuth: [] }],
-	request: { params: z.object({ id: z.string() }) },
 	responses: {
-		200: { description: "Course retrieved", content: { "application/json": { schema: CreateCourseResponseSchema } } },
-		400: { description: "Invalid ID", content: { "application/json": { schema: ErrorResponseSchema } } },
-		401: { description: "Unauthorized", content: { "application/json": { schema: ErrorResponseSchema } } },
-		404: { description: "Not found", content: { "application/json": { schema: ErrorResponseSchema } } },
-		500: { description: "Internal server error", content: { "application/json": { schema: ErrorResponseSchema } } },
+		200: {
+			description: "Courses retrieved successfully.",
+			content: {
+				"application/json": {
+					schema: GetCoursesResponseSchema,
+				},
+			},
+		},
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
 	},
 });
 
+registry.registerPath({
+	method: "get",
+	path: "/admin/courses/{id}",
+	tags: ["Admin"],
+	operationId: "getCourseById",
+	summary: "Get Course by ID",
+	description: "Retrieve a course by ID for the authenticated admin's school.",
+	security: [{ sessionAuth: [] }],
+	request: {
+		params: z.object({
+			id: z.string(),
+		}),
+	},
+	responses: {
+		200: {
+			description: "Course retrieved successfully.",
+			content: {
+				"application/json": {
+					schema: CreateCourseResponseSchema,
+				},
+			},
+		},
+		400: {
+			description: "Invalid course ID.",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
+		404: {
+			description: "Course not found.",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ErrorResponseSchema,
+				},
+			},
+		},
+	},
+});
 registry.registerPath({
 	method: "patch",
 	path: "/admin/courses/:id",
