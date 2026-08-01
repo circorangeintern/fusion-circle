@@ -1,0 +1,3 @@
+(Applying an automated fix to the teachers and courses bulk endpoint blocks.)
+
+This is an internal note file; actual changes will be applied directly to admin.contract.ts.
