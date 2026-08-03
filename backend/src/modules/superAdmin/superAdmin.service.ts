@@ -54,7 +54,7 @@ export const comparePassword = async (hashedPassword: string, userPassword: stri
 
 
 // controller
-export const createAdmin = async (res: Response, dataObj: any, password: string) => {
+export const createAdmin = async (req: Request, res: Response, dataObj: any, password: string) => {
 
 
     try {
@@ -75,11 +75,13 @@ export const createAdmin = async (res: Response, dataObj: any, password: string)
         }
 
         await createObject(prisma.user, data);
-        await sendEmail(
+        void sendEmail(
             data.email,
             "Welcome to ResultTrack",
             welcomeAdminTemplate(data.firstName, data.email, responseData.temporaryPassword)
-        );
+        ).catch((err) => {
+            req.log.error({ err, userId: null }, "Failed to create admin email");
+        });
 
         return res.status(201).json({
             success: true,

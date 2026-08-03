@@ -19,6 +19,9 @@ import { logAudit } from "../../utils/auditLogger";
 
 export const loginController = async (req: Request, res: Response) => {
     const user = await getUser(req.body.email, res);
+    if (!user) {
+        return;
+    }
     const isCorrectPassword = await comparePassword(user.passwordHash, req.body.password, res);
     if (!isCorrectPassword) { return };
     const isActivated = checkActivatedStatus(user, res);
