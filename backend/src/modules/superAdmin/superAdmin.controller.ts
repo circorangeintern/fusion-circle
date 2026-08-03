@@ -56,7 +56,7 @@ export const CreateAdmin = async (req: Request, res: Response) => {
     const data = req.body
     data.passwordHash = passwordHash;
 
-    await createAdmin(res, data, password);
+    await createAdmin(req, res, data, password);
 }
 
 
