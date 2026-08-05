@@ -96,8 +96,8 @@ router.patch("/users/:id/deactivate",
 
 // Students
 router.post("/students",
-    authenticate,
-    authorize(Permission.CREATE_STUDENT),
+  authenticate,
+  authorize(Permission.CREATE_STUDENT),
     validate(studentRowSchema),
     createStudentController);
 

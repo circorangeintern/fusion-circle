@@ -1,19 +1,26 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 
 import {
     getUser,
-    comparePassword, checkActivatedStatus,
-    //  createAdmin,
-    //     deactivateAdminService, getAdminsService, getAdminByIdService,
-    LogoutService, saveOtpToDb
-} from "./auth.service"
-import { createSession } from "../../shared/sessionHandler"
-import { generatePassword, generateResetToken } from "../../utils/passwordGenerator";
+    comparePassword,
+    checkActivatedStatus,
+    LogoutService,
+    saveOtpToDb,
+} from "./auth.service";
+import { createSession } from "../../shared/sessionHandler";
+import { generatePassword, generateResetToken, generateOtp } from "../../utils/passwordGenerator";
 import { hashPassword } from "../../utils/passwordHandler";
-import { sendEmail } from "../email/email.service"
+import { sendEmail } from "../email/email.service";
 import { resetPasswordTemplate } from "../email/templates/passwordreset";
+import { activationOtpTemplate } from "../email/templates/activationOtp";
 import jwt from "jsonwebtoken";
-import { getObjectById, updateObject, findAndDeleteById, findUniqueObject, findAndDeleteObject } from "../../shared/prisma/repoLayer";
+import {
+    getObjectById,
+    updateObject,
+    findAndDeleteById,
+    findUniqueObject,
+    findAndDeleteObject,
+} from "../../shared/prisma/repoLayer";
 import { prisma } from "../../shared/prisma/prisma";
 import { logAudit } from "../../utils/auditLogger";
 
@@ -174,4 +181,105 @@ export const resetPasswordController = async (req: Request, res: Response) => {
 
 }
 
+export const activateUserController = async (req: Request, res: Response) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email: req.body.email },
+            include: {
+                student: true,
+                teacher: true,
+            },
+        });
 
+        if (!user) {
+            req.log.error(
+                { email: req.body.email, firstName: req.body.firstName, lastName: req.body.lastName },
+                "activateUserController user not found"
+            );
+            return res.status(404).json({
+                success: false,
+                code: "NOT_FOUND",
+                message: "User details could not be found.",
+                error: null,
+            });
+        }
+if(user.role !== "STUDENT" && user.role !== "TEACHER") {
+            req.log.error(
+                { email: req.body.email, firstName: req.body.firstName, lastName: req.body.lastName, role: user.role },
+                "activateUserController invalid role"
+            );
+return res.status(403).json({
+                success: false,
+                code: "FORBIDEEN",
+                message: "User can't perform this action. Invalid role.",
+                error: null,
+            });
+        }
+        const nameMatch = user.firstName.toLowerCase() === req.body.firstName.toLowerCase()
+            && user.lastName.toLowerCase() === req.body.lastName.toLowerCase();
+
+        const student = user.student;
+        const teacher = user.teacher;
+
+        const studentMatch = student && nameMatch &&
+            (req.body.year ? student.year === req.body.year : true) &&
+            (req.body.class ? student.class === req.body.class : true) &&
+            (req.body.department ? student.department === req.body.department : true);
+
+        const teacherMatch = teacher && nameMatch &&
+            !req.body.year &&
+            (req.body.class ? teacher.studentClass === req.body.class : true) &&
+            (req.body.department ? teacher.department === req.body.department : true);
+
+        if (!studentMatch && !teacherMatch) {
+            req.log.error(
+                {
+                    userId: user.id,
+                    email: req.body.email,
+                    studentProfile: student,
+                    teacherProfile: teacher,
+                    provided: {
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        year: req.body.year,
+                        class: req.body.class,
+                        department: req.body.department,
+                    },
+                },
+                "activateUserController profile details mismatch"
+            );
+
+            return res.status(404).json({
+                success: false,
+                code: "NOT_FOUND",
+                message: "User details do not match any student or teacher account.",
+                error: null,
+            });
+        }
+
+        const otp = generateOtp(6);
+
+        void sendEmail(
+            user.email,
+            "Account Activation OTP",
+            activationOtpTemplate(user.firstName, otp)
+        ).catch((err) => {
+            req.log.error({ err, userId: user.id }, "Failed to send activation OTP email");
+        });
+
+        return res.status(200).json({
+            success: true,
+            code: "OK",
+            message: "Email found and OTP has been sent to the user email.",
+            error: null,
+        });
+    } catch (error) {
+        req.log.error({ err: error, email: req.body.email }, "activateUserController failed");
+        return res.status(500).json({
+            success: false,
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong. Please try again.",
+            error: null,
+        });
+    }
+}

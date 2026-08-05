@@ -45,6 +45,45 @@ export const forgotPasswordValidator = z.object({
         .email("Invalid email")
 })
 
+export const activateAccountValidator = z.object({
+    firstName: z
+        .string({ required_error: "First name is required" })
+        .min(1, "First name is required"),
+    lastName: z
+        .string({ required_error: "Last name is required" })
+        .min(1, "Last name is required"),
+    email: z
+        .string({ required_error: "Email is required" })
+        .email("Invalid email"),
+    year: z.nativeEnum(Year).optional(),
+    class: z.nativeEnum(Class).optional(),
+    department: z.string().optional(),
+}).superRefine((data, ctx) => {
+    if (data.year && data.class) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "A user cannot have both a year and a class — provide only one.",
+            path: ["year"],
+        });
+    }
+
+    if (!data.year && !data.class && !data.department) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Provide at least one of year, class, or department.",
+            path: ["year"],
+        });
+    }
+
+    if (data.year && !data.department) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Department is required when year is provided.",
+            path: ["department"],
+        });
+    }
+});
+
 export const resetPasswordValidator = z.object({
     token: z
         .string({

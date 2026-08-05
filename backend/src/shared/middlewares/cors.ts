@@ -6,6 +6,7 @@ export const corsOptions: CorsOptions = {
 
         const allowedOrigins = [
             process.env.CLIENT_URL,
+            "https://www.postman.com",
             "http://localhost:5173",
             "http://localhost:3000",
             "http://localhost:5000",

@@ -70,6 +70,13 @@ export const generateResetToken = (userId: number) => {
     };
 };
 
+export const generateOtp = (length: number = 6): string => {
+    let otp = "";
+    for (let i = 0; i < length; i += 1) {
+        otp += randomInt(10).toString();
+    }
+    return otp;
+};
 
 const PIN_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no O/0, I/1 — avoids ambiguity
 

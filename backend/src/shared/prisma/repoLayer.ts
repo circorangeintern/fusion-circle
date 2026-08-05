@@ -106,6 +106,15 @@ export const findUniqueObject = async (
     });
 };
 
+export const findFirstObject = async (
+    model: PrismaModel,
+    where: object
+) => {
+    return model.findFirst({
+        where,
+    });
+};
+
 export const findAndDeleteObject = async (
     model: PrismaModel,
     where: object
