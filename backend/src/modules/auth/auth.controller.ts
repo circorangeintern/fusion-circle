@@ -1,5 +1,6 @@
 import { json, Request, Response } from "express";
 import { Role, AccountStatus, User, Prisma } from "@prisma/client";
+import {syncDepartments} from "../../utils/syncDepartment";
 import {
     getUser,
     comparePassword,
@@ -233,6 +234,10 @@ export const resetPasswordController = async (req: Request, res: Response) => {
 
 export const activateUserController = async (req: Request, res: Response) => {
     try {
+   syncDepartments(6).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
+
         const user = await prisma.user.findUnique({
             where: { email: req.body.email },
             include: {

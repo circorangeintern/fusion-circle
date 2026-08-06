@@ -2,7 +2,8 @@ import { Response, Request, NextFunction, response } from "express";
 import { prisma } from "../../../shared/prisma/prisma";
 import { AccountStatus } from "@prisma/client";
 import { logAudit } from "../../../utils/auditLogger";
-import { createUniqueSchoolPin } from "../../../utils/passwordGenerator"
+import { createUniqueSchoolPin } from "../../../utils/passwordGenerator";
+import {syncDepartments} from "../../../utils/syncDepartment";
 import {
     createSchoolService, updateSchoolService,
     readSchoolService, processStudentBatch,
@@ -281,6 +282,9 @@ export const CreateBulkStudentsController = async (req: Request, res: Response) 
         },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
+  syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
     return res.status(fatalError ? 207 : 200).json({
         success: !fatalError,
         code: fatalError ? "PARTIAL_FAILURE" : "OK",
@@ -355,7 +359,9 @@ export const createStudentController = async (req: Request, res: Response) => {
             entityId: user.id,
             details: { email: user.email },
         }).catch((err) => req.log.error({ err }, "Audit log failed"));
-
+syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
         return res.status(201).json({
             success: true,
             code: "CREATED",
@@ -548,7 +554,9 @@ export const updateStudentController = async (req: Request, res: Response) => {
         }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
         const { passwordHash, ...safeUpdated } = updated;
-
+syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
         return res.status(200).json({
             success: true,
             code: "OK",
@@ -648,7 +656,9 @@ export const CreateBulkTeachersController = async (req: Request, res: Response) 
             interrupted: !!fatalError,
         },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
-
+syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
     return res.status(fatalError ? 207 : 200).json({
         success: !fatalError,
         code: fatalError ? "PARTIAL_FAILURE" : "OK",
@@ -721,7 +731,9 @@ export const createTeacherController = async (req: Request, res: Response) => {
             entityId: user.id,
             details: { email: user.email },
         }).catch((err) => req.log.error({ err }, "Audit log failed"));
-
+syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
         return res.status(201).json({
             success: true,
             code: "CREATED",
@@ -913,7 +925,9 @@ export const updateTeacherController = async (req: Request, res: Response) => {
         }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
         const { passwordHash, ...safeUpdated } = updated;
-
+syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
         return res.status(200).json({
             success: true,
             code: "OK",
@@ -1010,7 +1024,9 @@ export const bulkUploadCoursesController = async (req: Request, res: Response) =
         entityId: schoolId,
         details: { totalRows: rowsSeenSoFar, inserted: totalInserted, failed: allFailed.length, interrupted: !!fatalError },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
-
+syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
     return res.status(fatalError ? 207 : 200).json({
         success: !fatalError,
         code: fatalError ? "PARTIAL_FAILURE" : "OK",
@@ -1095,7 +1111,9 @@ export const createCourseController = async (req: Request, res: Response) => {
             entityId: course.id,
             details: { name: course.name },
         }).catch((err) => req.log.error({ err }, "Audit log failed"));
-
+            syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
         return res.status(201).json({
             success: true,
             code: "CREATED",
@@ -1184,7 +1202,9 @@ export const updateCourseController = async (req: Request, res: Response) => {
             entityId: courseId,
             details: req.body,
         }).catch((err) => req.log.error({ err }, "Audit log failed"));
-
+syncDepartments(schoolId).catch(err => {
+    req.log.error(err, "Department sync failed");
+});
         return res.status(200).json({
             success: true,
             code: "OK",
