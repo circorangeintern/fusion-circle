@@ -5,6 +5,8 @@ import {
     loginValidator,
     forgotPasswordValidator,
     resetPasswordValidator,
+     activateAccountValidator,
+    verifyOtpValidator,
 } from "../../shared/validator/validator";
 
 import {
@@ -42,6 +44,19 @@ const ResetPasswordResponseSchema = z.object({
     error: z.null(),
 });
 
+const ActivateAccountSuccessResponseSchema = z.object({
+    success: z.literal(true),
+    code: z.literal("OK"),
+    message: z.string(),
+    error: z.null(),
+});
+
+const VerifyOtpSuccessResponseSchema = z.object({
+    success: z.literal(true),
+    code: z.literal("OK"),
+    message: z.string(),
+    error: z.null(),
+});
 // -----------------------------------------------------------------------------
 // Register Schemas
 // -----------------------------------------------------------------------------
@@ -61,6 +76,26 @@ registry.register("ResetPasswordResponse", ResetPasswordResponseSchema);
 registry.register("ErrorResponse", ErrorResponseSchema);
 
 registry.register("ValidationErrorResponse", ValidationErrorSchema);
+
+registry.register(
+    "ActivateAccountRequest",
+    activateAccountValidator
+);
+
+registry.register(
+    "VerifyOtpRequest",
+    verifyOtpValidator
+);
+
+registry.register(
+    "ActivateAccountResponse",
+    ActivateAccountSuccessResponseSchema
+);
+
+registry.register(
+    "VerifyOtpResponse",
+    VerifyOtpSuccessResponseSchema
+);
 
 // -----------------------------------------------------------------------------
 // Login
@@ -338,6 +373,160 @@ registry.registerPath({
 
         401: {
             description: "Invalid or expired reset token",
+
+            content: {
+                "application/json": {
+                    schema: ErrorResponseSchema,
+                },
+            },
+        },
+
+        500: {
+            description: "Internal server error",
+
+            content: {
+                "application/json": {
+                    schema: ErrorResponseSchema,
+                },
+            },
+        },
+
+    },
+
+});
+
+// -----------------------------------------------------------------------------
+// Activate Account
+// -----------------------------------------------------------------------------
+
+registry.registerPath({
+
+    method: "post",
+
+    path: "/auth/activate-account",
+
+    tags: ["Authentication"],
+
+    operationId: "activateAccount",
+
+    summary: "Activate user account",
+
+    description:
+        "Verifies a student's or teacher's profile details. If the supplied information matches an existing account, a one-time activation OTP is sent to the user's registered email address.",
+
+    request: {
+        body: {
+            required: true,
+
+            content: {
+                "application/json": {
+                    schema: activateAccountValidator,
+                },
+            },
+        },
+    },
+
+    responses: {
+
+        200: {
+            description: "Activation OTP sent successfully",
+
+            content: {
+                "application/json": {
+                    schema: ActivateAccountSuccessResponseSchema,
+                },
+            },
+        },
+
+        400: {
+            description: "Validation failed",
+
+            content: {
+                "application/json": {
+                    schema: ValidationErrorSchema,
+                },
+            },
+        },
+
+        403: {
+            description: "User is not permitted to activate this account",
+
+            content: {
+                "application/json": {
+                    schema: ErrorResponseSchema,
+                },
+            },
+        },
+
+        404: {
+            description: "Matching user profile not found",
+
+            content: {
+                "application/json": {
+                    schema: ErrorResponseSchema,
+                },
+            },
+        },
+
+        500: {
+            description: "Internal server error",
+
+            content: {
+                "application/json": {
+                    schema: ErrorResponseSchema,
+                },
+            },
+        },
+
+    },
+
+});
+
+// -----------------------------------------------------------------------------
+// Verify OTP
+// -----------------------------------------------------------------------------
+
+registry.registerPath({
+
+    method: "post",
+
+    path: "/auth/verify-otp",
+
+    tags: ["Authentication"],
+
+    operationId: "verifyAccountOtp",
+
+    summary: "Verify activation OTP",
+
+    description:
+        "Verifies the activation OTP sent to the user's email address. If successful, the user's account is activated.",
+
+    request: {
+        body: {
+            required: true,
+
+            content: {
+                "application/json": {
+                    schema: verifyOtpValidator,
+                },
+            },
+        },
+    },
+
+    responses: {
+
+        200: {
+            description: "Account activated successfully",
+
+            content: {
+                "application/json": {
+                    schema: VerifyOtpSuccessResponseSchema,
+                },
+            },
+        },
+
+        400: {
+            description: "Invalid request, invalid OTP, expired OTP, or no OTP exists",
 
             content: {
                 "application/json": {

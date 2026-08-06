@@ -1,5 +1,5 @@
 import { error, log } from "console";
-import { logAudit } from "../../utils/auditLogger";
+import { safeLogAudit } from "../../utils/auditLogger";
 import { Request, Response, NextFunction } from "express";
 import {
     getUser, comparePassword, createAdmin,
@@ -27,7 +27,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
     await createSession(req, { id: user.id, role: user.role });
     console.timeEnd("create session")
     console.time("audit log")
-    logAudit({
+    void safeLogAudit({
         userId: user.id,
         action: "SUPER_ADMIN_LOGIN",
         entityType: "SUPER_ADMIN",

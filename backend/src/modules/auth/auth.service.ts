@@ -110,10 +110,12 @@ export const saveOtpToDb = async (tokenHash: string, userId: number) => {
             userId,
             tokenHash,
             expiresAt,
+             createdAt : new Date(Date.now()),
         },
         {
             tokenHash,
             expiresAt,
+             createdAt :new Date(Date.now()),
         }
     );
 }

@@ -70,13 +70,31 @@ export const generateResetToken = (userId: number) => {
     };
 };
 
-export const generateOtp = (length: number = 6): string => {
-    let otp = "";
-    for (let i = 0; i < length; i += 1) {
-        otp += randomInt(10).toString();
+export function generateOtp(
+    length: number = 6
+): string {
+    if (length < 1) {
+        throw new Error("OTP length must be at least 1");
     }
-    return otp;
-};
+
+    const otp: string[] = [];
+    
+    // Ensure at least one digit (always true for OTP)
+    otp.push(NUMBERS[Math.floor(Math.random() * NUMBERS.length)]);
+    
+    // Fill remaining positions
+    while (otp.length < length) {
+        otp.push(NUMBERS[Math.floor(Math.random() * NUMBERS.length)]);
+    }
+    
+    // Fisher-Yates shuffle for extra randomness
+    for (let i = otp.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [otp[i], otp[j]] = [otp[j], otp[i]];
+    }
+    
+    return otp.join("");
+}
 
 const PIN_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no O/0, I/1 — avoids ambiguity
 

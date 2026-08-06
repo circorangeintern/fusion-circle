@@ -84,6 +84,21 @@ export const activateAccountValidator = z.object({
     }
 });
 
+export const verifyOtpValidator = z.object({
+    userId: z
+        .number({
+            required_error: "User ID is required",
+            invalid_type_error: "User ID must be a number"
+        })
+        .int("User ID must be an integer"),
+    otp: z
+        .string({
+            required_error: "OTP is required"
+        })
+        .length(6, "OTP must be exactly 6 digits")
+        .regex(/^\d{6}$/, "OTP must contain only numbers")
+});
+
 export const resetPasswordValidator = z.object({
     token: z
         .string({

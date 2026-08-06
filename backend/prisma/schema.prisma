@@ -117,7 +117,7 @@ model Session {
 
 model PasswordResetToken {
   id        Int      @id @default(autoincrement())
-  tokenHash String
+  tokenHash String   
   expiresAt DateTime
   createdAt DateTime @default(now())
 

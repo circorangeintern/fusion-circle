@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-
+import { json, Request, Response } from "express";
+import { Role, AccountStatus, User, Prisma } from "@prisma/client";
 import {
     getUser,
     comparePassword,
@@ -20,9 +20,11 @@ import {
     findAndDeleteById,
     findUniqueObject,
     findAndDeleteObject,
+     getObjectsByField
 } from "../../shared/prisma/repoLayer";
 import { prisma } from "../../shared/prisma/prisma";
-import { logAudit } from "../../utils/auditLogger";
+import { safeLogAudit } from "../../utils/auditLogger";
+import { startTime } from "pino-http";
 
 export const loginController = async (req: Request, res: Response) => {
     const user = await getUser(req.body.email, res);
@@ -36,7 +38,7 @@ export const loginController = async (req: Request, res: Response) => {
 
     await createSession(req, { id: user.id, role: user.role });
 
-    logAudit({
+    void safeLogAudit({
         userId: user.id,
         action: "USER_LOGIN",
         entityType: "USER",
@@ -58,11 +60,27 @@ export const loginController = async (req: Request, res: Response) => {
 }
 
 export const logoutController = async (req: Request, res: Response) => {
+    void safeLogAudit({
+        userId: req.user?.id ?? null,
+        action: "USER_LOGOUT",
+        entityType: "USER",
+        entityId: req.user?.id ?? null,
+        details: { email: req.user?.email ?? null },
+    });
     await LogoutService(req, res)
 }
 export const forgotPasswordController = async (req: Request, res: Response) => {
     try {
         const user = await prisma.user.findUnique({ where: { email: req.body.email } });
+
+        if(!user) {
+            return res.status(400). json({
+              sucess: false,
+              code: "BAD_REQUEST",
+              message: "If an account with that email exists, a password reset link has been sent.",
+              error: null
+            })
+        }
 
         if (user) {
             const { token, jti } = generateResetToken(user.id);
@@ -83,6 +101,30 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
             //         // don't let email failure change the response
             //     }
         }
+
+        if(user.status !== AccountStatus.ACTIVATED) {
+            void safeLogAudit({
+                userId: user.id,
+                action: "PASSWORD_RESET_BLOCKED",
+                entityType: "USER",
+                entityId: user.id,
+                details: { email: user.email, status: user.status },
+            });
+            return res.status(403).json({
+                sucess:false,
+                code: "FORBIDDEN",
+                message: "User account is not activated contact school admin",
+                error: null
+            })
+        }
+
+        void safeLogAudit({
+            userId: user.id,
+            action: "PASSWORD_RESET_REQUESTED",
+            entityType: "USER",
+            entityId: user.id,
+            details: { email: user.email, status: user.status },
+        });
 
         return res.status(200).json({
             success: true,
@@ -161,6 +203,14 @@ export const resetPasswordController = async (req: Request, res: Response) => {
         await updateObject(prisma.user, { id: Number(payload.sub) }, { passwordHash: hashedPassword });
         await findAndDeleteObject(prisma.passwordResetToken, { userId: Number(payload.sub) });
 
+        void safeLogAudit({
+            userId: Number(payload.sub),
+            action: "PASSWORD_RESET_COMPLETED",
+            entityType: "USER",
+            entityId: Number(payload.sub),
+            details: { message: "Password reset completed successfully" },
+        });
+
         return res.status(200).json({
             success: true,
             code: "OK",
@@ -210,7 +260,7 @@ if(user.role !== "STUDENT" && user.role !== "TEACHER") {
             );
 return res.status(403).json({
                 success: false,
-                code: "FORBIDEEN",
+                code: "FORBIDDEN",
                 message: "User can't perform this action. Invalid role.",
                 error: null,
             });
@@ -249,6 +299,23 @@ return res.status(403).json({
                 "activateUserController profile details mismatch"
             );
 
+
+            void safeLogAudit({
+                userId: user.id,
+                action: "ACTIVATE_ACCOUNT_FAILED",
+                entityType: "USER",
+                entityId: user.id,
+                details: {
+                    email: req.body.email,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    year: req.body.year || null,
+                    class: req.body.class || null,
+                    department: req.body.department || null,
+                    studentProfile: student || null,
+                    teacherProfile: teacher || null,
+                },
+            })
             return res.status(404).json({
                 success: false,
                 code: "NOT_FOUND",
@@ -258,11 +325,23 @@ return res.status(403).json({
         }
 
         const otp = generateOtp(6);
-
+        await saveOtpToDb(otp, user.id);
+        void safeLogAudit({
+            userId: user.id,
+            action: "ACCOUNT_ACTIVATION_REQUESTED",
+            entityType: "USER",
+            entityId: user.id,
+            details: {
+                email: user.email,
+                role: user.role,
+                requestedBy: req.user?.id ?? null,
+            },
+        });
         void sendEmail(
             user.email,
             "Account Activation OTP",
             activationOtpTemplate(user.firstName, otp)
+
         ).catch((err) => {
             req.log.error({ err, userId: user.id }, "Failed to send activation OTP email");
         });
@@ -282,4 +361,88 @@ return res.status(403).json({
             error: null,
         });
     }
+}
+
+export const verifyOtpController = async (req: Request, res: Response) => {
+  const UserId = req.body?.userId;
+  const otp = req.body?.otp;
+  if(!UserId){
+    return res.status(400).json({
+      success: false,
+      code: "BAD_REQUEST",
+      message: "Invalid user ID.",
+      error: null
+    });
+  }
+
+  try {
+     const token = await getObjectsByField(
+    prisma.passwordResetToken,
+    "userId",
+    UserId
+);
+
+  if(token.length === 0) {
+    return res.status(400).json({
+        success: false,
+        code: "BAD_REQUEST",
+        message: "No OTP found for this user. Please request a new OTP.",
+        error: null
+    });
+  }
+
+
+  const isExpired = token[0].expiresAt < new Date();
+  if(isExpired) {
+    return res.status(400).json({
+        success: false,
+        code: "BAD_REQUEST",
+        message: "OTP has expired. Please request a new OTP.",
+        error: null
+    });
+  }
+
+  if(token[0].tokenHash !== String(otp)) {
+    return res.status(400).json({
+        success: false,
+        code: "BAD_REQUEST",
+        message: "Invalid OTP.",
+        error: null
+    });
+  }
+
+
+  await prisma.$transaction([
+    prisma.user.update({
+        where: { id: UserId },
+        data: { status: AccountStatus.ACTIVATED },
+    }),
+    prisma.passwordResetToken.delete({
+        where: { id: token[0].id },
+    }),
+]);
+     void safeLogAudit({
+      userId: UserId,
+                action: "ACCOUNT_ACTIVATED",
+                entityType: "USER",
+                entityId: UserId,
+                details: { userId: UserId }
+})
+     return res.status(200).json({
+        success: true,
+        code: "OK",
+        message: "Account activated successfully, you can now set your passowrd using the password reset link.",
+        error: null
+    })
+    
+  } catch (error) {
+    req.log.error({ err: error, userId: UserId }, "verifyOtpController failed");
+    return res.status(500).json({
+      success: false,
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Something went wrong. Please try again.",
+      error: null
+    });
+  }
+ 
 }
