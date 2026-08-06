@@ -52,6 +52,8 @@ All routes are prefixed with `/api/v1`.
 | **POST** | `/auth/logout` | Logs out the current user and invalidates the session. |
 | **POST** | `/auth/forgot-password` | Initiates the forgot password flow by sending a reset email. |
 | **POST** | `/auth/reset-password` | Resets a user's password using a verification token. |
+| **POST** | `/auth/activate-account` | Starts the account activation flow for a student or teacher using profile details. |
+| **POST** | `/auth/verify-otp` | Verifies the OTP sent during account activation and activates the user account. |
 
 ---
 
