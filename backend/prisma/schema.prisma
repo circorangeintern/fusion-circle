@@ -16,69 +16,57 @@ model SuperAdmin {
   updatedAt DateTime @updatedAt
 }
 
-enum SchoolType {
-  UNIVERSITY
-  SECONDARY_SCHOOL
-}
-
 model School {
-  id          Int         @id @default(autoincrement())
-
-  name        String
-  pin         String      @unique
-  email       String      @unique
-  website     String?
-
-  address     String
-  city        String
-  state       String
-  country     String
-
-  schoolType  SchoolType
-  schoolConfig SchoolConfig? 
-  description String?
-  departments Department[]
-
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  createdById Int
-  createdBy   User        @relation("SchoolCreator", fields: [createdById], references: [id], onDelete: Cascade)
-
-  users       User[]
-  courses     Course[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  pin          String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  createdById  Int
+  address      String
+  country      String
+  state        String
+  city         String
+  description  String?
+  email        String        @unique
+  schoolType   SchoolType
+  website      String?
+  courses      Course[]
+  departments  Department[]
+  createdBy    User          @relation("SchoolCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  schoolConfig SchoolConfig?
+  users        User[]
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  firstName    String
-  lastName     String
-  passwordHash String?
-  phoneNumber  String?
-  role         Role          @default(STUDENT)
-  status       AccountStatus @default(PENDING)
-  student      Student?
-  teacher      Teacher?
-
-  schoolId Int?
-  school   School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
-
-  schoolsCreated School[] @relation("SchoolCreator")
-
-  PasswordResetToken PasswordResetToken?
+  id                 Int                 @id @default(autoincrement())
+  email              String              @unique
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  firstName          String
+  lastName           String
+  passwordHash       String?
+  phoneNumber        String?
+  role               Role                @default(STUDENT)
+  schoolId           Int?
+  status             AccountStatus       @default(PENDING)
   auditLogs          AuditLog[]
+  PasswordResetToken PasswordResetToken?
+  schoolsCreated     School[]            @relation("SchoolCreator")
+  student            Student?
+  teacher            Teacher?
+  school             School?             @relation(fields: [schoolId], references: [id])
 }
 
 model Student {
-  userId Int    @id
-  regNo  String? @unique
-  department   String?
-  year   Year?
-  class  Class?
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int             @id
+  regNo         String?         @unique
+  year          Year?
+  class         Class?
+  department    String?
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  StudentResult StudentResult[]
+  courses       Course[]        @relation("CourseToStudent")
 }
 
 model Teacher {
@@ -88,7 +76,7 @@ model Teacher {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courses      Course[]
+  courses      Course[] @relation("CourseToTeacher")
 }
 
 model Department {
@@ -96,63 +84,112 @@ model Department {
   schoolId  Int
   name      String
   code      String
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  school     School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   @@unique([schoolId, name])
   @@unique([schoolId, code])
 }
 
 model Course {
-  id        Int      @id @default(autoincrement())
-  name      String
-  year      Year?
-  class     Class?
-  department String?
-  isActive   Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  teachers Teacher[]
-  schoolId Int
-  school   School @relation(fields: [schoolId], references: [id])
+  id          Int           @id @default(autoincrement())
+  name        String
+  year        Year?
+  class       Class?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  schoolId    Int
+  department  String?
+  isActive    Boolean       @default(true)
+  school      School        @relation(fields: [schoolId], references: [id])
+  ResultEntry ResultEntry[]
+  students    Student[]     @relation("CourseToStudent")
+  teachers    Teacher[]     @relation("CourseToTeacher")
+
   @@unique([name, schoolId, year, class])
 }
 
-
 model Session {
   sid    String   @id @db.VarChar
-  sess   Json     @db.JsonB
+  sess   Json
   expire DateTime @db.Timestamp(6)
 
-  @@index([expire], name: "IDX_session_expire")
+  @@index([expire], map: "IDX_session_expire")
   @@map("session")
 }
 
 model PasswordResetToken {
   id        Int      @id @default(autoincrement())
-  tokenHash String   
+  tokenHash String
   expiresAt DateTime
   createdAt DateTime @default(now())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model SchoolConfig {
+  id           Int      @id @default(autoincrement())
+  schoolId     Int      @unique
+  gradingBands Json     @default("[{\"max\": 100, \"min\": 70, \"grade\": \"A\", \"point\": 5}, {\"max\": 69, \"min\": 60, \"grade\": \"B\", \"point\": 4}, {\"max\": 59, \"min\": 50, \"grade\": \"C\", \"point\": 3}, {\"max\": 49, \"min\": 45, \"grade\": \"D\", \"point\": 2}, {\"max\": 44, \"min\": 40, \"grade\": \"E\", \"point\": 1}, {\"max\": 39, \"min\": 0, \"grade\": \"F\", \"point\": 0}]")
+  cgpa         Json     @default("{\"caWeight\": 30, \"passMark\": 40, \"examWeight\": 70}")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int?
+  action     String
+  entityType String
+  entityId   Int?
+  details    Json?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+model ResultEntry {
+  id              Int           @id @default(autoincrement())
+  studentResultId Int
+  courseId        Int
+  caScore         Decimal       @db.Decimal(5, 2)
+  examScore       Decimal       @db.Decimal(5, 2)
+  totalScore      Decimal       @db.Decimal(5, 2)
+  grade           String
+  status          ResultStatus
+  flag            ResultFlag    @default(NOT_FLAGGED)
+  flagDescription String?
+
+  resolutionDescription String?  // Teacher's response/review
+  resolvedAt            DateTime? // When it was resolved
+
+  Course          Course        @relation(fields: [courseId], references: [id])
+  StudentResult   StudentResult @relation(fields: [studentResultId], references: [id], onDelete: Cascade)
+
+  @@unique([studentResultId, courseId])
+  @@index([courseId])
 }
 
 
-model SchoolConfig {
-  id       Int    @id @default(autoincrement())
-  schoolId Int    @unique
-  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+model StudentResult {
+  id          Int           @id @default(autoincrement())
+  studentId   Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime
+  ResultEntry ResultEntry[]
+  Student     Student       @relation(fields: [studentId], references: [userId], onDelete: Cascade)
 
-  gradingBands Json @default("[{\"min\":70,\"max\":100,\"grade\":\"A\",\"point\":5},{\"min\":60,\"max\":69,\"grade\":\"B\",\"point\":4},{\"min\":50,\"max\":59,\"grade\":\"C\",\"point\":3},{\"min\":45,\"max\":49,\"grade\":\"D\",\"point\":2},{\"min\":40,\"max\":44,\"grade\":\"E\",\"point\":1},{\"min\":0,\"max\":39,\"grade\":\"F\",\"point\":0}]")
+  @@index([studentId])
+}
 
-  cgpa Json @default("{\"caWeight\":30,\"examWeight\":70,\"passMark\":40}")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum SchoolType {
+  UNIVERSITY
+  SECONDARY_SCHOOL
 }
 
 enum Role {
@@ -187,17 +224,12 @@ enum Year {
   YEAR_7
 }
 
-model AuditLog {
-  id         Int      @id @default(autoincrement())
-  userId     Int?
-  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  action     String
-  entityType String
-  entityId   Int?
-  details    Json?
-  createdAt  DateTime @default(now())
+enum ResultFlag {
+  FLAGGED
+  NOT_FLAGGED
+}
 
-  @@index([userId])
-  @@index([entityType, entityId])
-  @@index([createdAt])
+enum ResultStatus {
+  PASS
+  FAIL
 }

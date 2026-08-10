@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "Resulttrack",
+            "connectString": "postgresql://resulttrack_user:h4IuIeayJDJAzt5P76jM05HSDknWl7cs@dpg-d9a020ecjfls7391evf0-a.oregon-postgres.render.com/resulttrack"
+        }
+    ]
+}

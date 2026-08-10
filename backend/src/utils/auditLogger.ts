@@ -1,5 +1,5 @@
-import { prisma } from "../shared/prisma/prisma";
 import { logger } from "../shared/logger";
+import { writeAudit } from "./auditStore";
 
 export interface AuditLogParams {
     userId?: number | null;
@@ -26,14 +26,12 @@ export const logAudit = async (params: AuditLogParams): Promise<void> => {
     const { userId, action, entityType, entityId, details } = params;
 
     try {
-        await prisma.auditLog.create({
-            data: {
-                userId: userId ?? null,
-                action,
-                entityType,
-                entityId: entityId ?? null,
-                details: serializeDetails(details),
-            },
+        await writeAudit({
+            userId: userId ?? null,
+            action,
+            entityType,
+            entityId: entityId ?? null,
+            details: serializeDetails(details),
         });
 
         logger.info(

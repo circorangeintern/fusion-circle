@@ -41,6 +41,16 @@ export enum Permission {
     READ_COURSE = "read:course",
     DELETE_COURSE = "delete:course",
 
+
+    VIEW_TEACHER_COURSES = "view:teacher_courses",
+    VIEW_COURSE_STUDENTS = "view:course_students",
+    UPLOAD_RESULTS = "upload:results",
+    UPDATE_RESULTS = "update:results",
+    VIEW_RESULTS = "view:results",
+
+    VIEW_FLAGGED_RESULTS = "view:flagged_results",
+    RESOLVE_FLAGGED_RESULTS = "resolve:flagged_results"
+
 }
 
 export const RolePermissions: Record<Role, Permission[]> = {
@@ -69,7 +79,14 @@ export const RolePermissions: Record<Role, Permission[]> = {
         Permission.UPDATE_USER
     ],
     [Role.TEACHER]: [
-        Permission.LOGOUT_USER
+        Permission.LOGOUT_USER,
+        Permission.VIEW_TEACHER_COURSES,
+        Permission.VIEW_COURSE_STUDENTS,
+        Permission.UPLOAD_RESULTS,
+        Permission.UPDATE_RESULTS,
+        Permission.VIEW_RESULTS,
+        Permission.VIEW_FLAGGED_RESULTS,
+        Permission.RESOLVE_FLAGGED_RESULTS
     ],
     [Role.STUDENT]: [
         Permission.LOGOUT_USER

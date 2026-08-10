@@ -1,6 +1,28 @@
 import { Router } from "express";
+import {z} from "zod";
+import { authenticate , authorize} from "../../../shared/middlewares/auth.middleware";
+import {validate} from "../../../shared/middlewares/auth.middleware";
+import { Permission } from "../../../shared/permission";
+import {
+  getTeacherCoursesController,
+  getCourseStudentsController,
+   bulkUploadResultsController,
+  updateResultEntryController,
+  getCourseResultsController,
+  getStudentResultsController,
+   getTeacherFlaggedResultsController,
+  getTeacherFlaggedEntryByIdController,
+  resolveFlaggedEntryController,
+  reopenFlaggedResultController
+} from './teacher.controller';
+
+import { getCourseStudentsQuerySchema,  bulkUploadResultsSchema,
+  updateResultEntrySchema,
+  getResultsQuerySchema, } from '../../../shared/validator/validator';
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get("/profile", (req, res) => {
     res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves the teacher's profile." });
@@ -10,44 +32,84 @@ router.patch("/profile", (req, res) => {
     res.status(200).json({ success: true, message: "This route is currently in development. This route updates the teacher's profile." });
 });
 
-router.get("/courses", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves courses assigned to the teacher." });
-});
+router.get(
+  '/courses',
+  authenticate,
+  authorize(Permission.VIEW_TEACHER_COURSES),
+  getTeacherCoursesController
+);
 
-router.get("/courses/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves course details by ID: ${req.params.id}` });
-});
+// Get students for a specific course
+router.get(
+  '/courses/:courseId/students',
+  authenticate,
+  authorize(Permission.VIEW_COURSE_STUDENTS),
+  validate(getCourseStudentsQuerySchema, 'query'),
+  getCourseStudentsController
+);
 
-router.post("/grades", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route creates/submits a grade for a student." });
-});
 
-router.post("/grades/bulk", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route performs bulk submission of grades." });
-});
+// Bulk upload results for a course
+router.post(
+  '/courses/:courseId/results',
+  authorize(Permission.UPLOAD_RESULTS),
+  validate(bulkUploadResultsSchema),
+  bulkUploadResultsController
+);
 
-router.get("/grades", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all submitted grades." });
-});
+// Update a single result entry
+router.patch(
+  '/results/:entryId',
+  authorize(Permission.UPDATE_RESULTS),
+  validate(updateResultEntrySchema),
+  updateResultEntryController
+);
 
-router.get("/grades/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves details of a specific grade by ID: ${req.params.id}` });
-});
+// Get results for a course (teacher view)
+router.get(
+  '/courses/:courseId/results',
+  authorize(Permission.VIEW_RESULTS),
+  validate(getResultsQuerySchema, 'query'),
+  getCourseResultsController
+);
 
-router.patch("/grades/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route updates a grade by ID: ${req.params.id}` });
-});
+router.get(
+  '/students/:studentId/results',
+  authorize(Permission.VIEW_RESULTS),
+  getStudentResultsController
+);
 
-router.get("/flagged-results", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves flagged exam/grade results." });
-});
 
-router.get("/flagged-results/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves details of a specific flagged result by ID: ${req.params.id}` });
-});
+// Get all flagged results for teacher's courses
+router.get(
+  '/results/flagged',
+  authorize(Permission.VIEW_FLAGGED_RESULTS),
+  getTeacherFlaggedResultsController
+);
 
-router.patch("/flagged-results/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route reviews/resolves a flagged result by ID: ${req.params.id}` });
-});
+// Get a specific flagged entry by ID
+router.get(
+  '/results/flagged/:entryId',
+  authorize(Permission.VIEW_FLAGGED_RESULTS),
+  getTeacherFlaggedEntryByIdController
+);
+
+// Resolve a flagged entry
+router.patch(
+  '/results/flagged/:entryId/resolve',
+  authorize(Permission.RESOLVE_FLAGGED_RESULTS),
+  validate(z.object({
+    resolutionDescription: z.string().min(1, "Resolution description is required"),
+  })),
+  resolveFlaggedEntryController
+);
+
+// Unresolve a flagged entry (remove resolution)
+router.delete(
+  '/results/flagged/:entryId/resolve',
+  authorize(Permission.RESOLVE_FLAGGED_RESULTS),
+  reopenFlaggedResultController
+);
+
 
 export default router;

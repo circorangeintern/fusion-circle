@@ -385,6 +385,16 @@ export const getStudentsController = async (req: Request, res: Response) => {
         const schoolId = req.user!.schoolId!;
         const students = await getStudentsService(schoolId);
 
+        void logAudit({
+            userId: req.user!.id,
+            action: "VIEW_STUDENTS",
+            entityType: "SCHOOL",
+            entityId: schoolId,
+            details: {
+                totalStudents: students.length,
+            },
+        }).catch((err) => req.log.error({ err }, "Audit log failed"));
+
         return res.status(200).json({
             success: true,
             code: "OK",
@@ -437,6 +447,16 @@ export const getStudentByIdController = async (req: Request, res: Response) => {
                 data: null,
             });
         }
+
+        void logAudit({
+            userId: req.user!.id,
+            action: "VIEW_STUDENT",
+            entityType: "STUDENT",
+            entityId: studentId,
+            details: {
+                email: student.email,
+            },
+        }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
         const { passwordHash, student: studentProfile, ...userFields } = student;
 
@@ -756,6 +776,16 @@ export const getTeachersController = async (req: Request, res: Response) => {
         const schoolId = req.user!.schoolId!;
         const teachers = await getTeachersService(schoolId);
 
+        void logAudit({
+            userId: req.user!.id,
+            action: "VIEW_TEACHERS",
+            entityType: "SCHOOL",
+            entityId: schoolId,
+            details: {
+                totalTeachers: teachers.length,
+            },
+        }).catch((err) => req.log.error({ err }, "Audit log failed"));
+
         return res.status(200).json({
             success: true,
             code: "OK",
@@ -809,6 +839,16 @@ export const getTeacherByIdController = async (req: Request, res: Response) => {
                 data: null,
             });
         }
+
+        void logAudit({
+            userId: req.user!.id,
+            action: "VIEW_TEACHER",
+            entityType: "TEACHER",
+            entityId: teacherId,
+            details: {
+                email: teacher.email,
+            },
+        }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
         const { passwordHash, teacher: teacherProfile, ...userFields } = teacher;
 
@@ -1228,6 +1268,16 @@ export const getCoursesController = async (req: Request, res: Response) => {
         const schoolId = req.user!.schoolId!;
         const courses = await getCoursesService(schoolId);
 
+        void logAudit({
+            userId: req.user!.id,
+            action: "VIEW_COURSES",
+            entityType: "SCHOOL",
+            entityId: schoolId,
+            details: {
+                totalCourses: courses.length,
+            },
+        }).catch((err) => req.log.error({ err }, "Audit log failed"));
+
         return res.status(200).json({
             success: true,
             code: "OK",
@@ -1288,6 +1338,17 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
                 data: null,
             });
         }
+
+        void logAudit({
+            userId: req.user!.id,
+            action: "VIEW_COURSE",
+            entityType: "COURSE",
+            entityId: courseId,
+            details: {
+                name: course.name,
+                schoolId: course.schoolId,
+            },
+        }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
         return res.status(200).json({
             success: true,

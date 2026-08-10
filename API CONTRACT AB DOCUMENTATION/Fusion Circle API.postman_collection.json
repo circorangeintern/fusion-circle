@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "d7499499-6e0c-472d-9d88-7cbaeabcfa09",
     "name": "Fusion Circle API",
-    "description": "**Fusion circle project ResultTrack** is a school results platform that replaces manual paper- and Excel-based grading with an automated, real-time system. It enables teachers to enter and finalize scores quickly, while giving students immediate visibility into their finalized grades as they're submitted not just at the end of term. The MVP supports secondary and tertiary students at a single school, with secure PIN-gated registration, password-based login, automated grade computation (configurable weighting), and a student flagging feature to report suspected scoring errors directly to the owning teacher. Built for a 6-week sprint, it prioritizes trust, transparency, and efficiency over a broader school management system.EndFragment",
+    "description": "**Fusion circle project ResultTrack** is a school results platform that replaces manual paper- and Excel-based grading with an automated, real-time system. It enables teachers to enter and finalize scores quickly, while giving students immediate visibility into their finalized grades as they're submitted not just at the end of term. The MVP supports secondary and tertiary students at a single school, with secure PIN-gated registration, password-based login, automated grade computation (configurable weighting), and a student flagging feature to report suspected scoring errors directly to the owning teacher. Built for a 6-week sprint, it prioritizes trust, transparency, and efficiency over a broader school management system.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "51987467"
   },
@@ -11,6 +11,19 @@
       "name": "Auth",
       "item": [
         {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Login",
           "request": {
             "method": "POST",
@@ -18,21 +31,12 @@
             "body": {
               "mode": "raw",
               "raw": "{\r\n    \"email\": \"ediangmiracle@gmail.com\",\r\n    \"password\": \"tY#D?=5pRE6CAe\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "options": {"raw": {"language": "json"}}
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
             }
           },
           "response": []
@@ -44,13 +48,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
             }
           },
           "response": []
@@ -62,13 +61,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/forgot-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "forgot-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "forgot-password"]
             }
           },
           "response": []
@@ -80,13 +74,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/reset-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "reset-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "reset-password"]
             }
           },
           "response": []
@@ -99,21 +88,12 @@
             "body": {
               "mode": "raw",
               "raw": "{\r\n    \"email\": \"student@example.com\",\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"year\": \"1\",\r\n    \"class\": \"A\",\r\n    \"department\": \"Computer Science\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "options": {"raw": {"language": "json"}}
             },
             "url": {
               "raw": "{{baseUrl}}/auth/activate-account",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "activate-account"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "activate-account"]
             }
           },
           "response": []
@@ -126,21 +106,12 @@
             "body": {
               "mode": "raw",
               "raw": "{\r\n    \"userId\": 1,\r\n    \"otp\": \"123456\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "options": {"raw": {"language": "json"}}
             },
             "url": {
               "raw": "{{baseUrl}}/auth/verify-otp",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "verify-otp"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-otp"]
             }
           },
           "response": []
@@ -148,22 +119,35 @@
       ]
     },
     {
-      "name": "Super-Admin",
+      "name": "Super Admin",
       "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/superAdmin",
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin"]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Login",
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@example.com\",\r\n    \"password\": \"password\"\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
             "url": {
               "raw": "{{baseUrl}}/superAdmin/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "login"]
             }
           },
           "response": []
@@ -175,13 +159,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/superAdmin/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "logout"]
             }
           },
           "response": []
@@ -191,15 +170,15 @@
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@example.com\",\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"phoneNumber\": \"08000000000\"\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
             "url": {
               "raw": "{{baseUrl}}/superAdmin/admin",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "admin"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "admin"]
             }
           },
           "response": []
@@ -211,13 +190,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/superAdmin/admins",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "admins"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "admins"]
             }
           },
           "response": []
@@ -229,45 +203,23 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/superAdmin/admins/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "admins",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "admins", ":id"],
+              "variable": [{"key": "id", "value": "1"}]
             }
           },
           "response": []
         },
         {
-          "name": "Deactivate Admin (Legacy Toggle)",
+          "name": "Deactivate Admin (Toggle)",
           "request": {
             "method": "PATCH",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/superAdmin/admins/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "admins",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "admins", ":id"],
+              "variable": [{"key": "id", "value": "1"}]
             }
           },
           "response": []
@@ -279,21 +231,9 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/superAdmin/admins/:id/activate",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "admins",
-                ":id",
-                "activate"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "admins", ":id", "activate"],
+              "variable": [{"key": "id", "value": "1"}]
             }
           },
           "response": []
@@ -305,21 +245,9 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/superAdmin/admins/:id/deactivate",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "superAdmin",
-                "admins",
-                ":id",
-                "deactivate"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["superAdmin", "admins", ":id", "deactivate"],
+              "variable": [{"key": "id", "value": "1"}]
             }
           },
           "response": []
@@ -329,6 +257,19 @@
     {
       "name": "Admin",
       "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin"]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Schools",
           "item": [
@@ -340,21 +281,12 @@
                 "body": {
                   "mode": "raw",
                   "raw": "{\r\n  \"name\": \"African University of Science and Technology\",\r\n  \"email\": \"admissions@aust.edu.ng\",\r\n  \"website\": \"https://www.aust.edu.ng\",\r\n  \"address\": \"Plot 12, Technology Road, Lugbe\",\r\n  \"city\": \"Abuja\",\r\n  \"state\": \"Federal Capital Territory\",\r\n  \"country\": \"Nigeria\",\r\n  \"schoolType\": \"UNIVERSITY\",\r\n  \"description\": \"A world-class university focused on postgraduate STEM education and research.\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/schools",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "schools"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "schools"]
                 }
               },
               "response": []
@@ -366,99 +298,58 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/schools",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "schools"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "schools"]
                 }
               },
               "response": []
             },
             {
-              "name": "Get School By PIN",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/schools/:pin",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "schools",
-                    ":pin"
-                  ],
-                  "variable": [
-                    {
-                      "key": "pin",
-                      "value": "123456"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update School By PIN",
+              "name": "Update School",
               "request": {
                 "method": "PATCH",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Updated School Name\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
                 "url": {
-                  "raw": "{{baseUrl}}/admin/schools/:pin",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "schools",
-                    ":pin"
-                  ],
-                  "variable": [
-                    {
-                      "key": "pin",
-                      "value": "123456"
-                    }
-                  ]
+                  "raw": "{{baseUrl}}/admin/schools/:id",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "schools", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Get Schools Config Data",
+              "name": "Get School Config",
               "request": {
                 "method": "GET",
-                "header": []
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/schools/config",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "schools", "config"]
+                }
               },
               "response": []
             },
             {
-              "name": "Update School config Data",
+              "name": "Update School Config",
               "request": {
                 "method": "PUT",
                 "header": [],
                 "body": {
                   "mode": "raw",
                   "raw": "{\r\n  \"gradingBands\": [\r\n    { \"min\": 70, \"max\": 100, \"grade\": \"A\", \"point\": 5 },\r\n    { \"min\": 60, \"max\": 75, \"grade\": \"B\", \"point\": 4 },\r\n    { \"min\": 50, \"max\": 59, \"grade\": \"C\", \"point\": 3 },\r\n    { \"min\": 45, \"max\": 49, \"grade\": \"D\", \"point\": 2 },\r\n    { \"min\": 40, \"max\": 44, \"grade\": \"E\", \"point\": 1 },\r\n    { \"min\": 0, \"max\": 39, \"grade\": \"F\", \"point\": 0 }\r\n  ]\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/schools/config",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "schools",
-                    "config"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "schools", "config"]
                 }
               },
               "response": []
@@ -475,60 +366,30 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"firstName\": \"Jane\",\r\n  \"lastName\": \"Smith\",\r\n  \"email\": \"jane.smith2@example.com\",\r\n  \"phoneNumber\": \"08030000002\",\r\n  \"year\": \"YEAR_3\",\r\n  \"department\": \"Marine Engineering\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "raw": "{\r\n  \"firstName\": \"Jane\",\r\n  \"lastName\": \"Smith\",\r\n  \"email\": \"jane.smith@example.com\",\r\n  \"phoneNumber\": \"08030000002\",\r\n  \"year\": \"YEAR_3\",\r\n  \"department\": \"Marine Engineering\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/students",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "students"]
                 }
               },
               "response": []
             },
             {
-              "name": "Create Student Bulk",
+              "name": "Create Students (Bulk Upload)",
               "request": {
                 "method": "POST",
                 "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [{"key": "resultTrackStudent", "type": "file", "src": ""}]
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/students/bulk",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students",
-                    "bulk"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Student Custom",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/students/custom",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students",
-                    "custom"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "students", "bulk"]
                 }
               },
               "response": []
@@ -540,13 +401,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/students",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "students"]
                 }
               },
               "response": []
@@ -558,106 +414,28 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/students/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "students", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Update Student By ID",
+              "name": "Update Student",
               "request": {
                 "method": "PATCH",
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"class\": \"SS_2\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "raw": "{\r\n  \"year\": \"YEAR_4\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/students/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "100"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Activate Student",
-              "request": {
-                "method": "PATCH",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/students/:id/activate",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students",
-                    ":id",
-                    "activate"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Deactivate Student",
-              "request": {
-                "method": "PATCH",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/students/:id/deactivate",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "students",
-                    ":id",
-                    "deactivate"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "students", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
@@ -674,60 +452,30 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"firstName\": \"Samuel\",\r\n  \"lastName\": \"Okonkwo\",\r\n  \"email\": \"samuel.okonkwo@example.com\",\r\n  \"phoneNumber\": \"08033334444\",\r\n  \"department\": \"Marine Engineering\",\r\n  \"year\": \"YEAR_3\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "raw": "{\r\n  \"firstName\": \"Samuel\",\r\n  \"lastName\": \"Okonkwo\",\r\n  \"email\": \"samuel.okonkwo@example.com\",\r\n  \"phoneNumber\": \"08033334444\",\r\n  \"department\": \"Marine Engineering\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/teachers",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "teachers"]
                 }
               },
               "response": []
             },
             {
-              "name": "Create Teacher Bulk",
+              "name": "Create Teachers (Bulk Upload)",
               "request": {
                 "method": "POST",
                 "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [{"key": "resultTrackTeacher", "type": "file", "src": ""}]
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/teachers/bulk",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers",
-                    "bulk"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Teacher Custom",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/teachers/custom",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers",
-                    "custom"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "teachers", "bulk"]
                 }
               },
               "response": []
@@ -739,13 +487,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/teachers",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "teachers"]
                 }
               },
               "response": []
@@ -757,146 +500,57 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/teachers/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "teachers", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Update Teacher By ID",
+              "name": "Update Teacher",
               "request": {
                 "method": "PATCH",
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"firstName\": \"Samuel\",\r\n  \"lastName\": \"Okonkwo\",\r\n  \"email\": \"samel.okonkwo@example.com\",\r\n  \"phoneNumber\": \"08033334444\",\r\n  \"department\": \"Civil Engineering\",\r\n  \"year\": \"YEAR_3\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "raw": "{\r\n  \"firstName\": \"Samuel\",\r\n  \"lastName\": \"Okonkwo\",\r\n  \"email\": \"samuel.okonkwo@example.com\",\r\n  \"phoneNumber\": \"08033334444\",\r\n  \"department\": \"Civil Engineering\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/teachers/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1282"
-                    }
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "teachers", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Activate Teacher",
-              "request": {
-                "method": "PATCH",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/teachers/:id/activate",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers",
-                    ":id",
-                    "activate"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Deactivate Teacher",
-              "request": {
-                "method": "PATCH",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/teachers/:id/deactivate",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "teachers",
-                    ":id",
-                    "deactivate"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Assign Teacher to a Course",
+              "name": "Assign Teacher to Course",
               "request": {
                 "method": "PUT",
                 "header": [],
                 "url": {
-                  "raw": "{{BaseUrl}}/admin/courses/:courseId/teachers/:teacherId'",
-                  "host": [
-                    "{{BaseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses",
-                    ":courseId",
-                    "teachers",
-                    ":teacherId'"
-                  ],
-                  "variable": [
-                    {
-                      "key": "courseId",
-                      "value": "45"
-                    },
-                    {
-                      "key": "teacherId'",
-                      "value": "3"
-                    }
-                  ]
+                  "raw": "{{baseUrl}}/admin/courses/:courseId/teachers/:teacherId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses", ":courseId", "teachers", ":teacherId"],
+                  "variable": [{"key": "courseId", "value": "1"}, {"key": "teacherId", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Remove teacher from a course",
+              "name": "Remove Teacher from Course",
               "request": {
-                "method": "GET",
-                "header": []
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/courses/:courseId/teachers/:teacherId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses", ":courseId", "teachers", ":teacherId"],
+                  "variable": [{"key": "courseId", "value": "1"}, {"key": "teacherId", "value": "1"}]
+                }
               },
               "response": []
             }
@@ -913,59 +567,29 @@
                 "body": {
                   "mode": "raw",
                   "raw": "{\r\n  \"name\": \"INTRODUCTION TO PROGRAMMING\",\r\n  \"year\": \"YEAR_1\",\r\n  \"department\": \"GENERAL STUDIES\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses"]
                 }
               },
               "response": []
             },
             {
-              "name": "Create Course Bulk",
+              "name": "Create Courses (Bulk Upload)",
               "request": {
                 "method": "POST",
                 "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [{"key": "resultTrackCourse", "type": "file", "src": ""}]
+                },
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses/bulk",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses",
-                    "bulk"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Course Custom",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/courses/custom",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses",
-                    "custom"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses", "bulk"]
                 }
               },
               "response": []
@@ -977,13 +601,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses"]
                 }
               },
               "response": []
@@ -995,79 +614,42 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Update Course By ID",
+              "name": "Update Course",
               "request": {
                 "method": "PATCH",
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"name\": \"INTRODUCTION TO PROGRAMMING\",\r\n  \"year\": \"YEAR_2\",\r\n  \"department\": \"GENERAL STUDIES\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
+                  "raw": "{\r\n  \"name\": \"ADVANCED PROGRAMMING\",\r\n  \"year\": \"YEAR_2\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
                 },
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Delete Course By Id",
+              "name": "Delete Course",
               "request": {
                 "method": "DELETE",
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/courses/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "courses",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "courses", ":id"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
@@ -1075,296 +657,37 @@
           ]
         },
         {
-          "name": "Departments",
+          "name": "User Management",
           "item": [
             {
-              "name": "Create Department",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/departments",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "departments"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Department Bulk",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/departments/bulk",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "departments",
-                    "bulk"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Department Custom",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/departments/custom",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "departments",
-                    "custom"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get All Departments",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/departments",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "departments"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Department By ID",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/departments/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "departments",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Department By ID",
+              "name": "Activate User",
               "request": {
                 "method": "PATCH",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/admin/departments/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "departments",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        },
-        {
-          "name": "Classes",
-          "item": [
-            {
-              "name": "Create Class",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/classes",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "classes"
-                  ]
+                  "raw": "{{baseUrl}}/admin/users/:id/activate",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", ":id", "activate"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             },
             {
-              "name": "Create Class Bulk",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/classes/bulk",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "classes",
-                    "bulk"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Class Custom",
-              "request": {
-                "method": "POST",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/classes/custom",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "classes",
-                    "custom"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get All Classes",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/classes",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "classes"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Class By ID",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/admin/classes/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "classes",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Class By ID",
+              "name": "Deactivate User",
               "request": {
                 "method": "PATCH",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/admin/classes/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "classes",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "1"
-                    }
-                  ]
+                  "raw": "{{baseUrl}}/admin/users/:id/deactivate",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", ":id", "deactivate"],
+                  "variable": [{"key": "id", "value": "1"}]
                 }
               },
               "response": []
             }
           ]
-        },
-        {
-          "name": "Activate User Account",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/admin/users/:id/activate",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "users",
-                ":id",
-                "activate"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Deactivate User Account",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
         }
       ]
     },
@@ -1372,256 +695,203 @@
       "name": "Teacher",
       "item": [
         {
-          "name": "Get Profile",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update Profile",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Courses",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/courses",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "courses"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Course By ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/courses/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "courses",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+          "name": "Profile",
+          "item": [
+            {
+              "name": "Get Profile",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/profile",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "profile"]
                 }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Submit Grade",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/grades",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "grades"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Submit Grades Bulk",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/grades/bulk",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "grades",
-                "bulk"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Grades",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/grades",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "grades"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Grade By ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/grades/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "grades",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Profile",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/profile",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "profile"]
                 }
-              ]
+              },
+              "response": []
             }
-          },
-          "response": []
+          ]
         },
         {
-          "name": "Update Grade By ID",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/grades/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "grades",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+          "name": "Courses",
+          "item": [
+            {
+              "name": "Get My Courses",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/courses",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "courses"]
                 }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Flagged Results",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/flagged-results",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "flagged-results"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Flagged Result By ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/flagged-results/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "flagged-results",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Course Students",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/courses/:courseId/students",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "courses", ":courseId", "students"],
+                  "variable": [{"key": "courseId", "value": "1"}]
                 }
-              ]
+              },
+              "response": []
+            },
+            {
+              "name": "Get Course Results",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/courses/:courseId/results",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "courses", ":courseId", "results"],
+                  "variable": [{"key": "courseId", "value": "1"}]
+                }
+              },
+              "response": []
             }
-          },
-          "response": []
+          ]
         },
         {
-          "name": "Review Flagged Result By ID",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/teacher/flagged-results/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "teacher",
-                "flagged-results",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+          "name": "Results",
+          "item": [
+            {
+              "name": "Upload Results (Bulk)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"results\": [\r\n    {\r\n      \"studentId\": 1,\r\n      \"score\": 85.5\r\n    }\r\n  ]\r\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/courses/:courseId/results",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "courses", ":courseId", "results"],
+                  "variable": [{"key": "courseId", "value": "1"}]
                 }
-              ]
+              },
+              "response": []
+            },
+            {
+              "name": "Update Result Entry",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"score\": 90.0\r\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/results/:entryId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "results", ":entryId"],
+                  "variable": [{"key": "entryId", "value": "1"}]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Student Results",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/students/:studentId/results",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "students", ":studentId", "results"],
+                  "variable": [{"key": "studentId", "value": "1"}]
+                }
+              },
+              "response": []
             }
-          },
-          "response": []
+          ]
+        },
+        {
+          "name": "Flagged Results",
+          "item": [
+            {
+              "name": "Get All Flagged Results",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/results/flagged",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "results", "flagged"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Flagged Entry By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/results/flagged/:entryId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "results", "flagged", ":entryId"],
+                  "variable": [{"key": "entryId", "value": "1"}]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resolve Flagged Entry",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"resolutionDescription\": \"Score was correct, no adjustment needed\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/results/flagged/:entryId/resolve",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "results", "flagged", ":entryId", "resolve"],
+                  "variable": [{"key": "entryId", "value": "1"}]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reopen Flagged Entry",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/teacher/results/flagged/:entryId/resolve",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["teacher", "results", "flagged", ":entryId", "resolve"],
+                  "variable": [{"key": "entryId", "value": "1"}]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ]
     },
@@ -1629,196 +899,172 @@
       "name": "Student",
       "item": [
         {
-          "name": "Get Profile",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update Profile",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Dashboard Details",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/dashboard",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "dashboard"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Results",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/results",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "results"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Result By ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/results/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "results",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+          "name": "Profile",
+          "item": [
+            {
+              "name": "Get Profile",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/profile",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "profile"]
                 }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Results By Course ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/results/course/:courseId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "results",
-                "course",
-                ":courseId"
-              ],
-              "variable": [
-                {
-                  "key": "courseId",
-                  "value": "1"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Profile",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/profile",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "profile"]
                 }
-              ]
+              },
+              "response": []
             }
-          },
-          "response": []
+          ]
         },
         {
-          "name": "Flag Result By ID",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/results/:id/flag",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "results",
-                ":id",
-                "flag"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+          "name": "Dashboard",
+          "item": [
+            {
+              "name": "Get Dashboard",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/dashboard",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "dashboard"]
                 }
-              ]
+              },
+              "response": []
             }
-          },
-          "response": []
+          ]
         },
         {
-          "name": "Get Flags",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/flags",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "flags"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Flag By ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/student/flags/:id",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "student",
-                "flags",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1"
+          "name": "Courses",
+          "item": [
+            {
+              "name": "Get My Courses",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/courses",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "courses"]
                 }
-              ]
+              },
+              "response": []
+            },
+            {
+              "name": "Register Courses",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"courseIds\": [1, 2, 3]\r\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/student/courses/register",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "courses", "register"]
+                }
+              },
+              "response": []
             }
-          },
-          "response": []
+          ]
+        },
+        {
+          "name": "Results",
+          "item": [
+            {
+              "name": "Get My Results",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/courses/results",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "courses", "results"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Flag Result",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"flagDescription\": \"I believe this score is incorrect\"\r\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/student/courses/results/:entryId/flag",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "courses", "results", ":entryId", "flag"],
+                  "variable": [{"key": "entryId", "value": "1"}]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Unflag Result",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/courses/results/:entryId/unflag",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "courses", "results", ":entryId", "unflag"],
+                  "variable": [{"key": "entryId", "value": "1"}]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Flags",
+          "item": [
+            {
+              "name": "Get My Flagged Results",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/results/flags",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "results", "flags"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Flagged Entry By ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/student/results/flags/:entryId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["student", "results", "flags", ":entryId"],
+                  "variable": [{"key": "entryId", "value": "1"}]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ]
     }
@@ -1830,9 +1076,7 @@
         "type": "text/javascript",
         "packages": {},
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
@@ -1841,9 +1085,7 @@
         "type": "text/javascript",
         "packages": {},
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

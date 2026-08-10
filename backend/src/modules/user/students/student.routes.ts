@@ -1,6 +1,17 @@
 import { Router } from "express";
+import {getStudentCoursesQuerySchema,registerCoursesSchema , getResultsQuerySchema,
+  flagResultSchema,
+  getStudentResultsQuerySchema,
+  unflagResultSchema, } from "../../../shared/validator/validator";
+import { authenticate } from "../../../shared/middlewares/auth.middleware";
+import {validate} from "../../../shared/middlewares/auth.middleware";
+import { flagResultController, getStudentCoursesController, getStudentResultsController, 
+    registerCoursesController, unflagResultController, getFlaggedResultsController,
+  getFlaggedEntryByIdController, } from "./student.controllers";
+
 
 const router = Router();
+router.use(authenticate);
 
 router.get("/profile", (req, res) => {
     res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves the student's profile." });
@@ -14,28 +25,51 @@ router.get("/dashboard", (req, res) => {
     res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves student dashboard analytics/overview." });
 });
 
-router.get("/results", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all exam/grade results for the student." });
-});
 
-router.get("/results/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves details of a specific result by ID: ${req.params.id}` });
-});
+router.get(
+    '/courses',
+    validate(getStudentCoursesQuerySchema, 'query'), 
+    getStudentCoursesController
+);
 
-router.get("/results/course/:courseId", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves student results filtered by course ID: ${req.params.courseId}` });
-});
+router.post(
+  '/courses/register',
+  validate(registerCoursesSchema),
+  registerCoursesController
+);
 
-router.post("/results/:id/flag", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route flags a specific result (by ID: ${req.params.id}) for teacher review.` });
-});
+// Get student's own results
+router.get(
+  '/courses/results',
+  validate(getStudentResultsQuerySchema, 'query'),
+  getStudentResultsController
+);
 
-router.get("/flags", (req, res) => {
-    res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves all flags raised by the student." });
-});
+// Flag a result (student flags their own result)
+router.patch(
+  '/courses/results/:entryId/flag',
+  validate(flagResultSchema),
+  flagResultController
+);
 
-router.get("/flags/:id", (req, res) => {
-    res.status(200).json({ success: true, message: `This route is currently in development. This route retrieves details of a specific flag by ID: ${req.params.id}` });
-});
+// Unflag a result (student removes flag from their result)
+router.patch(
+  '/courses/results/:entryId/unflag',
+  validate(unflagResultSchema),
+  unflagResultController
+);
+
+// Get all flagged results for the authenticated student
+router.get(
+  '/results/flags',
+  getFlaggedResultsController
+);
+
+// Get a specific flagged entry by entry ID
+router.get(
+  '/results/flags/:entryId',
+  getFlaggedEntryByIdController
+);
+
 
 export default router;

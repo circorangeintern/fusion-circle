@@ -63,15 +63,10 @@ export function authorize(requiredPermission: Permission) {
 
 
 
-
-export const validate = (schema: ZodSchema) => {
-    return (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) => {
-        const result = schema.safeParse(req.body);
-
+export const validate = (schema: ZodSchema, source: 'body' | 'query' = 'body') => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const data = source === 'body' ? req.body : req.query;
+        const result = schema.safeParse(data);
 
         if (!result.success) {
             return res.status(400).json({
@@ -82,8 +77,13 @@ export const validate = (schema: ZodSchema) => {
             });
         }
 
-        req.body = result.data;
+        // Assign validated data back to the appropriate source
+        if (source === 'body') {
+            req.body = result.data;
+        } else {
+            req.query = result.data;
+        }
+
         next();
     };
 };
-

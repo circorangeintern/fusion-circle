@@ -464,6 +464,114 @@ export const updateSchoolConfigSchema = z.object({
     message: "At least one field (gradingBands or cgpa) must be provided",
 });
 
+
+export const getStudentCoursesQuerySchema = z.object({
+  year: z.nativeEnum(Year).optional(),
+  class: z.nativeEnum(Class).optional(),
+})
+.superRefine((data, ctx) => {
+  const hasYear = data.year !== undefined;
+  const hasClass = data.class !== undefined;
+
+  // Case 1: Both year and class provided (invalid)
+  if (hasYear && hasClass) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "You cannot filter by both year and class simultaneously. Please provide only one.",
+      path: ["year"],
+    });
+    return;
+  }
+
+  // Case 2: Neither year nor class provided (invalid)
+  if (!hasYear && !hasClass) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Either year or class must be provided",
+      path: ["year"],
+    });
+  }
+});
+
+
+export const registerCoursesSchema = z.object({
+  courseIds: z.array(
+    z.number().int().positive("Course ID must be a positive integer")
+  ).min(1, "At least one course must be selected"),
+});
+
+
+
+export const getCourseStudentsQuerySchema = z.object({
+  search: z.string().optional(),
+  department: z.string().optional(),
+  year: z.nativeEnum(Year).optional(),
+  class: z.nativeEnum(Class).optional(),
+});
+
+
+export const resultEntrySchema = z.object({
+  studentId: z.number().int().positive("Student ID must be a positive integer"),
+  caScore: z.number().min(0, "CA score must be at least 0").max(100, "CA score cannot exceed 100"),
+  examScore: z.number().min(0, "Exam score must be at least 0").max(100, "Exam score cannot exceed 100"),
+}).refine((data) => (data.caScore + data.examScore) <= 100, {
+  message: "CA score + Exam score cannot exceed 100",
+  path: ["caScore"],
+});
+
+
+export const bulkUploadResultsSchema = z.object({
+  results: z.array(resultEntrySchema).min(1, "At least one result must be provided"),
+});
+
+
+export const updateResultEntrySchema = z.object({
+  caScore: z.number().min(0, "CA score must be at least 0").max(100, "CA score cannot exceed 100").optional(),
+  examScore: z.number().min(0, "Exam score must be at least 0").max(100, "Exam score cannot exceed 100").optional(),
+  flag: z.enum(['FLAGGED', 'NOT_FLAGGED']).optional(),
+}).refine((data) => data.caScore || data.examScore || data.flag, {
+  message: "At least one field (caScore, examScore, or flag) must be provided",
+});
+
+
+
+// Get results query schema
+export const getResultsQuerySchema = z.object({
+  studentId: z.coerce.number().int().positive().optional(),
+  courseId: z.coerce.number().int().positive().optional(),
+  status: z.enum(['PASS', 'FAIL']).optional(),
+  grade: z.string().optional(),
+});
+
+// Flag a result schema
+export const flagResultSchema = z.object({
+  description: z.string().min(1, "Description is required").max(500, "Description cannot exceed 500 characters"),
+});
+
+export type FlagResultInput = z.infer<typeof flagResultSchema>;
+
+// Unflag a result schema
+export const unflagResultSchema = z.object({
+  description: z.string().optional(),
+});
+
+export type UnflagResultInput = z.infer<typeof unflagResultSchema>;
+
+// Get student results query
+export const getStudentResultsQuerySchema = z.object({
+  courseId: z.coerce.number().int().positive().optional(),
+  status: z.enum(['PASS', 'FAIL']).optional(),
+  grade: z.string().optional(),
+  flagged: z.coerce.boolean().optional(),
+});
+
+export type GetStudentResultsQueryInput = z.infer<typeof getStudentResultsQuerySchema>;
+export type UpdateResultEntryInput = z.infer<typeof updateResultEntrySchema>;
+export type BulkUploadResultsInput = z.infer<typeof bulkUploadResultsSchema>;
+export type GetResultsQueryInput = z.infer<typeof getResultsQuerySchema>;
+export type GetCourseStudentsQueryInput = z.infer<typeof getCourseStudentsQuerySchema>;
+export type RegisterCoursesInput = z.infer<typeof registerCoursesSchema>;
+export type GetStudentCoursesQueryInput = z.infer<typeof getStudentCoursesQuerySchema>;
 export const createCourseSchema = courseRowSchema;
 export type UpdateSchoolConfigInput = z.infer<typeof updateSchoolConfigSchema>;
 export type CourseRowInput = z.infer<typeof courseRowSchema>;

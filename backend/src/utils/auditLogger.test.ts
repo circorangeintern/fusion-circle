@@ -1,13 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { prisma } from "../shared/prisma/prisma";
+import * as auditStore from "./auditStore";
 import { safeLogAudit } from "./auditLogger";
 
-vi.mock("../shared/prisma/prisma", () => ({
-  prisma: {
-    auditLog: {
-      create: vi.fn(),
-    },
-  },
+vi.mock("./auditStore", () => ({
+  writeAudit: vi.fn(),
 }));
 
 describe("safeLogAudit", () => {
@@ -16,7 +12,7 @@ describe("safeLogAudit", () => {
   });
 
   it("does not throw when the database write fails", async () => {
-    vi.mocked(prisma.auditLog.create).mockRejectedValueOnce(new Error("db down"));
+    vi.mocked(auditStore.writeAudit).mockRejectedValueOnce(new Error("db down"));
 
     await expect(
       safeLogAudit({
