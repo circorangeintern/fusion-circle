@@ -1,14 +1,18 @@
 // controllers/courseController.ts
 import { Request, Response } from 'express';
 import { prisma } from "../../../shared/prisma/prisma";
-import { Prisma , ResultFlag, ResultStatus  } from '@prisma/client';
+import { Prisma , ResultFlag, ResultStatus, NotificationType  } from '@prisma/client';
 import { GetStudentCoursesQueryInput } from '../../../shared/validator/validator';
 import { safeLogAudit } from '../../../utils/auditLogger';
 import { registerCourses,  getStudentResults,
   flagResultEntry,
   unflagResultEntry,} from './student.service';
+import { createNotification } from '../../../shared/notificationService';
 
 import { RegisterCoursesInput } from '../../../shared/validator/validator';
+
+
+
 
 export const getStudentCoursesController = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -119,6 +123,48 @@ export const registerCoursesController = async (req: Request, res: Response) => 
     if (result.summary.invalidCourses > 0) {
       message += ` (${result.summary.invalidCourses} invalid courses skipped)`;
     }
+
+  const teacherIds = [
+  ...new Set(
+    result.courses.flatMap((course) =>
+      course.teachers.map((teacher) => teacher.user.id)
+    )
+  ),
+];
+
+const notifications = [
+  // Student notification
+  {
+    userId: result.student.id,
+    type: NotificationType.COURSE_REGISTERED,
+    title: "Course Registration Successful",
+    message: `You have successfully registered for ${result.courses.length} course(s).`,
+    entityType: "STUDENT",
+    entityId: result.student.id,
+  },
+
+  // Teacher notifications
+  ...teacherIds.map((teacherId) => ({
+    userId: teacherId,
+    type: NotificationType.COURSE_REGISTERED,
+    title: "Student Registered for Course",
+    message: `${result.student.name} has registered for the courses you were assigned to.`,
+    entityType: "STUDENT",
+    entityId: result.student.id,
+  })),
+];
+
+
+try {
+  await prisma.notification.createMany({
+    data: notifications,
+  });
+} catch (error) {
+  req.log.error(
+    { error },
+    "Failed to create notifications"
+  );
+}
 
     return res.status(200).json({
       success: true,
@@ -231,6 +277,28 @@ export const flagResultController = async (req: Request, res: Response) => {
       description
     );
 
+  const course = await prisma.course.findUnique({
+  where: {
+    id: result.entry.courseId,
+  },
+  include: {
+    teachers: {
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
     await safeLogAudit({
       userId: studentId,
       action: "FLAG_RESULT",
@@ -239,6 +307,29 @@ export const flagResultController = async (req: Request, res: Response) => {
       details: { description },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
+   void createNotification({
+  userId: studentId,
+  type: NotificationType.RESULT_FLAGGED,
+  title: 'Result Flagged',
+  message: `You have flagged your result for ${result.entry.courseName}. Your teacher will review it shortly.`,
+  entityType: 'ResultEntry',
+  entityId: result.entry.id,
+}).catch((error) => {
+  req.log.error('Failed to create notification:', error);
+});
+
+for (const teacher of course?.teachers ?? []) {
+  createNotification({
+    userId: teacher.userId,
+    type: NotificationType.RESULT_FLAGGED,
+    title: "Result Flagged",
+    message: `${result.entry.studentName} has flagged their result for ${result.entry.courseName}. Please review and resolve.`,
+    entityType: "ResultEntry",
+    entityId: result.entry.id,
+  }).catch((error) => {
+    req.log.error({ error, teacherId: teacher.userId }, 'Failed to create teacher notification');
+  });
+}
     return res.status(200).json({
       success: true,
       code: "OK",
@@ -289,6 +380,26 @@ export const unflagResultController = async (req: Request, res: Response) => {
       schoolId
     );
 
+  const course = await prisma.course.findUnique({
+  where: {
+    id: result.entry.courseId,
+  },
+  include: {
+    teachers: {
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
+    },
+  },
+});
+
     await safeLogAudit({
       userId: studentId,
       action: "UNFLAG_RESULT",
@@ -297,6 +408,30 @@ export const unflagResultController = async (req: Request, res: Response) => {
       details: { unflagged: true },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
+
+createNotification({
+  userId: studentId,
+  type: NotificationType.RESULT_UNFLAGGED,
+  title: 'Flag Removed',
+  message: `The flag on your result for ${result.entry.courseName} has been removed.`,
+  entityType: 'ResultEntry',
+  entityId: result.entry.id,
+}).catch((error) => {
+  req.log.error('Failed to create notification:', error);
+});
+
+for (const teacher of course?.teachers ?? []) {
+  createNotification({
+    userId: teacher.userId,
+    type: NotificationType.RESULT_UNFLAGGED,
+    title: "Result Flag Removed",
+    message: `${result.entry.studentName}'s flag on ${result.entry.courseName} has been removed.`,
+    entityType: "ResultEntry",
+    entityId: result.entry.id,
+  }).catch((error) => {
+    req.log.error({ error, teacherId: teacher.userId }, 'Failed to create teacher notification');
+  });
+}
     return res.status(200).json({
       success: true,
       code: "OK",

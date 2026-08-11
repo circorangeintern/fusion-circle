@@ -154,6 +154,7 @@ All routes are prefixed with `/api/v1`.
 | **GET** | `/teacher/flagged-results` | *Placeholder:* Retrieves results flagged by students for the teacher's review. |
 | **GET** | `/teacher/flagged-results/:id` | *Placeholder:* Retrieves a specific flagged result details. |
 | **PATCH** | `/teacher/flagged-results/:id` | *Placeholder:* Resolves/reviews a flagged result. |
+| **GET** | `/teacher/notifications/me` | Retrieves the authenticated teacher's notifications; supports `isRead`, `limit`, and `markAsRead` query parameters. |
 
 ---
 
@@ -170,3 +171,4 @@ All routes are prefixed with `/api/v1`.
 | **POST** | `/student/results/:id/flag` | *Placeholder:* Flags a specific result for teacher review. |
 | **GET** | `/student/flags` | *Placeholder:* Retrieves all flags raised by the student. |
 | **GET** | `/student/flags/:id` | *Placeholder:* Retrieves details of a specific raised flag. |
+| **GET** | `/student/notifications/me` | Retrieves the authenticated student's notifications; supports `isRead`, `limit`, and `markAsRead` query parameters. |

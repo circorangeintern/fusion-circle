@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction, response } from "express";
 import { prisma } from "../../../shared/prisma/prisma";
-import { AccountStatus } from "@prisma/client";
+import { AccountStatus ,NotificationType, Prisma} from "@prisma/client";
 import { logAudit } from "../../../utils/auditLogger";
 import { createUniqueSchoolPin } from "../../../utils/passwordGenerator";
 import {syncDepartments} from "../../../utils/syncDepartment";
@@ -22,6 +22,7 @@ import { upload } from "../../../shared/middlewares/csvFilter"
 import { getObjectById, updateObject } from "../../../shared/prisma/repoLayer"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { UpdateSchoolConfigInput } from "../../../shared/validator/validator";
+import { createNotification } from '../../../shared/notificationService';
 
 
 
@@ -1478,6 +1479,23 @@ export const addTeacherToCourseController = async (req: Request, res: Response) 
             },
         });
 
+        void createNotification({
+  userId: teacherId,
+  type: NotificationType.TEACHER_ASSIGNED_TO_COURSE,
+  title: "Course Assigned",
+  message: `You have been assigned to teach ${course.name} for ${course.year || course.class}.`,
+  entityType: "COURSE",
+  entityId: courseId,
+}).catch((error) => {
+  req.log.error(
+    {
+      error,
+      teacherId,
+      courseId,
+    },
+    "Failed to create teacher course assignment notification"
+  );
+});
         logAudit({
             userId: req.user!.id,
             action: "ADD_TEACHER_TO_COURSE",
@@ -1588,6 +1606,23 @@ export const removeTeacherFromCourseController = async (req: Request, res: Respo
             },
         });
 
+        void createNotification({
+  userId: teacherId,    
+  type: NotificationType.TEACHER_REMOVED_FROM_COURSE,
+  title: "Course Assignment Removed",
+  message: `You have been removed from teaching ${course.name}.`,
+  entityType: "COURSE",
+  entityId: courseId,
+}).catch((error) => {
+  req.log.error(
+    {
+      error,
+      teacherId,
+      courseId,
+    },
+    "Failed to create teacher course removal notification"
+  );
+});
 
         logAudit({
             userId: req.user!.id,
@@ -1972,49 +2007,179 @@ export const updateSchoolConfigController = async (req: Request, res: Response) 
     }
 };
 
-// PATCH /api/school/config/reset
-// export const resetSchoolConfigController = async (req: Request, res: Response) => {
-//     if (!req.user) {
-//         return res.status(401).json({
-//             success: false,
-//             message: "Authentication required",
-//         });
-//     }
+export const getMyNotificationsController = async (
+  req: Request,
+  res: Response
+) => {
+  const userId = req.user!.id;
 
-//     const schoolId = req.user.schoolId;
+  const { isRead, limit, markAsRead } = req.query;
 
-//     if (!schoolId) {
-//         return res.status(400).json({
-//             success: false,
-//             message: "User is not associated with a school",
-//         });
-//     }
+  // Validate isRead
+  if (
+    isRead !== undefined &&
+    isRead !== "true" &&
+    isRead !== "false"
+  ) {
+    return res.status(400).json({
+      success: false,
+      code: "BAD_REQUEST",
+      message: "isRead must be true or false",
+      data: null,
+    });
+  }
 
-//     try {
-//         const resetConfig = await prisma.schoolConfig.upsert({
-//             where: { schoolId },
-//             update: {
-//                 gradingBands: DEFAULT_GRADING_BANDS,
-//                 cgpa: DEFAULT_CGPA_CONFIG,
-//             },
-//             create: {
-//                 schoolId,
-//                 gradingBands: DEFAULT_GRADING_BANDS,
-//                 cgpa: DEFAULT_CGPA_CONFIG,
-//             },
-//         });
+  // Validate markAsRead
+  if (
+    markAsRead !== undefined &&
+    markAsRead !== "true" &&
+    markAsRead !== "false"
+  ) {
+    return res.status(400).json({
+      success: false,
+      code: "BAD_REQUEST",
+      message: "markAsRead must be true or false",
+      data: null,
+    });
+  }
 
-//         return res.status(200).json({
-//             success: true,
-//             message: "School configuration reset to defaults",
-//             data: resetConfig,
-//         });
+  // Validate limit
+  let take = 10;
 
-//     } catch (error) {
-//         console.error('Reset school config error:', error);
-//         return res.status(500).json({
-//             success: false,
-//             message: "Failed to reset school configuration",
-//         });
-//     }
-// };
+  if (limit !== undefined) {
+    const parsedLimit = Number(limit);
+
+    if (
+      !Number.isInteger(parsedLimit) ||
+      parsedLimit < 1 ||
+      parsedLimit > 100
+    ) {
+      return res.status(400).json({
+        success: false,
+        code: "BAD_REQUEST",
+        message: "limit must be an integer between 1 and 100",
+        data: null,
+      });
+    }
+
+    take = parsedLimit;
+  }
+
+  // Build notification filter
+  const where: Prisma.NotificationWhereInput = {
+    userId,
+  };
+
+  if (isRead !== undefined) {
+    where.isRead = isRead === "true";
+  }
+
+  const shouldMarkAsRead = markAsRead === "true";
+
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Get notifications
+      const notifications = await tx.notification.findMany({
+        where,
+        orderBy: {
+          createdAt: "desc",
+        },
+        take,
+      });
+
+      let markedIds: number[] = [];
+      let markedAt: Date | null = null;
+
+      // 2. Mark returned unread notifications as read
+      if (shouldMarkAsRead && notifications.length > 0) {
+        const unreadIds = notifications
+          .filter((notification) => !notification.isRead)
+          .map((notification) => notification.id);
+
+        if (unreadIds.length > 0) {
+          markedAt = new Date();
+
+          await tx.notification.updateMany({
+            where: {
+              id: {
+                in: unreadIds,
+              },
+              userId,
+              isRead: false,
+            },
+            data: {
+              isRead: true,
+              readAt: markedAt,
+            },
+          });
+
+          markedIds = unreadIds;
+        }
+      }
+
+      // 3. Get total notification count
+      const totalCount = await tx.notification.count({
+        where: {
+          userId,
+        },
+      });
+
+      // 4. Get unread count
+      const unreadCount = await tx.notification.count({
+        where: {
+          userId,
+          isRead: false,
+        },
+      });
+
+      // 5. Format notifications
+      const formattedNotifications = notifications.map((notification) => {
+        const wasMarkedAsRead = markedIds.includes(notification.id);
+
+        return {
+          ...notification,
+          isRead: wasMarkedAsRead
+            ? true
+            : notification.isRead,
+
+          readAt: wasMarkedAsRead
+            ? markedAt
+            : notification.readAt,
+        };
+      });
+
+      return {
+        notifications: formattedNotifications,
+        total: totalCount,
+        unreadCount,
+        markedCount: markedIds.length,
+      };
+    });
+
+    return res.status(200).json({
+      success: true,
+      code: "OK",
+      message: "Notifications retrieved successfully",
+      data: {
+        notifications: result.notifications,
+        count: result.notifications.length,
+        total: result.total,
+        unreadCount: result.unreadCount,
+        markedAsRead: result.markedCount,
+      },
+    });
+  } catch (error) {
+    req.log.error(
+      { error, userId },
+      "getMyNotificationsController failed"
+    );
+
+    return res.status(500).json({
+      success: false,
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Failed to fetch notifications",
+      data: null,
+    });
+  }
+};
+

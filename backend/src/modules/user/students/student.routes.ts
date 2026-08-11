@@ -8,10 +8,15 @@ import {validate} from "../../../shared/middlewares/auth.middleware";
 import { flagResultController, getStudentCoursesController, getStudentResultsController, 
     registerCoursesController, unflagResultController, getFlaggedResultsController,
   getFlaggedEntryByIdController, } from "./student.controllers";
+import { getMyNotificationsController } from "../admin/admin.controller";
 
 
 const router = Router();
 router.use(authenticate);
+
+router.get("/notifications/me", 
+  getMyNotificationsController
+)
 
 router.get("/profile", (req, res) => {
     res.status(200).json({ success: true, message: "This route is currently in development. This route retrieves the student's profile." });

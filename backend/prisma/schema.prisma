@@ -54,6 +54,7 @@ model User {
   PasswordResetToken PasswordResetToken?
   schoolsCreated     School[]            @relation("SchoolCreator")
   student            Student?
+  notifications      Notification[]
   teacher            Teacher?
   school             School?             @relation(fields: [schoolId], references: [id])
 }
@@ -184,6 +185,41 @@ model StudentResult {
   Student     Student       @relation(fields: [studentId], references: [userId], onDelete: Cascade)
 
   @@index([studentId])
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type    NotificationType
+  title   String
+  message String
+
+  isRead Boolean   @default(false)
+  readAt DateTime?
+
+  entityType String?
+  entityId   Int?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([userId, isRead])
+  @@index([userId, type])
+  @@index([entityType, entityId])
+}
+
+enum NotificationType {
+  RESULT_PUBLISHED
+  RESULT_FLAGGED
+  RESULT_FLAG_RESOLVED
+  COURSE_REGISTERED
+  RESULT_UNFLAGGED
+  RESULT_REOPENED
+  TEACHER_ASSIGNED_TO_COURSE
+  TEACHER_REMOVED_FROM_COURSE
 }
 
 enum SchoolType {

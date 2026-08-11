@@ -16,6 +16,7 @@ import {
   reopenFlaggedResultController
 } from './teacher.controller';
 
+import {getMyNotificationsController} from "../admin/admin.controller"
 import { getCourseStudentsQuerySchema,  bulkUploadResultsSchema,
   updateResultEntrySchema,
   getResultsQuerySchema, } from '../../../shared/validator/validator';
@@ -111,5 +112,9 @@ router.delete(
   reopenFlaggedResultController
 );
 
+
+router.get("/notifications", 
+  getMyNotificationsController
+)
 
 export default router;

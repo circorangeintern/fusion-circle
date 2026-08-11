@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { prisma } from "../../../shared/prisma/prisma";
-import { ResultFlag } from "@prisma/client";
+import { ResultFlag , NotificationType } from "@prisma/client";
 import { getTeacherCourses, getCourseStudents } from './teacher.service';
 import {
   bulkUploadResults,
@@ -179,6 +179,27 @@ export const bulkUploadResultsController = async (req: Request, res: Response) =
       },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
+
+    const notifications = result.results.map((studentResult) => ({
+  userId: studentResult.studentId,
+  type: NotificationType.RESULT_PUBLISHED,
+  title: "Result Published",
+  message: `Your result for ${result.course.name} has been published.`,
+  entityType: "RESULT_ENTRY",
+  entityId: studentResult.entryId,
+}));
+
+void prisma.notification.createMany({
+  data: notifications,
+}).catch((error) => {
+  req.log.error(
+    {
+      error,
+      courseId: result.course.id,
+    },
+    "Failed to create result notifications"
+  );
+});
     const statusCode = result.failed > 0 && result.successful > 0 ? 207 : 200;
     const message = result.failed > 0
       ? `Uploaded ${result.successful} results, ${result.failed} failed`
@@ -244,6 +265,27 @@ export const updateResultEntryController = async (req: Request, res: Response) =
       details: { entryId, caScore, examScore, flag },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
+
+    const notification = {
+  userId: result.entry.studentId,
+  type: NotificationType.RESULT_PUBLISHED,
+  title: "Result Updated",
+  message: `Your result for ${result.entry.courseName} has been updated.`,
+  entityType: "RESULT_ENTRY",
+  entityId: result.entry.id,
+};
+
+void prisma.notification.create({
+  data: notification,
+}).catch((error) => {
+  req.log.error(
+    {
+      error,
+      entryId: result.entry.id,
+    },
+    "Failed to create result update notification"
+  );
+});
     return res.status(200).json({
       success: true,
       code: "OK",
@@ -837,6 +879,28 @@ export const resolveFlaggedEntryController = async (
       },
     });
 
+
+    // Notify student that their flagged result has been resolved
+void prisma.notification.create({
+  data: {
+    userId: updatedEntry.StudentResult.studentId,
+    type: NotificationType.RESULT_FLAG_RESOLVED,
+    title: "Result Flag Resolved",
+    message: `Your flagged result for ${updatedEntry.Course.name} has been resolved by your lecturer.`,
+    entityType: "RESULT_ENTRY",
+    entityId: updatedEntry.id,
+  },
+}).catch((error) => {
+  req.log.error(
+    {
+      error,
+      entryId: updatedEntry.id,
+      studentId: updatedEntry.StudentResult.studentId,
+    },
+    "Failed to create result resolution notification"
+  );
+});
+
     await safeLogAudit({
       userId: teacherId,
       action: "RESOLVE_FLAGGED_RESULT",
@@ -1008,6 +1072,25 @@ export const reopenFlaggedResultController = async (
       },
     }).catch((err) => req.log.error({ err }, "Audit log failed"));
 
+    void prisma.notification.create({
+  data: {
+    userId: updatedEntry.StudentResult.studentId,
+    type: NotificationType.RESULT_REOPENED,
+    title: "Result Resolution Reopened",
+    message: `The resolution for your flagged result in ${updatedEntry.Course.name} has been reopened by your lecturer.`,
+    entityType: "RESULT_ENTRY",
+    entityId: updatedEntry.id,
+  },
+}).catch((error) => {
+  req.log.error(
+    {
+      error,
+      entryId: updatedEntry.id,
+      studentId: updatedEntry.StudentResult.studentId,
+    },
+    "Failed to create result reopen notification"
+  );
+});
     return res.status(200).json({
       success: true,
       code: "OK",

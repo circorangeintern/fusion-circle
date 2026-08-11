@@ -12,6 +12,7 @@ import {
 import {
   ErrorResponseSchema,
   ValidationErrorSchema,
+  GetNotificationsResponseSchema,
 } from "../../../contracts/schemas/sharedSchema";
 
 // ----------------------------
@@ -394,6 +395,26 @@ registry.registerPath({
     200: { description: "Flagged results retrieved", content: { "application/json": { schema: StudentFlaggedEntriesResponseSchema } } },
     401: { description: "Unauthorized", content: { "application/json": { schema: ErrorResponseSchema } } },
     404: { description: "Not Found", content: { "application/json": { schema: ErrorResponseSchema } } },
+    500: { description: "Internal server error", content: { "application/json": { schema: ErrorResponseSchema } } },
+  },
+});
+
+// Notifications
+registry.registerPath({
+  method: "get",
+  path: "/student/notifications/me",
+  tags: ["Student"],
+  operationId: "getStudentNotifications",
+  summary: "Get My Notifications",
+  description: "Retrieve notifications for the authenticated student. Supports query params: isRead, limit, markAsRead.",
+  security: [{ sessionAuth: [] }],
+  request: {
+    query: z.object({ isRead: z.string().optional(), limit: z.string().optional(), markAsRead: z.string().optional() }),
+  },
+  responses: {
+    200: { description: "Notifications retrieved", content: { "application/json": { schema: GetNotificationsResponseSchema } } },
+    400: { description: "Validation failed", content: { "application/json": { schema: ValidationErrorSchema } } },
+    401: { description: "Unauthorized", content: { "application/json": { schema: ErrorResponseSchema } } },
     500: { description: "Internal server error", content: { "application/json": { schema: ErrorResponseSchema } } },
   },
 });
