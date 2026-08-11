@@ -154,27 +154,26 @@ model AuditLog {
 }
 
 model ResultEntry {
-  id              Int           @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   studentResultId Int
   courseId        Int
-  caScore         Decimal       @db.Decimal(5, 2)
-  examScore       Decimal       @db.Decimal(5, 2)
-  totalScore      Decimal       @db.Decimal(5, 2)
+  caScore         Decimal      @db.Decimal(5, 2)
+  examScore       Decimal      @db.Decimal(5, 2)
+  totalScore      Decimal      @db.Decimal(5, 2)
   grade           String
   status          ResultStatus
-  flag            ResultFlag    @default(NOT_FLAGGED)
+  flag            ResultFlag   @default(NOT_FLAGGED)
   flagDescription String?
 
-  resolutionDescription String?  // Teacher's response/review
+  resolutionDescription String? // Teacher's response/review
   resolvedAt            DateTime? // When it was resolved
 
-  Course          Course        @relation(fields: [courseId], references: [id])
-  StudentResult   StudentResult @relation(fields: [studentResultId], references: [id], onDelete: Cascade)
+  Course        Course        @relation(fields: [courseId], references: [id])
+  StudentResult StudentResult @relation(fields: [studentResultId], references: [id], onDelete: Cascade)
 
   @@unique([studentResultId, courseId])
   @@index([courseId])
 }
-
 
 model StudentResult {
   id          Int           @id @default(autoincrement())
@@ -185,6 +184,7 @@ model StudentResult {
   Student     Student       @relation(fields: [studentId], references: [userId], onDelete: Cascade)
 
   @@index([studentId])
+}
 
 enum SchoolType {
   UNIVERSITY
