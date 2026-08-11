@@ -334,7 +334,7 @@ export const bulkUploadResults = async (
       if (!studentResult) {
         studentResult = await prisma.studentResult.create({
           data: {
-            studentId: result.studentId,
+            studentId: result.studentId
           },
         });
       }
@@ -416,16 +416,16 @@ export const updateResultEntry = async (
   const entry = await prisma.resultEntry.findUnique({
     where: { id: entryId },
     include: {
-      studentResult: {
+      StudentResult: {
         include: {
-          student: {
+          Student: {
             include: {
               user: true,
             },
           },
         },
       },
-      course: {
+      Course: {
         include: {
           teachers: true,
         },
@@ -438,7 +438,7 @@ export const updateResultEntry = async (
   }
 
   // 2. Check if teacher is assigned to this course
-  const isTeacherAssigned = entry.course.teachers.some(
+  const isTeacherAssigned = entry.Course.teachers.some(
     (t) => t.userId === teacherId
   );
 
@@ -447,7 +447,7 @@ export const updateResultEntry = async (
   }
 
   // 3. Check if school matches
-  if (entry.course.schoolId !== schoolId) {
+  if (entry.Course.schoolId !== schoolId) {
     throw new Error('Result does not belong to your school');
   }
 
@@ -505,26 +505,26 @@ export const updateResultEntry = async (
     where: { id: entryId },
     data: updateData,
     include: {
-      studentResult: {
+      StudentResult: {
         include: {
-          student: {
+          Student: {
             include: {
               user: true,
             },
           },
         },
       },
-      course: true,
+      Course: true,
     },
   });
 
   return {
     entry: {
       id: updatedEntry.id,
-      studentId: updatedEntry.studentResult.studentId,
-      studentName: `${updatedEntry.studentResult.student.user.firstName} ${updatedEntry.studentResult.student.user.lastName}`,
+      studentId: updatedEntry.StudentResult.studentId,
+      studentName: `${updatedEntry.StudentResult.Student.user.firstName} ${updatedEntry.StudentResult.Student.user.lastName}`,
       courseId: updatedEntry.courseId,
-      courseName: updatedEntry.course.name,
+      courseName: updatedEntry.Course.name,
       caScore: updatedEntry.caScore,
       examScore: updatedEntry.examScore,
       totalScore: updatedEntry.totalScore,
@@ -572,9 +572,9 @@ export const getCourseResults = async (
   const entries = await prisma.resultEntry.findMany({
     where,
     include: {
-      studentResult: {
+      StudentResult: {
         include: {
-          student: {
+          Student: {
             include: {
               user: {
                 select: {
@@ -590,8 +590,8 @@ export const getCourseResults = async (
       },
     },
     orderBy: {
-      studentResult: {
-        student: {
+      StudentResult: {
+        Student: {
           user: {
             lastName: 'asc',
           },
@@ -603,17 +603,17 @@ export const getCourseResults = async (
 
   const results = entries.map((entry) => ({
     id: entry.id,
-    studentId: entry.studentResult.studentId,
-    studentName: `${entry.studentResult.student.user.firstName} ${entry.studentResult.student.user.lastName}`,
-    regNo: entry.studentResult.student.regNo,
-    email: entry.studentResult.student.user.email,
+    studentId: entry.StudentResult.studentId,
+    studentName: `${entry.StudentResult.Student.user.firstName} ${entry.StudentResult.Student.user.lastName}`,
+    regNo: entry.StudentResult.Student.regNo,
+    email: entry.StudentResult.Student.user.email,
     caScore: Number(entry.caScore),
     examScore: Number(entry.examScore),
     totalScore: Number(entry.totalScore),
     grade: entry.grade,
     status: entry.status,
     flag: entry.flag,
-    updatedAt: entry.studentResult.updatedAt,
+    updatedAt: entry.StudentResult.updatedAt,
   }));
 
 
@@ -675,9 +675,9 @@ export const getStudentResults = async (
   const studentResults = await prisma.studentResult.findMany({
     where: { studentId },
     include: {
-      entries: {
+      ResultEntry: {
         include: {
-          course: {
+          Course: {
             select: {
               id: true,
               name: true,
@@ -699,19 +699,19 @@ export const getStudentResults = async (
     resultId: sr.id,
     submittedAt: sr.createdAt,
     updatedAt: sr.updatedAt,
-    courses: sr.entries.map((entry) => ({
+    courses: sr.ResultEntry.map((entry) => ({
       courseId: entry.courseId,
-      courseName: entry.course.name,
-      department: entry.course.department,
-      year: entry.course.year,
-      class: entry.course.class,
+      courseName: entry.Course.name,
+      department: entry.Course.department,
+      year: entry.Course.year,
+      class: entry.Course.class,
       caScore: Number(entry.caScore),
       examScore: Number(entry.examScore),
       totalScore: Number(entry.totalScore),
       grade: entry.grade,
       status: entry.status,
     })),
-    totalCourses: sr.entries.length,
+    totalCourses: sr.ResultEntry.length,
   }));
 
   return {

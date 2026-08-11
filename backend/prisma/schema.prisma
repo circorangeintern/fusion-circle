@@ -180,12 +180,11 @@ model StudentResult {
   id          Int           @id @default(autoincrement())
   studentId   Int
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime      @updatedAt
   ResultEntry ResultEntry[]
   Student     Student       @relation(fields: [studentId], references: [userId], onDelete: Cascade)
 
   @@index([studentId])
-}
 
 enum SchoolType {
   UNIVERSITY
