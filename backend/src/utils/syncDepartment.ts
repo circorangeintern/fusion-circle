@@ -1,4 +1,5 @@
 
+import { Prisma } from "@prisma/client";
 import { prisma } from "../shared/prisma/prisma";
 
 const generateDepartmentCode = (
@@ -112,4 +113,100 @@ export const syncDepartments = async (schoolId: number): Promise<void> => {
     } catch (error) {
         console.error("Failed to sync departments:", error);
     }
+};
+
+
+export const assignRegNo = async (userId: number) => {
+  return prisma.$transaction(async (tx) => {
+    const student = await tx.student.findUnique({
+      where: { userId },
+      include: { user: true },
+    });
+
+    if (!student) {
+      throw new Error("Student not found");
+    }
+
+    if (student.regNo) {
+      throw new Error("Student already has a registration number");
+    }
+
+    const schoolId = student.user.schoolId; 
+
+    if (!schoolId) {
+      throw new Error("User has no associated school");
+    }
+
+    let prefix: string;
+    let where: Prisma.StudentWhereInput;
+
+
+    if (student.class && !(student.year && student.department)) {
+      prefix = student.class;
+
+      where = {
+        class: student.class,
+        user: { schoolId },
+        regNo: { not: null },
+      };
+    }
+    
+    else if (student.year && student.department) {
+      const department = await tx.department.findUnique({
+        where: {
+          schoolId_name: {
+            schoolId,
+            name: student.department,
+          },
+        },
+      });
+
+      if (!department) {
+        throw new Error(
+          `Department "${student.department}" not found for this school`
+        );
+      }
+
+      prefix = `${student.year}/${department.code}`;
+
+      where = {
+        year: student.year,
+        department: student.department,
+        user: { schoolId },
+        regNo: { not: null },
+      };
+    } else {
+      throw new Error(
+        "Student must have either a class, or both year and department, to be assigned a reg no"
+      );
+    }
+
+ 
+    const lastStudent = await tx.student.findFirst({
+      where,
+      orderBy: { regNo: "desc" },
+    });
+
+    let nextNumber = 1;
+
+    if (lastStudent?.regNo) {
+      const parts = lastStudent.regNo.split("/");
+      const lastNumberStr = parts[parts.length - 1];
+      const lastNumber = parseInt(lastNumberStr, 10);
+
+      if (!Number.isNaN(lastNumber)) {
+        nextNumber = lastNumber + 1;
+      }
+    }
+
+    const paddedNumber = String(nextNumber).padStart(4, "0");
+    const regNo = `${prefix}/${paddedNumber}`;
+
+    const updated = await tx.student.update({
+      where: { userId },
+      data: { regNo },
+    });
+
+    return updated;
+  });
 };

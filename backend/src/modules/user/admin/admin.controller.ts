@@ -23,6 +23,7 @@ import { getObjectById, updateObject } from "../../../shared/prisma/repoLayer"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { UpdateSchoolConfigInput } from "../../../shared/validator/validator";
 import { createNotification } from '../../../shared/notificationService';
+import {assignRegNo} from "../../../utils/syncDepartment";
 
 
 
@@ -1696,8 +1697,14 @@ export const activateUserController = async (req: Request, res: Response) => {
             });
         }
 
+    if(user.role === Role.STUDENT) {
+        assignRegNo(user.id).catch((error) => {
+  req.log.error({ error, userId }, "assignRegNoController failed");
+});
+    }
 
-        if (user.schoolId !== req.user!.schoolId || req.user?.id === userId) {
+
+    if (user.schoolId !== req.user!.schoolId || req.user?.id === userId) {
             return res.status(403).json({
                 success: false,
                 code: "FORBIDDEN",

@@ -26,6 +26,7 @@ import {
 import { prisma } from "../../shared/prisma/prisma";
 import { safeLogAudit } from "../../utils/auditLogger";
 import { startTime } from "pino-http";
+import {assignRegNo} from "../../utils/syncDepartment";
 
 export const loginController = async (req: Request, res: Response) => {
     const user = await getUser(req.body.email, res);
@@ -414,7 +415,7 @@ export const verifyOtpController = async (req: Request, res: Response) => {
   }
 
 
-  await prisma.$transaction([
+  const [user, session] = await prisma.$transaction([
     prisma.user.update({
         where: { id: UserId },
         data: { status: AccountStatus.ACTIVATED },
@@ -423,6 +424,13 @@ export const verifyOtpController = async (req: Request, res: Response) => {
         where: { id: token[0].id },
     }),
 ]);
+
+    if(user.role === Role.STUDENT) {
+        assignRegNo(UserId).catch((error) => {
+  req.log.error({ error, UserId }, "assignRegNoController failed");
+});
+    }
+
      void safeLogAudit({
       userId: UserId,
                 action: "ACCOUNT_ACTIVATED",
