@@ -353,7 +353,7 @@ return res.status(403).json({
             success: true,
             code: "OK",
             message: "Email found and OTP has been sent to the user email.",
-            error: null,
+            data: {"userId" : user.id}
         });
     } catch (error) {
         req.log.error({ err: error, email: req.body.email }, "activateUserController failed");
