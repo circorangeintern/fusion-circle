@@ -1,6 +1,7 @@
 
 import { Prisma } from "@prisma/client";
 import { prisma } from "../shared/prisma/prisma";
+import { error } from "node:console";
 
 const generateDepartmentCode = (
     name: string,
@@ -117,6 +118,7 @@ export const syncDepartments = async (schoolId: number): Promise<void> => {
 
 
 export const assignRegNo = async (userId: number) => {
+    try {
   return prisma.$transaction(async (tx) => {
     const student = await tx.student.findUnique({
       where: { userId },
@@ -209,4 +211,9 @@ export const assignRegNo = async (userId: number) => {
 
     return updated;
   });
+} catch {
+    if(error) {
+        throw new Error(`${error}`)
+    }
+}
 };
