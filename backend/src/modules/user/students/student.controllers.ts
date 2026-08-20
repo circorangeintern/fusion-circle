@@ -645,7 +645,7 @@ export const getFlaggedEntryByIdController = async (
       where: {
         id: entryId,
         flag: ResultFlag.FLAGGED,
-        resolution: true,
+        resolutionDescription : true,
 
         StudentResult: {
           studentId,
