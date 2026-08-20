@@ -560,6 +560,8 @@ export const getFlaggedResultsController = async (
 
       flag: entry.flag,
       flagDescription: entry.flagDescription,
+      resolution: entry.resolutionDescription,
+      resolvedAt : entry.resolvedAt,
 
       submittedAt: entry.StudentResult.createdAt,
       updatedAt: entry.StudentResult.updatedAt,
