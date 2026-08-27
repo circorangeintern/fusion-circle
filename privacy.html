@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy — ResultTrack</title>
+    <meta name="description"
+        content="How ResultTrack and the pilot School collect, use, and protect your data, including special protections for students under 18, under the Nigeria Data Protection Act 2023." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="privacy.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Privacy Policy — ResultTrack" />
+    <meta property="og:description"
+        content="How ResultTrack and the pilot School collect, use, and protect your data under the Nigeria Data Protection Act 2023." />
+
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath fill='%23163B5C' d='M3,39 L3,25 L10,20 L10,39 Z'/%3E%3Cpath fill='%23163B5C' d='M13,39 L13,17 L20,11 L20,39 Z'/%3E%3Cpath fill='%23163B5C' d='M23,39 L23,10 L30,3 L30,39 Z'/%3E%3Cpolygon fill='%23E8A93C' points='18,38 22,38 32,17 28,17'/%3E%3Cpolygon fill='%23E8A93C' points='27,19 32,17 44,2'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        :root {
+            --primary: #163B5C;
+            --primary-dark: #0E2739;
+            --primary-light: #2C5680;
+            --primary-50: #EAF0F5;
+            --primary-100: #CFDCE7;
+            --secondary: #1E8F7A;
+            --secondary-light: #34A78F;
+            --secondary-50: #E7F5F2;
+            --accent: #E8A93C;
+            --accent-50: #FDF3E3;
+            --bg: #F4F6F8;
+            --surface: #ffffff;
+            --surface-2: #f8fafb;
+            --surface-3: #eef1f3;
+            --border: #e1e6ea;
+            --border-strong: #c7cfd6;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-tertiary: #6B7280;
+            --shadow-sm: 0 1px 3px rgba(22, 59, 92, .12), 0 1px 2px rgba(22, 59, 92, .07);
+            --shadow-md: 0 4px 6px rgba(22, 59, 92, .08), 0 2px 4px rgba(22, 59, 92, .07);
+            --shadow-lg: 0 10px 15px rgba(22, 59, 92, .12), 0 4px 6px rgba(22, 59, 92, .06);
+            --r-sm: 5px;
+            --r-md: 8px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 22px;
+            --r-full: 50px;
+            --font-display: 'Sora', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+            --ease: cubic-bezier(.4, 0, .2, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-display);
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        ul,
+        ol {
+            padding-left: 1.3em;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .skip-link {
+            position: absolute;
+            left: 12px;
+            top: -60px;
+            z-index: 1000;
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: var(--r-md);
+            font-weight: 600;
+            font-size: 14px;
+            transition: top .2s var(--ease);
+        }
+
+        .skip-link:focus {
+            top: 12px;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        summary:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 3px;
+            border-radius: 3px;
+        }
+
+        .rt-logo-mark {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .rt-logo-mark .rt-bar {
+            fill: #fff;
+        }
+
+        .rt-logo-mark .rt-highlight {
+            fill: var(--primary-dark);
+            opacity: .25;
+        }
+
+        .rt-logo-mark .rt-arrow {
+            fill: var(--accent);
+        }
+
+        .rt-wordmark {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.05rem;
+            letter-spacing: -.01em;
+            color: #fff;
+        }
+
+        /* ---------- Header ---------- */
+        #siteHeader {
+            position: sticky;
+            top: 0;
+            z-index: 500;
+            background: var(--primary-dark);
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .header-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-nav a {
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            color: rgba(255, 255, 255, .68);
+            padding: 8px 14px;
+            border-radius: var(--r-full);
+            transition: background .15s var(--ease), color .15s var(--ease);
+        }
+
+        .header-nav a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .header-nav a.is-current {
+            color: #fff;
+            background: rgba(255, 255, 255, .12);
+        }
+
+        .header-nav .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--secondary);
+            color: #fff !important;
+        }
+
+        .header-nav .btn-home:hover {
+            background: var(--secondary-light);
+        }
+
+        .header-menu-toggle {
+            display: none;
+            width: 38px;
+            height: 38px;
+            border-radius: var(--r-md);
+            background: rgba(255, 255, 255, .08);
+            border: none;
+            color: #fff;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 720px) {
+            .header-nav {
+                display: none;
+            }
+
+            .header-menu-toggle {
+                display: flex;
+            }
+
+            .header-nav.is-open {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 2px;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-dark);
+                padding: 10px 16px 16px;
+                border-bottom: 1px solid rgba(255, 255, 255, .08);
+            }
+
+            .header-nav.is-open a {
+                padding: 12px 14px;
+            }
+        }
+
+        /* ---------- Doc hero ---------- */
+        .doc-hero {
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 40px 24px 64px;
+        }
+
+        .doc-hero-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, .55);
+            margin-bottom: 16px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, .75);
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .doc-hero h1 {
+            font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            margin-bottom: 12px;
+        }
+
+        .doc-hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .doc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .85);
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .16);
+            padding: 6px 13px;
+            border-radius: var(--r-full);
+        }
+
+        .doc-hero-note {
+            margin-top: 18px;
+            font-size: 13.5px;
+            color: rgba(255, 255, 255, .68);
+            max-width: 640px;
+            line-height: 1.65;
+        }
+
+        /* ---------- Layout ---------- */
+        .doc-shell {
+            max-width: 1180px;
+            margin: -34px auto 0;
+            padding: 0 24px 80px;
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 28px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .doc-shell {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .toc-card {
+            position: sticky;
+            top: 84px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            box-shadow: var(--shadow-md);
+            padding: 20px 18px;
+            max-height: calc(100vh - 110px);
+            overflow-y: auto;
+        }
+
+        .toc-title {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+
+        .toc-card nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .toc-card nav a {
+            display: block;
+            text-decoration: none;
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 7px 10px;
+            border-radius: var(--r-sm);
+            border-left: 2px solid transparent;
+            transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+        }
+
+        .toc-card nav a:hover {
+            background: var(--surface-3);
+            color: var(--text-primary);
+        }
+
+        .toc-card nav a.is-active {
+            background: var(--primary-50);
+            color: var(--primary);
+            font-weight: 700;
+            border-left-color: var(--primary);
+        }
+
+        .mobile-toc {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .toc-card {
+                display: none;
+            }
+
+            .mobile-toc {
+                display: block;
+            }
+        }
+
+        .mobile-toc-details {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .mobile-toc-details summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .mobile-toc-details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .mobile-toc-details[open] summary {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-toc-details nav ul {
+            list-style: none;
+            padding: 10px 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .mobile-toc-details nav a {
+            display: block;
+            text-decoration: none;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            padding: 9px 10px;
+            border-radius: var(--r-sm);
+        }
+
+        .mobile-toc-details nav a:hover {
+            background: var(--surface-3);
+            color: var(--text-primary);
+        }
+
+        .doc-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            box-shadow: var(--shadow-md);
+            padding: 40px clamp(20px, 4vw, 52px);
+            max-width: 100%;
+        }
+
+        .doc-content>p.intro {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.75;
+        }
+
+        .doc-section {
+            padding: 26px 0;
+            border-bottom: 1px solid var(--border);
+            scroll-margin-top: 84px;
+        }
+
+        .doc-section:first-of-type {
+            padding-top: 0;
+        }
+
+        .doc-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .doc-section h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .doc-section h2 .num {
+            color: var(--secondary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .doc-section p {
+            font-size: 14.5px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .doc-section ul {
+            margin-bottom: 4px;
+        }
+
+        .doc-section li {
+            font-size: 14.5px;
+            color: var(--text-secondary);
+        }
+
+        .doc-section li strong {
+            color: var(--text-primary);
+        }
+
+        .callout {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: var(--secondary-50);
+            border: 1px solid rgba(30, 143, 122, .25);
+            border-radius: var(--r-md);
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-size: 13.5px;
+            color: #135e50;
+        }
+
+        .callout.gold {
+            background: var(--accent-50);
+            border-color: rgba(232, 169, 60, .35);
+            color: #7a5c10;
+        }
+
+        .callout i {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .placeholder-note {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-style: italic;
+            background: var(--surface-2);
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--r-md);
+            padding: 10px 13px;
+            margin-top: 10px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 400;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+            transition: opacity .2s var(--ease), transform .2s var(--ease), background .15s;
+        }
+
+        .back-to-top.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ---------- Footer ---------- */
+        #siteFooter {
+            background: var(--primary-dark);
+            color: rgba(255, 255, 255, .6);
+            padding: 40px 24px 28px;
+        }
+
+        .footer-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, .1);
+            margin-bottom: 20px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            color: rgba(255, 255, 255, .68);
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-links a.is-current {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        @media (max-width: 480px) {
+            .doc-content {
+                padding: 26px 16px;
+            }
+
+            .header-inner {
+                padding: 12px 16px;
+            }
+
+            .doc-hero {
+                padding: 30px 16px 52px;
+            }
+
+            .doc-shell {
+                padding: 0 12px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#mainContent" class="skip-link">Skip to content</a>
+
+    <header id="siteHeader">
+        <div class="header-inner">
+            <a href="index.html" class="header-brand" aria-label="ResultTrack home">
+                <svg class="rt-logo-mark" viewBox="0 0 44 44" aria-hidden="true">
+                    <path class="rt-bar" d="M3,39 L3,25 L10,20 L10,39 Z" />
+                    <path class="rt-bar" d="M13,39 L13,17 L20,11 L20,39 Z" />
+                    <path class="rt-bar" d="M23,39 L23,10 L30,3 L30,39 Z" />
+                    <polygon class="rt-highlight" points="5,35 8,35 19,15 16,15" />
+                    <polygon class="rt-arrow" points="18,38 22,38 32,17 28,17" />
+                    <polygon class="rt-arrow" points="27,19 32,17 44,2" />
+                </svg>
+                <span class="rt-wordmark">ResultTrack</span>
+            </a>
+            <button class="header-menu-toggle" id="headerMenuToggle" aria-label="Open menu" aria-expanded="false"
+                aria-controls="headerNav">
+                <i data-lucide="menu" style="width:19px;height:19px"></i>
+            </button>
+            <nav class="header-nav" id="headerNav" aria-label="Legal pages">
+                <a href="index.html" class="btn-home"><i data-lucide="arrow-left" style="width:14px;height:14px"></i>
+                    Back to ResultTrack</a>
+                <a href="privacy.html" class="is-current" aria-current="page">Privacy</a>
+                <a href="terms.html">Terms</a>
+                <a href="accessibility.html">Accessibility</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="doc-hero">
+        <div class="doc-hero-inner">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="index.html">ResultTrack</a><span>/</span><a href="#" aria-current="page"
+                    style="color:#fff">Privacy Policy</a>
+            </nav>
+            <h1>Privacy Policy</h1>
+            <div class="doc-hero-meta">
+                <span class="doc-badge"><i data-lucide="shield-check" style="width:13px;height:13px"></i> Nigeria Data
+                    Protection Act 2023 (NDPA)</span>
+                <span class="doc-badge"><i data-lucide="flask-conical" style="width:13px;height:13px"></i> ResultTrack
+                    Pilot — Week 3 Sprint</span>
+            </div>
+            <p class="doc-hero-note">This policy covers ResultTrack as used by the pilot School. A formal "Last Updated"
+                date and the School's designated contact details will be added to Section 14 before pilot launch — see
+                the note there.</p>
+        </div>
+    </div>
+
+    <main id="mainContent" class="doc-shell">
+        <aside class="toc-card" aria-label="Table of contents">
+            <div class="toc-title">On this page</div>
+            <nav>
+                <ul>
+                    <li><a href="#who-we-are">1. Who We Are</a></li>
+                    <li><a href="#what-we-collect">2. What Data We Collect</a></li>
+                    <li><a href="#why-we-collect">3. Why We Collect It</a></li>
+                    <li><a href="#childrens-data">4. Children's Data</a></li>
+                    <li><a href="#third-parties">5. Third Parties We Use</a></li>
+                    <li><a href="#cross-border">6. Cross-Border Data Transfers</a></li>
+                    <li><a href="#retention">7. How Long We Keep Data</a></li>
+                    <li><a href="#your-rights">8. Your Rights</a></li>
+                    <li><a href="#data-security">9. Data Security</a></li>
+                    <li><a href="#breach-notification">10. Data Breach Notification</a></li>
+                    <li><a href="#dpo">11. Data Protection Officer</a></li>
+                    <li><a href="#governing-law">12. Governing Law</a></li>
+                    <li><a href="#changes">13. Changes to This Policy</a></li>
+                    <li><a href="#contact">14. Contact</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div>
+            <div class="mobile-toc">
+                <details class="mobile-toc-details">
+                    <summary>On this page <i data-lucide="chevron-down" style="width:16px;height:16px"></i></summary>
+                    <nav>
+                        <ul>
+                            <li><a href="#who-we-are">1. Who We Are</a></li>
+                            <li><a href="#what-we-collect">2. What Data We Collect</a></li>
+                            <li><a href="#why-we-collect">3. Why We Collect It</a></li>
+                            <li><a href="#childrens-data">4. Children's Data</a></li>
+                            <li><a href="#third-parties">5. Third Parties We Use</a></li>
+                            <li><a href="#cross-border">6. Cross-Border Data Transfers</a></li>
+                            <li><a href="#retention">7. How Long We Keep Data</a></li>
+                            <li><a href="#your-rights">8. Your Rights</a></li>
+                            <li><a href="#data-security">9. Data Security</a></li>
+                            <li><a href="#breach-notification">10. Data Breach Notification</a></li>
+                            <li><a href="#dpo">11. Data Protection Officer</a></li>
+                            <li><a href="#governing-law">12. Governing Law</a></li>
+                            <li><a href="#changes">13. Changes to This Policy</a></li>
+                            <li><a href="#contact">14. Contact</a></li>
+                        </ul>
+                    </nav>
+                </details>
+            </div>
+
+            <article class="doc-content">
+                <p class="intro">Part 1 of the ResultTrack Privacy Policy &amp; Terms and Conditions document, covering
+                    how ResultTrack and the pilot School handle personal data.</p>
+
+                <section class="doc-section" id="who-we-are">
+                    <h2><span class="num">1.</span> Who We Are</h2>
+                    <p>This policy covers ResultTrack as used by the pilot school ("the School"). The School is the data
+                        controller; ResultTrack is the platform the School uses to record and share academic results.
+                        Questions about this policy should go to the School's designated contact, named in Section 14.
+                    </p>
+                </section>
+
+                <section class="doc-section" id="what-we-collect">
+                    <h2><span class="num">2.</span> What Data We Collect</h2>
+                    <ul>
+                        <li><strong>Roster data:</strong> full name, year, department or class, and a verified contact
+                            (institutional or parent/guardian email or phone)</li>
+                        <li><strong>Registration data:</strong> activation channel used, timestamps of registration</li>
+                        <li><strong>Account data:</strong> registration or staff ID, hashed password, role</li>
+                        <li><strong>Academic data:</strong> CA scores, exam scores, computed final grades, the specific
+                            section and teacher tied to each score</li>
+                        <li><strong>Flag data:</strong> any discrepancy flag raised, its resolution, and any note
+                            attached</li>
+                        <li><strong>Audit data:</strong> a record of every change made to a score, who made it, and when
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="doc-section" id="why-we-collect">
+                    <h2><span class="num">3.</span> Why We Collect It</h2>
+                    <ul>
+                        <li>To provide the core service: computing and displaying accurate results (contractual
+                            necessity for staff and adult tertiary users; for minors, the basis is parental or guardian
+                            consent as described in Section 4, not contractual necessity, since a minor cannot
+                            independently enter into that contract)</li>
+                        <li>To verify identity at registration and prevent one person accessing another's records
+                            (legitimate interest in account security)</li>
+                        <li>To notify the right people when a score is finalized or a flag is raised (legitimate
+                            interest in service delivery)</li>
+                        <li>To meet the School's own record-keeping obligations (legal obligation)</li>
+                    </ul>
+                </section>
+
+                <section class="doc-section" id="childrens-data">
+                    <h2><span class="num">4.</span> Children's Data</h2>
+                    <p>Many ResultTrack users are minors. The NDPA requires parental or guardian consent for processing
+                        the data of anyone under 18, treated with the same care as sensitive personal data, including
+                        reasonable measures to verify age. ResultTrack's registration design satisfies this directly
+                        rather than as an afterthought: secondary school registration is tied to a parent or guardian's
+                        verified contact, not the student's own, so a parent or guardian is the one confirming and
+                        consenting to account activation from the start. ResultTrack does not collect more data from a
+                        minor than necessary to provide the results service, and never uses minors' data for advertising
+                        or profiling.</p>
+                </section>
+
+                <section class="doc-section" id="third-parties">
+                    <h2><span class="num">5.</span> Third Parties We Use</h2>
+                    <ul>
+                        <li>An analytics tool, used to measure whether ResultTrack is working as intended (for example,
+                            whether students see results promptly). This tool receives event data such as "a score was
+                            finalized" or "a flag was raised," not the underlying grade content itself where avoidable.
+                        </li>
+                        <li>An email or SMS provider, used only to deliver activation PINs and password reset codes</li>
+                    </ul>
+                </section>
+
+                <section class="doc-section" id="cross-border">
+                    <h2><span class="num">6.</span> Cross-Border Data Transfers</h2>
+                    <p>Nigerian law only permits transferring personal data outside Nigeria if the receiving country or
+                        organization provides a level of protection comparable to what the NDPA guarantees inside
+                        Nigeria. Once the School's analytics and messaging vendors are finalized, their hosting location
+                        will be confirmed and recorded here before launch. If a chosen vendor stores data outside
+                        Nigeria without adequate safeguards in place, an alternative vendor or a specific data
+                        protection agreement will be required first.</p>
+                    <div class="placeholder-note"><i data-lucide="clock"
+                            style="width:13px;height:13px;vertical-align:-2px"></i> Vendor hosting locations are not yet
+                        finalized. This section will be updated with specifics before launch, per the text above.</div>
+                </section>
+
+                <section class="doc-section" id="retention">
+                    <h2><span class="num">7.</span> How Long We Keep Data</h2>
+                    <p>Academic records are retained for as long as the School requires them for official purposes.
+                        Registration and account data is retained for the duration of a student's or staff member's
+                        association with the School. Audit logs are retained indefinitely, since their purpose is
+                        historical accuracy, not active use.</p>
+                    <p>If the School stops using ResultTrack entirely, the School's data will be exported and returned
+                        to the School in a usable format within 30 days of that decision, then deleted from
+                        ResultTrack's systems within a further 30 days, except where a copy must be retained to comply
+                        with a legal obligation.</p>
+                </section>
+
+                <section class="doc-section" id="your-rights">
+                    <h2><span class="num">8.</span> Your Rights</h2>
+                    <ul>
+                        <li><strong>Right to see your own data:</strong> students and staff can view their own academic
+                            records directly in the product at any time</li>
+                        <li><strong>Right to correct inaccurate data:</strong> the in-product discrepancy-flag feature
+                            is the primary mechanism for this, routing directly to the teacher who entered it</li>
+                        <li><strong>Right to withdraw consent,</strong> where consent is the basis for processing your
+                            data, without affecting the lawfulness of processing already carried out</li>
+                        <li><strong>Right to lodge a complaint</strong> directly with the Nigeria Data Protection
+                            Commission (NDPC) if you believe your data has been mishandled and it has not been resolved
+                            through the School</li>
+                        <li>Any other rights recognized for data subjects under the NDPA; contact the School's
+                            designated contact in Section 14 to exercise any of these</li>
+                    </ul>
+                </section>
+
+                <section class="doc-section" id="data-security">
+                    <h2><span class="num">9.</span> Data Security</h2>
+                    <ul>
+                        <li>Passwords are hashed, never stored in plain text</li>
+                        <li>All traffic is encrypted in transit (HTTPS)</li>
+                        <li>Activation PINs and password reset codes expire after 15 minutes if unused</li>
+                        <li>Repeated failed login attempts trigger a delay before another attempt is allowed</li>
+                        <li>Every change to a score produces an audit log entry, without exception</li>
+                    </ul>
+                </section>
+
+                <section class="doc-section" id="breach-notification">
+                    <h2><span class="num">10.</span> Data Breach Notification</h2>
+                    <p>If a breach occurs that is likely to pose a high risk to any user's rights, the School will
+                        notify the Nigeria Data Protection Commission within 72 hours of becoming aware of it, and will
+                        notify affected users directly with clear instructions on what to do. A breach register
+                        recording the facts, consequences, and corrective action taken for every breach is maintained
+                        internally, in line with NDPA requirements.</p>
+                </section>
+
+                <section class="doc-section" id="dpo">
+                    <h2><span class="num">11.</span> Data Protection Officer</h2>
+                    <p>Organizations processing personal data for more than 200 people within any 6-month period are
+                        required under the NDPA to appoint a Data Protection Officer. The School commits to assessing
+                        its enrollment against this threshold within the first month of the pilot. If the threshold is
+                        met, or expected to be met, a Data Protection Officer will be appointed within 30 days of that
+                        determination and named in Section 14.</p>
+                </section>
+
+                <section class="doc-section" id="governing-law">
+                    <h2><span class="num">12.</span> Governing Law</h2>
+                    <p>This policy is governed by the Nigeria Data Protection Act 2023 (NDPA) and the General
+                        Application and Implementation Directive (GAID) issued by the Nigeria Data Protection Commission
+                        (NDPC), which together set out the current data protection framework in Nigeria. Provisions
+                        relating to minors are read alongside the Child Rights Act 2003.</p>
+                </section>
+
+                <section class="doc-section" id="changes">
+                    <h2><span class="num">13.</span> Changes to This Policy</h2>
+                    <p>If this policy changes in a way that affects what data is collected or how it's used, users will
+                        be notified in-app before the change takes effect.</p>
+                </section>
+
+                <section class="doc-section" id="contact">
+                    <h2><span class="num">14.</span> Contact</h2>
+                    <div class="callout gold">
+                        <i data-lucide="alert-triangle" style="width:16px;height:16px"></i>
+                        <span>School's designated data contact name, role, and email to be added before pilot launch. If
+                            a Data Protection Officer is appointed per Section 11, their contact replaces or supplements
+                            this entry.</span>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer id="siteFooter">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <a href="index.html" class="footer-brand" aria-label="ResultTrack home">
+                    <svg class="rt-logo-mark" viewBox="0 0 44 44" aria-hidden="true" style="width:26px;height:26px">
+                        <path class="rt-bar" d="M3,39 L3,25 L10,20 L10,39 Z" />
+                        <path class="rt-bar" d="M13,39 L13,17 L20,11 L20,39 Z" />
+                        <path class="rt-bar" d="M23,39 L23,10 L30,3 L30,39 Z" />
+                        <polygon class="rt-highlight" points="5,35 8,35 19,15 16,15" />
+                        <polygon class="rt-arrow" points="18,38 22,38 32,17 28,17" />
+                        <polygon class="rt-arrow" points="27,19 32,17 44,2" />
+                    </svg>
+                    <span class="rt-wordmark" style="font-size:.95rem">ResultTrack</span>
+                </a>
+                <nav class="footer-links" aria-label="Legal">
+                    <a href="privacy.html" class="is-current" aria-current="page">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="accessibility.html">Accessibility</a>
+                </nav>
+            </div>
+            <p class="footer-bottom">© 2025 ResultTrack. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTopBtn" aria-label="Back to top">
+        <i data-lucide="arrow-up" style="width:18px;height:18px"></i>
+    </button>
+
+    <script>
+        lucide.createIcons();
+
+        // Mobile header menu toggle
+        const menuToggle = document.getElementById('headerMenuToggle');
+        const headerNav = document.getElementById('headerNav');
+        menuToggle.addEventListener('click', () => {
+            const isOpen = headerNav.classList.toggle('is-open');
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        // Back-to-top visibility
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        window.addEventListener('scroll', () => {
+            backToTopBtn.classList.toggle('is-visible', window.scrollY > 500);
+        }, { passive: true });
+        backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Active TOC highlighting
+        const sections = document.querySelectorAll('.doc-section[id]');
+        const tocLinks = document.querySelectorAll('.toc-card nav a');
+        if ('IntersectionObserver' in window && sections.length) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const link = document.querySelector(`.toc-card nav a[href="#${entry.target.id}"]`);
+                    if (!link) return;
+                    if (entry.isIntersecting) {
+                        tocLinks.forEach(l => l.classList.remove('is-active'));
+                        link.classList.add('is-active');
+                    }
+                });
+            }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+            sections.forEach(s => observer.observe(s));
+        }
+
+        // Close mobile menu on nav click
+        headerNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+            headerNav.classList.remove('is-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+        }));
+    </script>
+</body>
+
+</html>

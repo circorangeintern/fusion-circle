@@ -1,0 +1,4207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="ResultTrack Student — sign in to view your results and raise a flag if something looks wrong." />
+    <title>Student — ResultTrack</title>
+
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath fill='%23163B5C' d='M3,39 L3,25 L10,20 L10,39 Z'/%3E%3Cpath fill='%23163B5C' d='M13,39 L13,17 L20,11 L20,39 Z'/%3E%3Cpath fill='%23163B5C' d='M23,39 L23,10 L30,3 L30,39 Z'/%3E%3Cpolygon fill='%23E8A93C' points='18,38 22,38 32,17 28,17'/%3E%3Cpolygon fill='%23E8A93C' points='27,19 32,17 44,2'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        :root {
+            --primary: #163B5C;
+            --primary-dark: #0E2739;
+            --primary-light: #2C5680;
+            --primary-50: #EAF0F5;
+            --primary-100: #CFDCE7;
+            --secondary: #1E8F7A;
+            --secondary-light: #34A78F;
+            --secondary-50: #E7F5F2;
+            --accent: #E8A93C;
+            --accent-light: #f0c06b;
+            --accent-50: #FDF3E3;
+            --bg: #F4F6F8;
+            --surface: #ffffff;
+            --surface-2: #f8fafb;
+            --surface-3: #eef1f3;
+            --border: #e1e6ea;
+            --border-strong: #c7cfd6;
+            --success: #2F9E5B;
+            --success-50: #e9f7ef;
+            --error: #D6483F;
+            --error-50: #fbeceb;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-tertiary: #6B7280;
+            --text-inverse: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(22, 59, 92, .12), 0 1px 2px rgba(22, 59, 92, .07);
+            --shadow-md: 0 4px 6px rgba(22, 59, 92, .08), 0 2px 4px rgba(22, 59, 92, .07);
+            --shadow-lg: 0 10px 15px rgba(22, 59, 92, .12), 0 4px 6px rgba(22, 59, 92, .06);
+            --shadow-xl: 0 20px 25px rgba(22, 59, 92, .12), 0 10px 10px rgba(22, 59, 92, .05);
+            --shadow-2xl: 0 25px 50px rgba(22, 59, 92, .18);
+            --r-sm: 5px;
+            --r-md: 8px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 22px;
+            --r-full: 50px;
+            --font-xs: .75rem;
+            --font-sm: .875rem;
+            --font-base: 1rem;
+            --font-lg: 1.125rem;
+            --font-xl: 1.25rem;
+            --font-2xl: 1.5rem;
+            --ease: cubic-bezier(.4, 0, .2, 1);
+            --dur: .2s;
+            --font-display: 'Sora', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+            --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+            --sidebar-w: 264px;
+            --topbar-h: 64px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text-secondary);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-display);
+            color: var(--text-primary);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-strong);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .rt-logo-mark {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .rt-logo-mark .rt-bar {
+            fill: var(--primary);
+        }
+
+        .rt-logo-mark .rt-highlight {
+            fill: #fff;
+            opacity: .3;
+        }
+
+        .rt-logo-mark .rt-arrow {
+            fill: var(--accent);
+        }
+
+        .on-dark .rt-logo-mark .rt-bar {
+            fill: #fff;
+        }
+
+        .on-dark .rt-logo-mark .rt-highlight {
+            fill: var(--primary-dark);
+            opacity: .25;
+        }
+
+        .rt-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: -.02em;
+            color: var(--text-primary);
+        }
+
+        .rt-logo.on-dark {
+            color: #fff;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 18px;
+            border-radius: var(--r-md);
+            font-size: var(--font-sm);
+            font-weight: 600;
+            border: 1.5px solid transparent;
+            transition: all var(--dur) var(--ease);
+            white-space: nowrap;
+        }
+
+        .btn:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 1px 3px rgba(22, 59, 92, .25);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: var(--surface);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 7px 13px;
+            font-size: var(--font-xs);
+            border-radius: var(--r-sm);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        .btn .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, .4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        .btn-outline .spinner {
+            border-color: rgba(22, 59, 92, .25);
+            border-top-color: var(--primary);
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn.is-loading .btn-label {
+            visibility: hidden;
+        }
+
+        .btn.is-loading {
+            position: relative;
+        }
+
+        .btn.is-loading .spinner {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -7px 0 0 -7px;
+            display: block !important;
+        }
+
+        .btn .spinner {
+            display: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: var(--r-full);
+            white-space: nowrap;
+        }
+
+        .badge.blue {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .badge.teal {
+            background: var(--secondary-50);
+            color: var(--secondary);
+        }
+
+        .badge.gold {
+            background: var(--accent-50);
+            color: #8a6013;
+        }
+
+        .badge.success {
+            background: var(--success-50);
+            color: #1e6b3f;
+        }
+
+        .badge.error {
+            background: var(--error-50);
+            color: var(--error);
+        }
+
+        .badge.slate {
+            background: var(--surface-3);
+            color: var(--text-secondary);
+        }
+
+        .badge.dev {
+            background: var(--accent-50);
+            color: #8a6013;
+            border: 1px solid rgba(232, 169, 60, .4);
+        }
+
+        #loginScreen {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+        }
+
+        .auth-brand {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(165deg, var(--primary-dark) 0%, #102c44 40%, var(--primary) 100%);
+            padding: 44px 48px;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        .auth-brand-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+            background-size: 56px 56px;
+        }
+
+        .auth-brand-orb {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            top: -160px;
+            right: -180px;
+            background: radial-gradient(circle, rgba(30, 143, 122, .16) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .auth-brand-inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 420px;
+        }
+
+        .auth-brand-body {
+            margin-top: auto;
+            margin-bottom: auto;
+            padding: 60px 0;
+        }
+
+        .auth-brand-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .75);
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .16);
+            padding: 6px 13px;
+            border-radius: var(--r-full);
+            margin-bottom: 22px;
+        }
+
+        .auth-brand-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.32;
+            letter-spacing: -.01em;
+            margin-bottom: 14px;
+        }
+
+        .auth-brand-sub {
+            font-size: var(--font-base);
+            color: rgba(255, 255, 255, .68);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .auth-trust-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .auth-trust-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+        }
+
+        .auth-trust-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--secondary-light);
+        }
+
+        .auth-trust-text-title {
+            font-size: var(--font-sm);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .auth-trust-text-desc {
+            font-size: var(--font-xs);
+            color: rgba(255, 255, 255, .6);
+            line-height: 1.6;
+        }
+
+        .auth-brand-foot {
+            font-size: var(--font-xs);
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .auth-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            background: var(--bg);
+        }
+
+        .auth-card-wrap {
+            width: 100%;
+            max-width: 408px;
+        }
+
+        .auth-card-topnav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-2xl);
+            padding: 36px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .auth-view-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            background: var(--primary-50);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .auth-view-title {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .auth-view-sub {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .dev-banner {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: var(--accent-50);
+            border: 1px solid rgba(232, 169, 60, .4);
+            border-radius: var(--r-md);
+            padding: 12px 13px;
+            margin-bottom: 20px;
+            font-size: 12.5px;
+            color: #7a5c10;
+            line-height: 1.6;
+        }
+
+        .dev-banner b {
+            color: #5c4508;
+        }
+
+        .dev-banner code {
+            background: rgba(232, 169, 60, .22);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 11.5px;
+        }
+
+        .auth-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            font-size: var(--font-sm);
+            font-weight: 500;
+            padding: 12px 14px;
+            border-radius: var(--r-md);
+            margin-bottom: 18px;
+            line-height: 1.55;
+        }
+
+        .auth-banner[hidden] {
+            display: none;
+        }
+
+        .auth-banner.error {
+            background: var(--error-50);
+            border: 1px solid rgba(214, 72, 63, .25);
+            color: var(--error);
+        }
+
+        .auth-banner.warn {
+            background: var(--accent-50);
+            border: 1px solid rgba(232, 169, 60, .35);
+            color: #8a6013;
+        }
+
+        .auth-banner.success {
+            background: var(--success-50);
+            border: 1px solid rgba(47, 158, 91, .3);
+            color: #1e6b3f;
+        }
+
+        .auth-banner i {
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .auth-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .auth-field label {
+            font-size: var(--font-xs);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .auth-field-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .auth-field-link {
+            font-size: var(--font-xs);
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .auth-field-link:hover {
+            text-decoration: underline;
+        }
+
+        .auth-input-wrap {
+            position: relative;
+        }
+
+        .auth-input-wrap i.auth-input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            pointer-events: none;
+        }
+
+        .auth-field input {
+            width: 100%;
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            background: var(--surface-2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px 13px 12px 40px;
+            transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+        }
+
+        .auth-field input:hover {
+            border-color: var(--border-strong);
+        }
+
+        .auth-field input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: var(--surface);
+            box-shadow: 0 0 0 3px var(--secondary-50);
+        }
+
+        .auth-field.has-error input {
+            border-color: var(--error);
+        }
+
+        .auth-field.has-error input:focus {
+            box-shadow: 0 0 0 3px var(--error-50);
+        }
+
+        .auth-field-error {
+            font-size: 12px;
+            color: var(--error);
+            min-height: 14px;
+            line-height: 1.4;
+        }
+
+        .auth-password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+        }
+
+        .auth-password-toggle:hover {
+            background: var(--surface-3);
+            color: var(--text-primary);
+        }
+
+        .auth-password-toggle:focus-visible,
+        .auth-field-link:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        .auth-remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .auth-remember input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .auth-remember label {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .auth-submit {
+            width: 100%;
+            padding: 13px 20px;
+            border-radius: var(--r-md);
+            margin-top: 2px;
+        }
+
+        .auth-view-foot {
+            text-align: center;
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            margin-top: 20px;
+        }
+
+        .auth-view-foot a {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .auth-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .auth-back-link:hover {
+            color: var(--primary);
+        }
+
+        .auth-view {
+            display: none;
+        }
+
+        .auth-view.is-active {
+            display: block;
+        }
+
+        .auth-success {
+            text-align: center;
+            padding: 6px 0 4px;
+        }
+
+        .auth-success-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: var(--success-50);
+            color: #1e6b3f;
+            border: 1.5px solid rgba(47, 158, 91, .35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+        }
+
+        .auth-success-title {
+            font-size: var(--font-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .auth-success-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 300px;
+            margin: 0 auto 20px;
+        }
+
+        @media (max-width:980px) {
+            #loginScreen {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-brand {
+                display: none;
+            }
+        }
+
+        @media (max-width:480px) {
+            .auth-form-panel {
+                padding: 18px;
+            }
+
+            .auth-card {
+                padding: 24px 20px;
+                border-radius: var(--r-xl);
+            }
+        }
+
+        #appShell {
+            display: none;
+            min-height: 100vh;
+        }
+
+        #appShell.is-active {
+            display: block;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--primary-dark);
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--dur) var(--ease);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 12px 16px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 9px 12px;
+            border-radius: var(--r-md);
+            font-size: 13.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, .68);
+            transition: background var(--dur), color var(--dur);
+            margin-bottom: 2px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, .06);
+            color: #fff;
+        }
+
+        .sidebar-link.is-active {
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .sidebar-link.is-active .sidebar-link-icon {
+            color: var(--secondary-light);
+        }
+
+        .sidebar-link-icon {
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+            color: rgba(255, 255, 255, .45);
+        }
+
+        .sidebar-link-count {
+            margin-left: auto;
+            background: var(--error);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: var(--r-full);
+        }
+
+        .sidebar-foot {
+            padding: 14px 12px 18px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .sidebar-link.logout:hover {
+            background: rgba(214, 72, 63, .15);
+            color: #f0b3af;
+        }
+
+        .sidebar-link.logout:hover .sidebar-link-icon {
+            color: #f0b3af;
+        }
+
+        .sidebar-link:focus-visible {
+            outline: 2px solid var(--secondary-light);
+            outline-offset: 1px;
+        }
+
+        #mainWrap {
+            margin-left: var(--sidebar-w);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #topbar {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            height: var(--topbar-h);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            gap: 16px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .topbar-menu-btn {
+            display: none;
+            width: 36px;
+            height: 36px;
+            border-radius: var(--r-md);
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .topbar-menu-btn:hover {
+            background: var(--surface-3);
+        }
+
+        .topbar-brand {
+            display: none;
+            align-items: center;
+        }
+
+        .topbar-title {
+            font-family: var(--font-display);
+            font-size: var(--font-lg);
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .icon-btn {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .icon-btn:hover {
+            background: var(--surface-3);
+            color: var(--text-primary);
+        }
+
+        .icon-btn .dot {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--error);
+            border: 1.5px solid var(--surface);
+        }
+
+        .topbar-profile {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 6px 10px 6px 6px;
+            border-radius: var(--r-full);
+            transition: background var(--dur);
+        }
+
+        .topbar-profile:hover {
+            background: var(--surface-3);
+        }
+
+        .topbar-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .topbar-profile-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .topbar-profile-role {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            line-height: 1.2;
+        }
+
+        #content {
+            flex: 1;
+            padding: 28px 28px 60px;
+            max-width: 1280px;
+            width: 100%;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.is-active {
+            display: block;
+        }
+
+        .view-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .view-header h1 {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .view-header p {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            max-width: 560px;
+        }
+
+        .view-header-actions {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        #sidebarOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(14, 39, 57, .5);
+            z-index: 290;
+        }
+
+        #sidebarOverlay.is-active {
+            display: block;
+        }
+
+        @media (max-width:1024px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+
+            #sidebar.is-open {
+                transform: translateX(0);
+                box-shadow: var(--shadow-2xl);
+            }
+
+            #mainWrap {
+                margin-left: 0;
+            }
+
+            .topbar-menu-btn {
+                display: flex;
+            }
+
+            .topbar-brand {
+                display: flex;
+            }
+        }
+
+        @media (max-width:640px) {
+            #content {
+                padding: 20px 16px 48px;
+            }
+
+            .topbar-profile-name,
+            .topbar-profile-role {
+                display: none;
+            }
+
+            #topbar {
+                padding: 0 14px;
+            }
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            padding: 22px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            padding: 19px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.blue {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .stat-icon.teal {
+            background: var(--secondary-50);
+            color: var(--secondary);
+        }
+
+        .stat-icon.gold {
+            background: var(--accent-50);
+            color: #8a6013;
+        }
+
+        .stat-icon.error {
+            background: var(--error-50);
+            color: var(--error);
+        }
+
+        .stat-val {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-lbl {
+            font-size: 12.5px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        @media (max-width:1180px) {
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width:480px) {
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 18px;
+        }
+
+        @media (max-width:980px) {
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .panel-title h2 {
+            font-size: var(--font-base);
+            font-weight: 700;
+        }
+
+        .panel-title .link {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+
+        .activity-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-row:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: var(--surface-3);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.unread {
+            background: var(--secondary-50);
+            color: var(--secondary);
+        }
+
+        .activity-text {
+            font-size: 13.5px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .activity-time {
+            font-size: 11.5px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .gpa-ring-wrap {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .gpa-ring {
+            position: relative;
+            width: 104px;
+            height: 104px;
+            flex-shrink: 0;
+        }
+
+        .gpa-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .gpa-ring-val {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gpa-ring-num {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .gpa-ring-lbl {
+            font-size: 9.5px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-top: 2px;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            max-width: 340px;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 9px 12px 9px 36px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            font-size: var(--font-sm);
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .search-wrap input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px var(--secondary-50);
+        }
+
+        .select-filter {
+            padding: 9px 30px 9px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            font-size: var(--font-sm);
+            background: var(--surface) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%236B7280" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>') no-repeat right 8px center;
+            color: var(--text-primary);
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .select-filter:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .toolbar-spacer {
+            flex: 1;
+        }
+
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            overflow: hidden;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table.rt-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 640px;
+        }
+
+        table.rt-table thead th {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            text-align: left;
+            padding: 12px 16px;
+            background: var(--surface-2);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        table.rt-table tbody td {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            padding: 13px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        table.rt-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.rt-table tbody tr:hover td {
+            background: var(--surface-2);
+        }
+
+        .cell-primary {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .cell-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .row-icon-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--r-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+        }
+
+        .row-icon-btn:hover {
+            background: var(--surface-3);
+            color: var(--primary);
+        }
+
+        .row-icon-btn:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+        }
+
+        .table-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 16px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .table-foot-info {
+            font-size: 12.5px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 64px 28px;
+            background: var(--surface);
+            border: 1.5px dashed var(--border-strong);
+            border-radius: var(--r-xl);
+        }
+
+        .empty-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            background: var(--primary-50);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .empty-title {
+            font-size: var(--font-lg);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            max-width: 420px;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width:640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .form-field label {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            width: 100%;
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            background: var(--surface-2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 10px 12px;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: var(--surface);
+            box-shadow: 0 0 0 3px var(--secondary-50);
+        }
+
+        .form-field input:disabled,
+        .form-field select:disabled {
+            background: var(--surface-3);
+            color: var(--text-tertiary);
+        }
+
+        .form-field-error {
+            font-size: 12px;
+            color: var(--error);
+            min-height: 14px;
+            margin-top: 4px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 6px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .char-counter {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        #toastStack {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 340px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--r-md);
+            padding: 13px 15px;
+            box-shadow: var(--shadow-lg);
+            font-size: 13.5px;
+            color: var(--text-primary);
+            animation: toastIn .25s var(--ease);
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--error);
+        }
+
+        .toast.warn {
+            border-left-color: var(--accent);
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 24, 36, .55);
+            z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s var(--ease);
+        }
+
+        .modal-overlay.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 901;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .modal-inner {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            max-height: 88vh;
+            overflow-y: auto;
+            background: var(--surface);
+            border-radius: var(--r-2xl);
+            box-shadow: var(--shadow-2xl);
+            padding: 30px;
+            opacity: 0;
+            transform: translateY(12px) scale(.98);
+            transition: opacity .2s var(--ease), transform .2s var(--ease);
+            pointer-events: auto;
+        }
+
+        .modal.is-open .modal-inner {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--surface-3);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .modal-header {
+            margin-bottom: 18px;
+            padding-right: 22px;
+        }
+
+        .modal-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--primary-50);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .modal-icon.warn {
+            background: var(--accent-50);
+            color: #8a6013;
+        }
+
+        .modal-title {
+            font-size: var(--font-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .modal-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .flag-course-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .flag-course-summary .fc-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .flag-course-summary .fc-sub {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .thread {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .thread-msg {
+            max-width: 88%;
+            padding: 11px 14px;
+            border-radius: var(--r-lg);
+            font-size: 13.5px;
+            line-height: 1.6;
+        }
+
+        .thread-msg.mine {
+            align-self: flex-end;
+            background: var(--primary-50);
+            color: var(--text-primary);
+            border-bottom-right-radius: 4px;
+        }
+
+        .thread-msg.theirs {
+            align-self: flex-start;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .thread-msg .tm-meta {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 6px;
+        }
+
+        .thread-msg.mine .tm-meta {
+            text-align: right;
+        }
+
+        .flag-stepper {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 22px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }
+
+        .flag-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 74px;
+            position: relative;
+        }
+
+        .flag-step-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--surface-3);
+            color: var(--text-tertiary);
+            border: 2px solid var(--border-strong);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .flag-step-line {
+            position: absolute;
+            top: 13px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border-strong);
+            z-index: 0;
+        }
+
+        .flag-step:last-child .flag-step-line {
+            display: none;
+        }
+
+        .flag-step-lbl {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-align: center;
+            margin-top: 7px;
+            line-height: 1.35;
+            max-width: 78px;
+        }
+
+        .flag-step.is-done .flag-step-dot {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: #fff;
+        }
+
+        .flag-step.is-done .flag-step-line {
+            background: var(--secondary);
+        }
+
+        .flag-step.is-current .flag-step-dot {
+            background: var(--surface);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-50);
+        }
+
+        .flag-step.is-current .flag-step-lbl {
+            color: var(--text-primary);
+        }
+
+        .flag-step.is-done .flag-step-lbl {
+            color: var(--text-primary);
+        }
+
+        .flag-step.is-rejected .flag-step-dot {
+            background: var(--error);
+            border-color: var(--error);
+            color: #fff;
+        }
+
+        .flag-step.is-rejected .flag-step-lbl {
+            color: var(--error);
+        }
+
+        @media (max-width:1024px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <template id="logoMarkTpl">
+        <svg class="rt-logo-mark" viewBox="0 0 44 44">
+            <path class="rt-bar" d="M3,39 L3,25 L10,20 L10,39 Z" />
+            <path class="rt-bar" d="M13,39 L13,17 L20,11 L20,39 Z" />
+            <path class="rt-bar" d="M23,39 L23,10 L30,3 L30,39 Z" />
+            <polygon class="rt-highlight" points="5,35 8,35 19,15 16,15" />
+            <polygon class="rt-arrow" points="18,38 22,38 32,17 28,17" />
+            <polygon class="rt-arrow" points="27,19 32,17 44,2" />
+        </svg>
+    </template>
+
+    <div id="loginScreen">
+        <aside class="auth-brand" aria-hidden="true">
+            <div class="auth-brand-grid"></div>
+            <div class="auth-brand-orb"></div>
+            <div class="auth-brand-inner">
+                <div class="rt-logo on-dark" id="brandLogoSlot"></div>
+                <div class="auth-brand-body">
+                    <div class="auth-brand-eyebrow"><i data-lucide="graduation-cap" style="width:12px;height:12px"></i>
+                        Student Access</div>
+                    <h1 class="auth-brand-title">See exactly what makes up your grade.</h1>
+                    <p class="auth-brand-sub">No more guessing at a final letter grade. Sign in to see your CA score,
+                        exam score, and GPA the moment a result is approved — and flag anything that looks wrong.</p>
+                    <div class="auth-trust-list">
+                        <div class="auth-trust-item">
+                            <div class="auth-trust-icon"><i data-lucide="eye" style="width:16px;height:16px"></i></div>
+                            <div>
+                                <div class="auth-trust-text-title">See it the moment it's approved</div>
+                                <div class="auth-trust-text-desc">No noticeboard, no waiting on the registry.</div>
+                            </div>
+                        </div>
+                        <div class="auth-trust-item">
+                            <div class="auth-trust-icon"><i data-lucide="flag" style="width:16px;height:16px"></i></div>
+                            <div>
+                                <div class="auth-trust-text-title">Flag a result that looks wrong</div>
+                                <div class="auth-trust-text-desc">Track your lecturer's response right here.</div>
+                            </div>
+                        </div>
+                        <div class="auth-trust-item">
+                            <div class="auth-trust-icon"><i data-lucide="lock" style="width:16px;height:16px"></i></div>
+                            <div>
+                                <div class="auth-trust-text-title">Only ever your own record</div>
+                                <div class="auth-trust-text-desc">Role-based access, encrypted end to end.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="auth-brand-foot">© 2025 ResultTrack. All rights reserved.</div>
+            </div>
+        </aside>
+
+        <main class="auth-form-panel">
+            <div class="auth-card-wrap">
+                <div class="auth-card-topnav">
+                    <div class="rt-logo" id="cardLogoSlot"></div>
+                </div>
+                <div class="auth-card">
+
+                    <section class="auth-view is-active" id="viewSignIn" aria-labelledby="signInTitle">
+                        <div class="auth-view-icon"><i data-lucide="graduation-cap" style="width:22px;height:22px"></i>
+                        </div>
+                        <h2 class="auth-view-title" id="signInTitle">Student Sign In</h2>
+                        <p class="auth-view-sub">Sign in with the email and password on your ResultTrack account.</p>
+
+                        <div class="dev-banner" id="devModeBanner" hidden>
+                            <i data-lucide="flask-conical"
+                                style="width:15px;height:15px;flex-shrink:0;margin-top:1px"></i>
+                            <span><b>Development mode.</b> Sign-in is running against a mock, not the live backend. Use
+                                <code>student@resulttrack.edu.ng</code> / <code>Student@12345</code>. Switch
+                                <code>CONFIG.DATA_MODE</code> to <code>"live"</code> once the student endpoints are
+                                confirmed.</span>
+                        </div>
+
+                        <div class="auth-banner error" id="signInBanner" role="alert" hidden></div>
+
+                        <form class="auth-form" id="signInForm" novalidate>
+                            <div class="auth-field" id="fieldEmail">
+                                <label for="loginEmail">Email address</label>
+                                <div class="auth-input-wrap">
+                                    <i data-lucide="mail" class="auth-input-icon" style="width:16px;height:16px"></i>
+                                    <input type="email" id="loginEmail" name="email" autocomplete="username" required
+                                        aria-describedby="loginEmailError" placeholder="you@university.edu.ng">
+                                </div>
+                                <span class="auth-field-error" id="loginEmailError" role="alert"></span>
+                            </div>
+                            <div class="auth-field" id="fieldPassword">
+                                <div class="auth-field-row">
+                                    <label for="loginPassword">Password</label>
+                                    <a href="#" class="auth-field-link" data-view-link="viewForgot">Forgot password?</a>
+                                </div>
+                                <div class="auth-input-wrap">
+                                    <i data-lucide="lock" class="auth-input-icon" style="width:16px;height:16px"></i>
+                                    <input type="password" id="loginPassword" name="password"
+                                        autocomplete="current-password" required aria-describedby="loginPasswordError"
+                                        placeholder="••••••••">
+                                    <button type="button" class="auth-password-toggle" data-toggle-for="loginPassword"
+                                        aria-label="Show password"><i data-lucide="eye"
+                                            style="width:16px;height:16px"></i></button>
+                                </div>
+                                <span class="auth-field-error" id="loginPasswordError" role="alert"></span>
+                            </div>
+                            <div class="auth-remember">
+                                <input type="checkbox" id="rememberMe">
+                                <label for="rememberMe">Remember my email on this device</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary auth-submit" id="signInSubmit">
+                                <span class="btn-label"><i data-lucide="log-in" style="width:15px;height:15px"></i> Sign
+                                    in</span>
+                                <span class="spinner" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                        <p class="auth-view-foot">First time here? <a href="#" data-view-link="viewActivate">Activate
+                                your account</a></p>
+                        <p class="auth-view-foot">Not a student? <a href="index.html">Return to ResultTrack</a></p>
+                    </section>
+
+                <section class="auth-view" id="viewActivate" aria-labelledby="activateTitle">
+                    <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
+                            style="width:14px;height:14px"></i> Back to sign in</a>
+                
+                    <div id="activateFormWrap">
+                        <div class="auth-view-icon"><i data-lucide="user-check" style="width:22px;height:22px"></i>
+                        </div>
+                        <h2 class="auth-view-title" id="activateTitle">Activate your account</h2>
+                        <p class="auth-view-sub">Enter your name, institutional email, year, and department. If it
+                            matches your academic record, we'll email you a one-time code.</p>
+                        <div class="auth-banner error" id="activateBanner" role="alert" hidden></div>
+                
+                        <form class="auth-form" id="activateForm" novalidate>
+                            <div class="form-grid" style="margin-bottom:0">
+                                <div class="form-field" id="fieldActFirstName">
+                                    <label for="actFirstName">First name</label>
+                                    <input type="text" id="actFirstName" autocomplete="given-name" placeholder="John">
+                                    <span class="form-field-error" id="actFirstNameError"></span>
+                                </div>
+                                <div class="form-field" id="fieldActLastName">
+                                    <label for="actLastName">Last name</label>
+                                    <input type="text" id="actLastName" autocomplete="family-name" placeholder="Doe">
+                                    <span class="form-field-error" id="actLastNameError"></span>
+                                </div>
+                            </div>
+                            <div class="auth-field" id="fieldActivateEmail">
+                                <label for="activateEmail">Institutional email</label>
+                                <div class="auth-input-wrap">
+                                    <i data-lucide="mail" class="auth-input-icon" style="width:16px;height:16px"></i>
+                                    <input type="email" id="activateEmail" name="email" autocomplete="username" required
+                                        aria-describedby="activateEmailError" placeholder="you@university.edu.ng">
+                                </div>
+                                <span class="auth-field-error" id="activateEmailError" role="alert"></span>
+                            </div>
+                            <div class="form-field" id="fieldActYear">
+                                <label for="actYear">Year</label>
+                                <select id="actYear">
+                                    <option value="" disabled selected>Select your year</option>
+                                    <option value="YEAR_1">Year 1</option>
+                                    <option value="YEAR_2">Year 2</option>
+                                    <option value="YEAR_3">Year 3</option>
+                                    <option value="YEAR_4">Year 4</option>
+                                    <option value="YEAR_5">Year 5</option>
+                                    <option value="YEAR_6">Year 6</option>
+                                    <option value="YEAR_7">Year 7</option>
+                                </select>
+                                <span class="form-field-error" id="actYearError"></span>
+                            </div>
+                            <div class="form-field" id="fieldActDepartment">
+                                <label for="actDepartment">Department <span style="font-weight:400;color:var(--text-tertiary)">(as it
+                                        appears on your admission letter)</span></label>
+                                <input type="text" id="actDepartment" placeholder="Computer Science">
+                                <span class="form-field-error" id="actDepartmentError"></span>
+                            </div>
+                
+                            <div class="auth-remember">
+                                <input type="checkbox" id="actTerms">
+                                <label for="actTerms">I accept the Terms of Use and Privacy Policy</label>
+                            </div>
+                            <span class="form-field-error" id="actTermsError" style="display:block;margin-top:-10px"></span>
+                
+                            <button type="submit" class="btn btn-primary auth-submit" id="activateSubmit">
+                                <span class="btn-label"><i data-lucide="send" style="width:15px;height:15px"></i> Send activation
+                                    code</span>
+                                <span class="spinner" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+                
+                    <div id="activateOtpWrap" hidden>
+                        <div class="auth-view-icon"><i data-lucide="shield-check" style="width:22px;height:22px"></i></div>
+                        <h2 class="auth-view-title">Enter your activation code</h2>
+                        <p class="auth-view-sub" id="activateOtpSub">We've sent a 6-digit code to your email.</p>
+                        <div class="auth-banner error" id="activateOtpBanner" role="alert" hidden></div>
+                        <form class="auth-form" id="activateOtpForm" novalidate>
+                            <div class="auth-field" id="fieldActivateOtp">
+                                <label for="activateOtpInput">Activation code</label>
+                                <div class="auth-input-wrap">
+                                    <i data-lucide="key-round" class="auth-input-icon" style="width:16px;height:16px"></i>
+                                    <input type="text" id="activateOtpInput" inputmode="numeric" autocomplete="one-time-code"
+                                        placeholder="123456" style="padding-left:40px">
+                                </div>
+                                <span class="auth-field-error" id="activateOtpError" role="alert"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary auth-submit" id="activateOtpSubmit">
+                                <span class="btn-label"><i data-lucide="check-circle" style="width:15px;height:15px"></i> Verify
+                                    code</span>
+                                <span class="spinner" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+                
+                    <div id="activateStep3Wrap" hidden>
+                        <div class="auth-success">
+                            <div class="auth-success-icon"><i data-lucide="mail-check" style="width:24px;height:24px"></i></div>
+                                                    <h2 class="auth-success-title">Account activated</h2>
+                                                    <p class="auth-success-desc">Your account is active. We've also emailed you a link to set your password — open it,
+                                                        choose a password, then come back here and sign in.</p>
+                            <a href="#" class="btn btn-primary" data-view-link="viewSignIn" style="margin-top:14px"><span
+                                    class="btn-label">Go to sign in</span></a>
+                        </div>
+                    </div>
+                </section>
+
+                    <section class="auth-view" id="viewForgot" aria-labelledby="forgotTitle">
+                        <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
+                                style="width:14px;height:14px"></i> Back to sign in</a>
+                        <div id="forgotFormWrap">
+                            <div class="auth-view-icon"><i data-lucide="key-round" style="width:22px;height:22px"></i>
+                            </div>
+                            <h2 class="auth-view-title" id="forgotTitle">Reset your password</h2>
+                            <p class="auth-view-sub">Enter your email. If it exists, we'll send a link to reset your
+                                password.</p>
+                            <div class="auth-banner error" id="forgotBanner" role="alert" hidden></div>
+                            <form class="auth-form" id="forgotForm" novalidate>
+                                <div class="auth-field" id="fieldForgotEmail">
+                                    <label for="forgotEmail">Email address</label>
+                                    <div class="auth-input-wrap">
+                                        <i data-lucide="mail" class="auth-input-icon"
+                                            style="width:16px;height:16px"></i>
+                                        <input type="email" id="forgotEmail" name="email" autocomplete="username"
+                                            required aria-describedby="forgotEmailError"
+                                            placeholder="you@university.edu.ng">
+                                    </div>
+                                    <span class="auth-field-error" id="forgotEmailError" role="alert"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary auth-submit" id="forgotSubmit">
+                                    <span class="btn-label"><i data-lucide="send" style="width:15px;height:15px"></i>
+                                        Send reset link</span>
+                                    <span class="spinner" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        </div>
+                        <div id="forgotSuccessWrap" hidden>
+                            <div class="auth-success">
+                                <div class="auth-success-icon"><i data-lucide="mail-check"
+                                        style="width:24px;height:24px"></i></div>
+                                <h2 class="auth-success-title">Check your email</h2>
+                                <p class="auth-success-desc" id="forgotSuccessDesc">If an account exists for that
+                                    address, a reset link is on its way.</p>
+                                <a href="#" class="btn btn-primary" data-view-link="viewSignIn"><span
+                                        class="btn-label">Back to sign in</span></a>
+                            </div>
+                        </div>
+                </section>
+                
+                <section class="auth-view" id="viewResetPassword" aria-labelledby="resetPwTitle">
+                    <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
+                            style="width:14px;height:14px"></i> Back to sign in</a>
+                    <div id="resetPwFormWrap">
+                        <div class="auth-view-icon"><i data-lucide="key-round" style="width:22px;height:22px"></i></div>
+                                            <h2 class="auth-view-title" id="resetPwTitle">Choose a new password</h2>
+                                            <p class="auth-view-sub" id="resetPwSub">Enter a new password for your account.</p>
+                        <div class="auth-banner error" id="resetPwBanner" role="alert" hidden></div>
+                        <form class="auth-form" id="resetPwForm" novalidate>
+                            <div class="auth-field" id="fieldResetPw">
+                                <label for="resetPwNew">New password</label>
+                                <div class="auth-input-wrap">
+                                    <i data-lucide="lock" class="auth-input-icon" style="width:16px;height:16px"></i>
+                                    <input type="password" id="resetPwNew" autocomplete="new-password" required
+                                        aria-describedby="resetPwError" placeholder="At least 8 characters">
+                                    <button type="button" class="auth-password-toggle" data-toggle-for="resetPwNew"
+                                        aria-label="Show password"><i data-lucide="eye" style="width:16px;height:16px"></i></button>
+                                </div>
+                                <span class="auth-field-error" id="resetPwError" role="alert"></span>
+                            </div>
+                            <div class="auth-field" id="fieldResetPwConfirm">
+                                <label for="resetPwConfirm">Confirm new password</label>
+                                <div class="auth-input-wrap">
+                                    <i data-lucide="lock" class="auth-input-icon" style="width:16px;height:16px"></i>
+                                    <input type="password" id="resetPwConfirm" autocomplete="new-password" required
+                                        aria-describedby="resetPwConfirmError" placeholder="Re-enter your new password">
+                                    <button type="button" class="auth-password-toggle" data-toggle-for="resetPwConfirm"
+                                        aria-label="Show password"><i data-lucide="eye" style="width:16px;height:16px"></i></button>
+                                </div>
+                                <span class="auth-field-error" id="resetPwConfirmError" role="alert"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary auth-submit" id="resetPwSubmit">
+                                <span class="btn-label"><i data-lucide="check-circle" style="width:15px;height:15px"></i> Reset
+                                    password</span>
+                                <span class="spinner" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+                    <div id="resetPwSuccessWrap" hidden>
+                        <div class="auth-success">
+                            <div class="auth-success-icon"><i data-lucide="check-circle" style="width:24px;height:24px"></i></div>
+                                                    <h2 class="auth-success-title" id="resetPwSuccessTitle">Password reset</h2>
+                                                    <p class="auth-success-desc" id="resetPwSuccessDesc">Your password has been updated. Sign in with your new password.</p>
+                            <a href="#" class="btn btn-primary" data-view-link="viewSignIn"><span class="btn-label">Back to sign
+                                    in</span></a>
+                        </div>
+                    </div>
+                </section>
+                
+                </div>
+                </div>
+                </main>
+                </div>
+                
+                <div id="appShell">
+        <div id="sidebarOverlay"></div>
+
+        <aside id="sidebar" aria-label="Student navigation">
+            <div class="sidebar-brand">
+                <div class="rt-logo on-dark" id="sidebarLogoSlot"></div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+            <div class="sidebar-foot">
+                <a href="#" class="sidebar-link logout" id="logoutBtn"><i data-lucide="log-out"
+                        class="sidebar-link-icon"></i> Log out</a>
+            </div>
+        </aside>
+
+        <div id="mainWrap">
+            <header id="topbar">
+                <div class="topbar-left">
+                    <button class="topbar-menu-btn" id="menuToggleBtn" aria-label="Open navigation"><i
+                            data-lucide="menu" style="width:20px;height:20px"></i></button>
+                    <div class="topbar-brand" id="topbarBrandSlot" aria-hidden="true"></div>
+                    <h1 class="topbar-title" id="topbarTitle">Dashboard</h1>
+                </div>
+                <div class="topbar-right">
+                    <button class="icon-btn" id="notifBtn" aria-label="Notifications" data-route-link="notifications">
+                        <i data-lucide="bell" style="width:18px;height:18px"></i>
+                        <span class="dot" id="notifDot" hidden aria-hidden="true"></span>
+                    </button>
+                    <a class="topbar-profile" href="#" data-route-link="profile">
+                        <div class="topbar-avatar" id="topbarAvatar">A</div>
+                        <div>
+                            <div class="topbar-profile-name" id="topbarName">Student</div>
+                            <div class="topbar-profile-role">Student</div>
+                        </div>
+                    </a>
+                </div>
+            </header>
+
+            <main id="content">
+
+                <section class="view is-active" id="view-dashboard" data-title="Dashboard">
+                    <div class="view-header">
+                        <div>
+                            <h1>Welcome back<span id="welcomeName"></span></h1>
+                            <p>Here's where things stand this semester.</p>
+                        </div>
+                    <span class="badge dev" id="devDataBadge" hidden><i data-lucide="flask-conical" style="width:12px;height:12px"></i>
+                        Development data</span>
+                    </div>
+
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon blue"><i data-lucide="book-open" style="width:18px;height:18px"></i></div>
+                    </div>
+                    <div class="stat-val" id="statCourses">0</div>
+                    <div class="stat-lbl">Registered courses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon teal"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>
+                    </div>
+                    <div class="stat-val" id="statPublished">0</div>
+                    <div class="stat-lbl">Results published</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon gold"><i data-lucide="clock" style="width:18px;height:18px"></i></div>
+                    </div>
+                    <div class="stat-val" id="statPending">0</div>
+                    <div class="stat-lbl">Awaiting result</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon error"><i data-lucide="flag" style="width:18px;height:18px"></i></div>
+                    </div>
+                    <div class="stat-val" id="statFlags">0</div>
+                    <div class="stat-lbl">Active flags</div>
+                </div>
+            </div>
+
+                    <div class="dash-grid">
+                        <div class="card">
+                            <div class="panel-title">
+                                <h2>Recent results</h2><span class="link" data-route-link="results">View all</span>
+                            </div>
+                            <div id="recentResultsList"></div>
+                        </div>
+                        <div class="card">
+                            <div class="panel-title">
+                                <h2>Notifications</h2><span class="link" data-route-link="notifications">View all</span>
+                            </div>
+                            <div id="dashNotifList"></div>
+                        </div>
+                    </div>
+                </section>
+
+            <section class="view" id="view-courses" data-title="My Courses">
+                <div class="view-header">
+                    <div>
+                        <h1>My Courses</h1>
+                        <p>Select the courses you want to register for this session, then confirm below. Registered courses are
+                            visible to your lecturers.</p>
+                    </div>
+                    <div class="view-header-actions">
+                        <button class="btn btn-primary btn-sm" id="registerCoursesBtn" disabled><span class="btn-label"><i
+                                    data-lucide="check-circle" style="width:14px;height:14px"></i> Register selected
+                                courses</span><span class="spinner"></span></button>
+                    </div>
+                </div>
+                <div id="coursesGrid" class="courses-grid"></div>
+                    <div class="empty-state" id="coursesEmptyState" hidden>
+                        <div class="empty-icon"><i data-lucide="book-open" style="width:26px;height:26px"></i></div>
+                        <div class="empty-title">No courses found</div>
+                        <div class="empty-desc">Nothing is registered to your account yet for this session. Check back once course
+                            registration opens, or contact your department.</div>
+                    </div>
+                </section>
+                
+                
+
+                <section class="view" id="view-results" data-title="My Results">
+                    <div class="view-header">
+                        <div>
+                            <h1>My Results</h1>
+                            <p>Your course results this session — CA, exam, total, and grade, exactly as your lecturer
+                                entered them.</p>
+                        </div>
+                        <div class="view-header-actions">
+                            <button class="btn btn-outline btn-sm" id="resultsExportBtn"><i data-lucide="download"
+                                    style="width:14px;height:14px"></i> Export CSV</button>
+                            <button class="btn btn-outline btn-sm" id="resultsPrintBtn"><i data-lucide="printer"
+                                    style="width:14px;height:14px"></i> Print</button>
+                        </div>
+                    </div>
+                <div class="toolbar">
+                    <div class="search-wrap"><i data-lucide="search" style="width:15px;height:15px"></i><input type="text"
+                            id="resultsSearchInput" placeholder="Search by course title…"></div>
+                    <select class="select-filter" id="resultsStatusFilter">
+                        <option value="all">All statuses</option>
+                        <option value="pass">Passed</option>
+                        <option value="fail">Failed</option>
+                        <option value="pending">Awaiting result</option>
+                    </select>
+                    <label
+                        style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-secondary);cursor:pointer;white-space:nowrap">
+                        <input type="checkbox" id="resultsFlaggedOnly" style="width:16px;height:16px;accent-color:var(--primary)">
+                        Flagged only
+                    </label>
+                    <div class="toolbar-spacer"></div>
+                </div>
+                    <div class="table-wrap">
+                        <div class="table-scroll">
+                            <table class="rt-table" id="resultsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>CA</th>
+                                        <th>Exam</th>
+                                        <th>Total</th>
+                                        <th>Grade</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="resultsTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="table-foot"><span class="table-foot-info" id="resultsFootInfo"></span></div>
+                    </div>
+                </section>
+
+
+                <section class="view" id="view-transcript" data-title="Transcript">
+                    <div class="view-header">
+                        <div>
+                            <h1>Transcript</h1>
+                            <p>Every published result, grouped by session and semester. A statement of results, not
+                                an official transcript — request the certified copy through the registry.</p>
+                        </div>
+                        <div class="view-header-actions">
+                            <button class="btn btn-outline btn-sm" id="transcriptPrintBtn"><i data-lucide="printer"
+                                    style="width:14px;height:14px"></i> Print</button>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom:18px">
+                        <div class="form-grid" style="margin-bottom:0">
+                            <div>
+                                <div class="stat-lbl">Student</div>
+                                <div class="cell-primary" id="transcriptStudentName" style="margin-top:2px">—</div>
+                            </div>
+                            <div>
+                                <div class="stat-lbl">Registration number</div>
+                                <div class="cell-primary" id="transcriptRegNo" style="margin-top:2px">—</div>
+                            </div>
+                        <div>
+                            <div class="stat-lbl">Programme</div>
+                            <div class="cell-primary" id="transcriptProgramme" style="margin-top:2px">—</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div id="transcriptSessionGroups"></div>
+                </section>
+
+                <section class="view" id="view-flags" data-title="Result Flags">
+                    <div class="view-header">
+                        <div>
+                            <h1>Result Flags</h1>
+                            <p>Track every result you've flagged and your lecturer's response.</p>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <div class="table-scroll">
+                            <table class="rt-table" id="flagsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Reason</th>
+                                        <th>Raised</th>
+                                        <th>Status</th>
+                                        <th>Lecturer response</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="flagsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="empty-state" id="flagsEmptyState" hidden>
+                        <div class="empty-icon"><i data-lucide="flag" style="width:26px;height:26px"></i></div>
+                        <div class="empty-title">No flags raised</div>
+                        <div class="empty-desc">If a result ever looks wrong, flag it directly from My Results — your
+                            lecturer will see exactly which score is in question.</div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-notifications" data-title="Notifications">
+                    <div class="view-header">
+                        <div>
+                            <h1>Notifications</h1>
+                            <p>Updates on your results and flagged items.</p>
+                        </div>
+                        <div class="view-header-actions"><button class="btn btn-outline btn-sm" id="markAllReadBtn"><i
+                                    data-lucide="check-check" style="width:14px;height:14px"></i> Mark all read</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div id="notifFullList"></div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-profile" data-title="Profile">
+                    <div class="view-header">
+                        <div>
+                            <h1>Your profile</h1>
+                            <p>Your student account details.</p>
+                        </div>
+                    </div>
+                    <div class="card" style="max-width:640px;margin-bottom:18px">
+                        <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px">
+                            <div class="topbar-avatar" style="width:56px;height:56px;font-size:20px" id="profileAvatar">
+                                A</div>
+                            <div>
+                                <div style="font-size:var(--font-lg);font-weight:700;color:var(--text-primary)"
+                                    id="profileName">Student</div>
+                                <div style="font-size:13px;color:var(--text-tertiary)" id="profileEmail">
+                                    student@resulttrack.edu.ng</div>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-field"><label>Registration number</label><input type="text"
+                                    id="profileRegNo" disabled></div>
+                            <div class="form-field"><label>Department</label><input type="text" id="profileDept"
+                                    disabled></div>
+                            <div class="form-field"><label>Level</label><input type="text" id="profileLevel" disabled>
+                            </div>
+                            <div class="form-field"><label>Current session</label><input type="text" id="profileSession"
+                                    disabled></div>
+                        </div>
+                    </div>
+                    <div class="card" style="max-width:640px">
+                        <div
+                            style="font-size:var(--font-base);font-weight:700;color:var(--text-primary);margin-bottom:14px">
+                            Change password</div>
+                        <form id="profilePwForm">
+                            <div class="form-field"><label for="curPw">Current password</label><input type="password"
+                                    id="curPw" autocomplete="current-password"></div>
+                            <div class="form-field"><label for="newPw">New password</label><input type="password"
+                                    id="newPw" autocomplete="new-password"></div>
+                            <div class="form-actions"><button type="submit" class="btn btn-primary"><span
+                                        class="btn-label">Update password</span><span class="spinner"></span></button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="toastStack" aria-live="polite"></div>
+
+    <div class="modal-overlay" id="flagOverlay" hidden></div>
+    <div class="modal" id="flagModal" role="dialog" aria-modal="true" hidden>
+        <div class="modal-inner">
+            <button type="button" class="modal-close" id="flagModalClose" aria-label="Close"><i data-lucide="x"
+                    style="width:16px;height:16px"></i></button>
+            <div class="modal-header">
+                <div class="modal-icon warn"><i data-lucide="flag" style="width:20px;height:20px"></i></div>
+                <div class="modal-title">Flag this result</div>
+                <p class="modal-desc">Tell us what looks wrong. Your lecturer will see the exact score and your note.
+                </p>
+            </div>
+            <div class="flag-course-summary" id="flagCourseSummary"></div>
+            <form id="flagForm">
+                <div class="form-field">
+                    <label for="flagReason">Reason</label>
+                    <select id="flagReason" required>
+                        <option value="" disabled selected>Select a reason</option>
+                        <option value="ca_score">Incorrect CA score</option>
+                        <option value="exam_score">Incorrect exam score</option>
+                        <option value="grade_computation">Grade doesn't match the scores shown</option>
+                        <option value="not_reflecting">Result not reflecting at all</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="flagDesc">Describe the issue</label>
+                    <textarea id="flagDesc" rows="4" required minlength="15" maxlength="600"
+                        placeholder="e.g. My CA score shows 18/30 but I scored 26/30 on the test dated..."></textarea>
+                    <div class="char-counter" id="flagCharCounter">0 / 600</div>
+                    <span class="form-field-error" id="flagDescError"></span>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="flagCancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="flagSubmitBtn"><span class="btn-label"><i
+                                data-lucide="send" style="width:14px;height:14px"></i> Submit flag</span><span
+                            class="spinner"></span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="flagDetailOverlay" hidden></div>
+    <div class="modal" id="flagDetailModal" role="dialog" aria-modal="true" hidden>
+        <div class="modal-inner">
+            <button type="button" class="modal-close" id="flagDetailClose" aria-label="Close"><i data-lucide="x"
+                    style="width:16px;height:16px"></i></button>
+            <div class="modal-header">
+                <div class="modal-icon blue"><i data-lucide="message-square" style="width:20px;height:20px"></i></div>
+                <div class="modal-title" id="flagDetailTitle">Flag detail</div>
+            </div>
+            <div class="flag-course-summary" id="flagDetailSummary"></div>
+            <div id="flagDetailStepper"></div>
+            <div class="thread" id="flagDetailThread"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="mustChangeOverlay" hidden></div>
+    <div class="modal" id="mustChangeModal" role="dialog" aria-modal="true" aria-labelledby="mustChangeTitle" hidden>
+        <div class="modal-inner">
+            <div class="modal-header">
+                <div class="modal-icon warn"><i data-lucide="shield-alert" style="width:20px;height:20px"></i></div>
+                <div class="modal-title" id="mustChangeTitle">Set a new password</div>
+                <p class="modal-desc">You're signed in with a temporary password. Choose a new password before
+                    continuing — this step is required.</p>
+            </div>
+            <form id="mustChangeForm">
+                <div class="form-field"><label for="mustChangeCurPw">Temporary password</label><input type="password"
+                        id="mustChangeCurPw" autocomplete="current-password"></div>
+                <div class="form-field"><label for="mustChangeNewPw">New password</label><input type="password"
+                        id="mustChangeNewPw" autocomplete="new-password"></div>
+                <div class="form-field"><label for="mustChangeConfirmPw">Confirm new password</label><input
+                        type="password" id="mustChangeConfirmPw" autocomplete="new-password"></div>
+                <span class="form-field-error" id="mustChangeError" style="display:block;margin-bottom:8px"></span>
+                <div class="form-actions" style="justify-content:flex-end;border-top:none;padding-top:0">
+                    <button type="submit" class="btn btn-primary" id="mustChangeSubmit"><span class="btn-label"><i
+                                data-lucide="lock" style="width:14px;height:14px"></i> Update password &amp;
+                            continue</span><span class="spinner"></span></button>
+                </div>
+</form>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay" id="yearConfirmOverlay" hidden></div>
+<div class="modal" id="yearConfirmModal" role="dialog" aria-modal="true" aria-labelledby="yearConfirmTitle" hidden>
+    <div class="modal-inner">
+        <div class="modal-header">
+            <div class="modal-icon warn"><i data-lucide="calendar-range" style="width:20px;height:20px"></i></div>
+            <div class="modal-title" id="yearConfirmTitle">Confirm your year</div>
+            <p class="modal-desc">Your profile doesn't have your academic year on file yet. Select it below so we can
+                load your registered courses — you won't be asked again on this device.</p>
+        </div>
+        <form id="yearConfirmForm">
+            <div class="form-field">
+                <label for="yearConfirmSelect">Year</label>
+                <select id="yearConfirmSelect">
+                    <option value="" disabled selected>Select your year</option>
+                    <option value="YEAR_1">Year 1</option>
+                    <option value="YEAR_2">Year 2</option>
+                    <option value="YEAR_3">Year 3</option>
+                    <option value="YEAR_4">Year 4</option>
+                    <option value="YEAR_5">Year 5</option>
+                    <option value="YEAR_6">Year 6</option>
+                    <option value="YEAR_7">Year 7</option>
+                </select>
+                <span class="form-field-error" id="yearConfirmError"></span>
+            </div>
+            <div class="form-actions" style="justify-content:flex-end;border-top:none;padding-top:0">
+                <button type="submit" class="btn btn-primary" id="yearConfirmSubmit"><span class="btn-label"><i
+                            data-lucide="check-circle" style="width:14px;height:14px"></i> Confirm &amp;
+                        continue</span><span class="spinner"></span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="logoutOverlay" hidden></div>
+<div class="modal" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle" hidden>
+    <div class="modal-inner">
+        <button type="button" class="modal-close" id="logoutModalClose" aria-label="Close"><i data-lucide="x"
+                style="width:16px;height:16px"></i></button>
+        <div class="modal-header">
+            <div class="modal-icon warn"><i data-lucide="log-out" style="width:20px;height:20px"></i></div>
+            <div class="modal-title" id="logoutModalTitle">Log out?</div>
+            <p class="modal-desc">You'll need to sign in again to view your results and flags.</p>
+        </div>
+        <div class="form-actions" style="border-top:none;padding-top:0">
+            <button type="button" class="btn btn-outline" id="logoutStayBtn">Stay signed in</button>
+            <button type="button" class="btn btn-primary" id="logoutConfirmBtn"
+                style="background:var(--error);border-color:var(--error)"><span class="btn-label"><i
+                        data-lucide="log-out" style="width:14px;height:14px"></i> Log out</span><span
+                    class="spinner"></span></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+            DATA_MODE: "live",
+            API_BASE_URL: "https://resulttrack-backend.onrender.com/api/v1",
+            ENDPOINTS: {
+                /* ==========================================================
+                   AUTHENTICATION
+                  
+                ========================================================== */
+                  
+                LOGIN: "/auth/login",
+                LOGOUT: "/auth/logout",
+                FORGOT_PASSWORD: "/auth/forgot-password",
+                RESET_PASSWORD: "/auth/reset-password",
+                ACTIVATE: "/auth/activate-account",
+                VERIFY_OTP: "/auth/verify-otp",
+
+                /* ==========================================================
+                   STUDENT PROFILE
+                ========================================================== */
+                profile: "/student/profile",
+
+                /* ==========================================================
+                   STUDENT DASHBOARD
+                ========================================================== */
+                dashboard: "/student/dashboard",
+
+                /* ==========================================================
+                   STUDENT COURSES
+                ========================================================== */
+                courses: "/student/courses",
+                registerCourses: "/student/courses/register",
+
+                /* ==========================================================
+                   STUDENT RESULTS
+                   Confirmed against live Swagger docs (Student section).
+                ========================================================== */
+                results: "/student/courses/results",
+                flagResult: "/student/courses/results/:entryId/flag",
+                unflagResult: "/student/courses/results/:entryId/unflag",
+
+                /* ==========================================================
+                   FLAGGED RESULTS
+                   Confirmed against live Swagger docs (Student section).
+                ========================================================== */
+                flags: "/student/results/flags",
+                flagById: "/student/results/flags/:entryId",
+
+                /* ==========================================================
+                   NOTIFICATIONS
+                ========================================================== */
+                notifications: "/student/notifications/me"
+            },
+            REQUEST_TIMEOUT_MS: 15000,
+            // Temporary-password login used on the Sign In screen (post-activation, first login).
+            MOCK_STUDENT: {
+                email: "student@resulttrack.edu.ng",
+                password: "Student@12345",
+                id: "dev-student-001",
+                userName: "Amaka Okafor",
+                regNo: "19/CSC/0421",
+                department: "Computer Science",
+                faculty: "Natural and Applied Sciences",
+                programme: "B.Sc. Computer Science",
+                level: "300L",
+                session: "2024/2025",
+                academicStatus: "Active",
+                photoUrl: "",
+                role: "student",
+                mustChangePassword: true
+            },
+            // Mock "institution records" directory used by the Activate Account flow.
+            // In production this becomes a backend lookup keyed by institutional email / matric no.
+           MOCK_ACTIVATION_DIRECTORY: [
+            {
+                email: "student@resulttrack.edu.ng",
+                firstName: "Amaka",
+                middleName: "Chiamaka",
+                lastName: "Okafor",
+                year: "YEAR_3",
+                department: "Computer Science",
+                regNo: "19/CSC/0421",
+                programme: "B.Sc. Computer Science",
+                faculty: "Natural and Applied Sciences",
+                level: "300L",
+                session: "2024/2025",
+                academicStatus: "Active",
+                photoUrl: "",
+                alreadyActivated: false,
+                mockOtp: "123456"
+            }
+        ]
+        };
+
+        // Persists the profile captured during activation, keyed by institutional email.
+        // This is the backend-ready seam: once a real activation endpoint exists, its
+        // response (not this localStorage object) becomes the source of truth for the
+        // student's identity — nothing else in the app needs to change, since every
+        // screen already reads from the `currentUser` object built at login time.
+        const ActivationProfileStore = (function () {
+            const KEY = 'rt_activation_profiles';
+            function readAll() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (_) { return {}; } }
+            function writeAll(map) { localStorage.setItem(KEY, JSON.stringify(map)); }
+            return {
+                get(email) { return readAll()[email.trim().toLowerCase()] || null; },
+                save(email, profile) {
+                    const all = readAll();
+                    all[email.trim().toLowerCase()] = profile;
+                    writeAll(all);
+                    return profile;
+                }
+            };
+        })();
+
+        const StudentAuth = (function () {
+            class AuthError extends Error {
+                constructor(message, { status = null, code = null, kind = 'error' } = {}) {
+                    super(message); this.status = status; this.code = code; this.kind = kind;
+                }
+            }
+            async function liveRequest(path, body) {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+                let response;
+                try {
+                    response = await fetch(CONFIG.API_BASE_URL + path, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include', body: JSON.stringify(body), signal: controller.signal
+                    });
+                } catch (err) {
+                    clearTimeout(timer);
+                    if (err.name === 'AbortError') throw new AuthError("This is taking longer than expected. Please try again.", { kind: 'timeout' });
+                    throw new AuthError("We couldn't reach the server. Check your connection and try again.", { kind: 'network' });
+                }
+                clearTimeout(timer);
+                if (response.status === 204) return { status: response.status, data: null };
+                let data = null;
+                try { data = await response.json(); }
+                catch (_) {
+                    if (!response.ok) throw new AuthError("Something went wrong on our end. Please try again in a moment.", { status: response.status, kind: 'server' });
+                    return { status: response.status, data: null };
+                }
+                if (!response.ok) {
+                    const msg = (data && (data.message || data.error)) || null;
+                    if (response.status === 400) throw new AuthError(msg || "Please check the fields below and try again.", { status: 400, kind: 'validation' });
+                    if (response.status === 401) throw new AuthError(msg || "That email or password doesn't look right.", { status: 401, kind: 'auth' });
+                    if (response.status === 403) throw new AuthError(msg || "Your account isn't active. Contact your administrator.", { status: 403, kind: 'auth' });
+                    if (response.status === 429) throw new AuthError(msg || "Too many attempts. Please wait a moment and try again.", { status: 429, kind: 'auth' });
+                    if (response.status >= 500) throw new AuthError(msg || "Something went wrong on our end. Please try again in a moment.", { status: response.status, kind: 'server' });
+                    throw new AuthError(msg || "Something unexpected happened. Please try again.", { status: response.status, kind: 'server' });
+                }
+                return { status: response.status, data };
+            }
+           function mockAuthDelay(ms) { return new Promise(res => setTimeout(res, ms)); }
+            async function liveGet(path) {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+                let response;
+                try {
+                    response = await fetch(CONFIG.API_BASE_URL + path, {
+                        method: 'GET', headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include', signal: controller.signal
+                    });
+                } catch (err) {
+                    clearTimeout(timer);
+                    if (err.name === 'AbortError') throw new AuthError("This is taking longer than expected. Please try again.", { kind: 'timeout' });
+                    throw new AuthError("We couldn't reach the server. Check your connection and try again.", { kind: 'network' });
+                }
+                clearTimeout(timer);
+                let data = null;
+                try { data = await response.json(); }
+                catch (_) {
+                    if (!response.ok) throw new AuthError("Something went wrong on our end. Please try again in a moment.", { status: response.status, kind: 'server' });
+                    return null;
+                }
+                if (!response.ok) {
+                    const msg = (data && (data.message || data.error)) || null;
+                    if (response.status === 401) throw new AuthError(msg || "Your session has expired. Please sign in again.", { status: 401, kind: 'auth' });
+                    throw new AuthError(msg || "Couldn't load your profile right now.", { status: response.status, kind: 'server' });
+                }
+                return data;
+            }
+            // /student/profile is still marked "in development" on the backend, so field
+            // names aren't finalised yet — normalize with fallbacks and never overwrite
+            // good local data with something missing from the response.
+            function normalizeProfile(raw) {
+                if (!raw) return null;
+                const p = raw.data || raw;
+                if (!p || typeof p !== 'object') return null;
+              return {
+                    id: p.id ?? p.userId ?? p._id,
+                    userName: p.userName ?? p.fullName ?? p.name,
+                    email: p.email,
+                    regNo: p.regNo ?? p.regNumber ?? p.registrationNumber ?? p.matricNo,
+                    department: p.department ?? p.dept,
+                    faculty: p.faculty,
+                    programme: p.programme ?? p.program ?? p.course,
+                    level: p.level ?? p.currentLevel,
+                    year: p.year ?? p.currentYear ?? p.yearOfStudy,
+                    session: p.session ?? p.currentSession ?? p.academicSession,
+                    academicStatus: p.academicStatus ?? p.status,
+                    photoUrl: p.photoUrl ?? p.avatar ?? p.photo
+                };
+            }
+            async function mockGetProfile() { await mockAuthDelay(200); return null; }
+            async function mockLogin(email, password) {
+                await mockAuthDelay(700);
+                const activated = ActivationProfileStore.get(email);
+                if (activated && password === activated.password) {
+                    return { status: 200, data: { status: 'success', statusCode: 'OK', message: 'Login successful', data: activated } };
+                }
+                const m = CONFIG.MOCK_STUDENT;
+                if (email.trim().toLowerCase() === m.email.toLowerCase() && password === m.password) {
+                    return { status: 200, data: { status: 'success', statusCode: 'OK', message: 'Login successful', data: { id: m.id, userName: m.userName, role: m.role } } };
+                }
+                throw new AuthError("That email or password doesn't look right.", { status: 401, kind: 'auth' });
+            }
+         async function mockForgot(_email) { await mockAuthDelay(600); return { status: 200, data: { success: true, code: 'OK' } }; }
+            async function mockResetPassword(_token, _password) { await mockAuthDelay(700); return { status: 200, data: { status: 'success', message: 'Password reset.' } }; }
+
+            // Step 1 of activation: student submits name + email + year + department.
+            // Backend matches this against institution records and, if matched, emails an OTP.
+         async function mockActivateAccount(payload) {
+                await mockAuthDelay(750);
+                const record = CONFIG.MOCK_ACTIVATION_DIRECTORY.find(s => s.email.toLowerCase() === payload.email.trim().toLowerCase());
+                if (!record) throw new AuthError("We couldn't match those details to a student record. Confirm your institutional email and try again, or contact the registry.", { status: 404, kind: 'auth' });
+                if (record.alreadyActivated) throw new AuthError("This account has already been activated. Try signing in, or use \u2018Forgot password\u2019.", { status: 409, kind: 'validation' });
+                record.mockUserId = record.mockUserId || Math.floor(Math.random() * 900000) + 100000;
+                return { status: 200, data: { success: true, code: 'OK', message: 'Email found and OTP has been sent to the user email.', data: { userId: record.mockUserId } } };
+            }
+            // Step 2 of activation: student enters the OTP from their email.
+            // NOTE: live Swagger schema for /auth/verify-otp documents { userId, otp } —
+            // we're sending { email, otp } here since no step in this flow ever returns a
+            // userId. Flagged for backend confirmation; swap the payload key in
+            // StudentAuth.verifyOtp() below if the backend actually requires userId.
+         async function mockVerifyOtp(userId, otp) {
+                await mockAuthDelay(700);
+                const record = CONFIG.MOCK_ACTIVATION_DIRECTORY.find(s => s.mockUserId === userId);
+                if (!record) throw new AuthError("We couldn't find that activation request. Start again.", { status: 404, kind: 'auth' });
+                if (otp !== record.mockOtp) throw new AuthError("That code doesn't look right. Check your email and try again.", { status: 400, kind: 'validation' });
+                record.alreadyActivated = true;
+                return { status: 200, data: { success: true, code: 'OK', message: 'Account activated successfully, you can now set your password using the password reset link.', error: null } };
+            }
+                      async function mockChangePassword(_currentPassword, _newPassword) {
+                await mockAuthDelay(700);
+                return { status: 200, data: { status: 'success', message: 'Password updated.' } };
+            }
+            return {
+                AuthError,
+           login(email, password) { return CONFIG.DATA_MODE === 'mock' ? mockLogin(email, password) : liveRequest(CONFIG.ENDPOINTS.LOGIN, { email, password }); },
+            forgotPassword(email) { return CONFIG.DATA_MODE === 'mock' ? mockForgot(email) : liveRequest(CONFIG.ENDPOINTS.FORGOT_PASSWORD, { email }); },
+                resetPassword(token, password) { return CONFIG.DATA_MODE === 'mock' ? mockResetPassword(token, password) : liveRequest(CONFIG.ENDPOINTS.RESET_PASSWORD, { token, password }); },
+             activateAccount(payload) { return CONFIG.DATA_MODE === 'mock' ? mockActivateAccount(payload) : liveRequest(CONFIG.ENDPOINTS.ACTIVATE, payload); },
+            verifyOtp(userId, otp) { return CONFIG.DATA_MODE === 'mock' ? mockVerifyOtp(userId, otp) : liveRequest(CONFIG.ENDPOINTS.VERIFY_OTP, { userId, otp }); },
+                changePassword(currentPassword, newPassword) { return CONFIG.DATA_MODE === 'mock' ? mockChangePassword(currentPassword, newPassword) : liveRequest(CONFIG.ENDPOINTS.changePassword, { currentPassword, newPassword }); },
+                           logout() { return CONFIG.DATA_MODE === 'mock' ? mockAuthDelay(200) : liveRequest(CONFIG.ENDPOINTS.LOGOUT, {}); },
+                async getProfile() {
+                    if (CONFIG.DATA_MODE === 'mock') return mockGetProfile();
+                    const raw = await liveGet(CONFIG.ENDPOINTS.profile);
+                    return normalizeProfile(raw);
+                }
+            };
+        })();
+
+      
+
+        const RegisteredCoursesStore = (function () {
+                // Prefer regNo (stable, backend-issued) over email, since /student/profile is
+                // still in development and email casing can vary between logins.
+                function storeKey() {
+                    const idPart = (currentUser && (currentUser.regNo || currentUser.id || (currentUser.email && currentUser.email.trim().toLowerCase()))) || 'unknown';
+                    return 'rt_registered_courses_' + idPart;
+                }
+                return {
+                    get() { try { return JSON.parse(localStorage.getItem(storeKey())) || []; } catch (_) { return []; } },
+                    set(ids) { localStorage.setItem(storeKey(), JSON.stringify(ids)); }
+                };
+            })();
+
+       const DEV_RESULTS = [
+            { id: 1, entryId: 101, title: 'CSC 301 — Data Structures', ca: 28, exam: 62, total: 90, grade: 'A', status: 'pass', isFlagged: false, flag: null, flagDescription: null },
+            { id: 2, entryId: 102, title: 'CSC 303 — Operating Systems', ca: 29, exam: 66, total: 95, grade: 'A', status: 'pass', isFlagged: false, flag: null, flagDescription: null },
+            { id: 3, entryId: 103, title: 'CSC 305 — Database Systems', ca: 24, exam: 54, total: 78, grade: 'B', status: 'pass', isFlagged: false, flag: null, flagDescription: null },
+            { id: 4, entryId: null, title: 'CSC 307 — Computer Networks', ca: null, exam: null, total: null, grade: null, status: 'pending', isFlagged: false, flag: null, flagDescription: null },
+            { id: 5, entryId: 104, title: 'CSC 309 — Software Engineering', ca: 26, exam: 58, total: 84, grade: 'A', status: 'pass', isFlagged: false, flag: null, flagDescription: null },
+            { id: 6, entryId: null, title: 'GST 301 — Entrepreneurship Studies', ca: null, exam: null, total: null, grade: null, status: 'pending', isFlagged: false, flag: null, flagDescription: null }
+        ];
+        const DEV_NOTIFICATIONS = [
+            { id: 'n1', kind: 'result', text: 'Your result for CSC 305 has been published.', time: '2 hours ago', read: false },
+            { id: 'n2', kind: 'flag', text: 'Your flag on CSC 303 has been assigned to your lecturer.', time: '5 hours ago', read: false },
+            { id: 'n3', kind: 'flag', text: 'Your flag on CSC 303 is now under review.', time: 'Yesterday', read: false },
+            { id: 'n4', kind: 'general', text: 'The 2024/2025 Semester 2 academic calendar has been released.', time: '3 days ago', read: true },
+            { id: 'n5', kind: 'flag', text: 'A previous flag you raised was approved and your result was updated.', time: '1 week ago', read: true }
+        ];
+    function mockDataDelay(ms) { return new Promise(res => setTimeout(res, ms || 350)); }
+ const StudentData = {
+        async getResults() {
+            if (CONFIG.DATA_MODE === 'mock') { await mockDataDelay(); return JSON.parse(JSON.stringify(DEV_RESULTS)); }
+            const raw = await apiGet(CONFIG.ENDPOINTS.results);
+            return normalizeResultEntries(raw);
+        },
+      async getNotifications() {
+         if (CONFIG.DATA_MODE === 'mock') { await mockDataDelay(200); return JSON.parse(JSON.stringify(DEV_NOTIFICATIONS)); }
+         const raw = await apiGet(CONFIG.ENDPOINTS.notifications);
+         return normalizeNotifications(raw);
+     },
+        async getCourses() {
+            if (CONFIG.DATA_MODE === 'mock') {
+                await mockDataDelay(300);
+                // Mock mode has no dedicated course directory — derive a simple list
+                // from the dev results so the view isn't empty during local testing.
+                return DEV_RESULTS.map(r => ({ id: r.id, name: r.title, department: (currentUser && currentUser.department) || '—', year: null, classLevel: null, isActive: true, teachers: [] }));
+            }
+   const yearEnum = getEffectiveYearEnum();
+            const query = yearEnum ? `?year=${encodeURIComponent(yearEnum)}` : '';
+            console.log('[getCourses] currentUser.level =', currentUser && currentUser.level, '→ query:', query || '(none)');
+            const raw = await apiGet(CONFIG.ENDPOINTS.courses + query);
+            console.log('[getCourses] raw response:', raw);
+            const normalized = normalizeCourseList(raw);
+    console.log('[getCourses] normalized:', normalized);
+          return normalized;
+      },
+      async registerCourses(courseIds) {
+          if (CONFIG.DATA_MODE === 'mock') {
+              await mockDataDelay(500);
+              return { success: true, message: 'Mock registration complete.', data: { summary: { totalRequested: courseIds.length, successfullyRegistered: courseIds.length, invalidCourses: 0, invalidCourseIds: [] }, courses: courseIds.map(id => ({ id })) } };
+          }
+          return apiPost(CONFIG.ENDPOINTS.registerCourses, { courseIds });
+      }
+  };
+
+    // Best-effort GET for live-mode analytics — returns null on any failure so a
+    // flaky/in-development endpoint never blocks rendering the dashboard.
+  async function apiGet(path) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+        try {
+            const response = await fetch(CONFIG.API_BASE_URL + path, {
+                method: 'GET', headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', signal: controller.signal
+            });
+            clearTimeout(timer);
+            if (!response.ok) {
+                let bodyText = '';
+                try { bodyText = await response.text(); } catch (_) { /* ignore */ }
+                console.warn(`[apiGet] ${path} → ${response.status} ${response.statusText}`, bodyText);
+                return null;
+            }
+            try { return await response.json(); } catch (err) {
+                console.warn(`[apiGet] ${path} → 200 but body wasn't valid JSON`, err);
+                return null;
+            }
+    } catch (err) {
+                clearTimeout(timer);
+                console.warn(`[apiGet] ${path} → request failed`, err);
+                return null;
+            }
+        }
+        class ApiError extends Error {
+            constructor(message, { status = null, code = null } = {}) { super(message); this.status = status; this.code = code; }
+        }
+     async function apiPost(path, body) { return apiRequest('POST', path, body); }
+        async function apiPatch(path, body) { return apiRequest('PATCH', path, body); }
+        async function apiRequest(method, path, body) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+            let response;
+            try {
+                response = await fetch(CONFIG.API_BASE_URL + path, {
+                    method, headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', body: JSON.stringify(body), signal: controller.signal
+                });
+            } catch (err) {
+                clearTimeout(timer);
+                if (err.name === 'AbortError') throw new ApiError("This is taking longer than expected. Please try again.");
+                throw new ApiError("We couldn't reach the server. Check your connection and try again.");
+            }
+            clearTimeout(timer);
+            let data = null;
+            try { data = await response.json(); } catch (_) { /* ignore */ }
+            if (!response.ok) {
+                const msg = (data && (data.message || data.error)) || null;
+                throw new ApiError(msg || "Something went wrong. Please try again.", { status: response.status, code: data && data.code });
+            }
+            return data;
+        }
+        const FlagsApi = {
+                // Confirmed against Swagger: PATCH /student/courses/results/:entryId/flag, body { description }.
+                create(entryId, payload) { return apiPatch(CONFIG.ENDPOINTS.flagResult.replace(':entryId', entryId), payload); },
+                // Confirmed against Swagger: PATCH /student/courses/results/:entryId/unflag, body { description } (empty body accepted).
+                remove(entryId) { return apiPatch(CONFIG.ENDPOINTS.unflagResult.replace(':entryId', entryId), {}); },
+                list() { return apiGet(CONFIG.ENDPOINTS.flags); },
+                getById(entryId) { return apiGet(CONFIG.ENDPOINTS.flagById.replace(':entryId', entryId)); }
+            };
+        // /student/dashboard is still marked "in development" on the backend — field
+    // names aren't finalised, so pull whatever's there with fallbacks and let
+    // renderDashboard() fall back to locally computed numbers for anything missing.
+    function normalizeDashboardStats(raw) {
+        if (!raw) return null;
+        const d = raw.data || raw;
+        if (!d || typeof d !== 'object') return null;
+        return {
+            totalCourses: d.totalCourses ?? d.registeredCourses ?? d.coursesCount ?? d.courses,
+            publishedResults: d.publishedResults ?? d.publishedCount ?? d.published,
+            pendingResults: d.pendingResults ?? d.pendingCount ?? d.pending ?? d.awaitingResults,
+            activeFlags: d.activeFlags ?? d.flagsCount ?? d.flags,
+            completedUnits: d.completedUnits ?? d.creditsCompleted ?? d.unitsCompleted,
+            totalUnits: d.totalUnits ?? d.creditsTotal ?? d.requiredUnits ?? d.totalRequiredUnits
+        };
+    }
+   async function loadDashboardStats() {
+        if (CONFIG.DATA_MODE !== 'live') { dashboardStats = null; return; }
+        const raw = await apiGet(CONFIG.ENDPOINTS.dashboard);
+        dashboardStats = normalizeDashboardStats(raw);
+    }
+    // Maps the student's level (e.g. "300L") to the YEAR_n enum /student/courses expects.
+ // Resolves the YEAR_n enum /student/courses expects. Checks every field that
+    // could plausibly hold it, in order — an explicit "YEAR_3"-style value first,
+    // then a numeric fallback that handles both "300L" and a bare "3".
+    function resolveYearEnum(user) {
+        if (!user) return null;
+        const candidates = [user.year, user.currentYear, user.level, user.currentLevel];
+        for (const val of candidates) {
+            if (typeof val === 'string' && /^YEAR_[1-7]$/i.test(val.trim())) return val.trim().toUpperCase();
+        }
+        for (const val of candidates) {
+            const n = parseInt((val || '').toString().replace(/\D/g, ''), 10);
+            if (!n) continue;
+            const year = n >= 100 ? Math.round(n / 100) : n; // "300L"/"300" → 3, bare "3" → 3
+            if (year >= 1 && year <= 7) return `YEAR_${year}`;
+        }
+        return null;
+    }
+
+      // /student/profile doesn't return a year/level field for every account yet
+        // (still in development — this admin-created account is a case in point). When
+        // we can't derive it automatically, ask the student once and remember their
+        // answer on this device until the backend fills this in.
+        function yearOverrideKey() {
+            const id = (currentUser && (currentUser.email || currentUser.id)) || 'unknown';
+            return `rt_student_year_override_${id}`;
+        }
+        function getStoredYearOverride() { return localStorage.getItem(yearOverrideKey()); }
+        function setStoredYearOverride(yearEnum) { localStorage.setItem(yearOverrideKey(), yearEnum); }
+        function getEffectiveYearEnum() { return resolveYearEnum(currentUser) || getStoredYearOverride(); }
+   function normalizeResultEntries(raw) {
+        const groups = (raw && raw.data && Array.isArray(raw.data.results)) ? raw.data.results : [];
+        const flat = [];
+        groups.forEach(group => {
+            (group.courses || []).forEach(c => {
+                flat.push({
+                    id: c.courseId,
+                    // Live API returns the result entry's identifier as "id" (confirmed
+                    // by the flag-endpoint response schema), not "entryId". Fall back
+                    // through both names so this keeps working either way.
+                    entryId: c.entryId ?? c.id,
+                    title: c.courseName,
+                        ca: c.caScore,
+                        exam: c.examScore,
+                        total: c.totalScore,
+                        grade: c.grade,
+                        status: (c.status || '').toUpperCase() === 'PASS' ? 'pass' : ((c.status || '').toUpperCase() === 'FAIL' ? 'fail' : 'pending'),
+                        isFlagged: Boolean(c.isFlagged),
+                        flag: c.flag || null,
+                        flagDescription: c.flagDescription || null,
+                        resultId: group.resultId,
+                        submittedAt: group.submittedAt,
+                        updatedAt: group.updatedAt
+                    });
+                });
+            });
+            return flat;
+        }
+        function mergeCoursesWithResults(courses, resultEntries) {
+            const byCourseId = new Map();
+            (resultEntries || []).forEach(entry => byCourseId.set(entry.id, entry));
+            const merged = [];
+            (courses || []).forEach(c => {
+                const entry = byCourseId.get(c.id);
+                if (entry) { merged.push(entry); byCourseId.delete(c.id); }
+                else merged.push({ id: c.id, entryId: null, title: c.name, ca: null, exam: null, total: null, grade: null, status: 'pending', isFlagged: false, flag: null, flagDescription: null });
+            });
+            byCourseId.forEach(entry => merged.push(entry));
+            return merged;
+        }
+        function normalizeCourseList(raw) {
+        const arr = (raw && Array.isArray(raw.data)) ? raw.data : (Array.isArray(raw) ? raw : []);
+        return arr.map(c => ({
+            id: c.id,
+            name: c.name,
+            department: c.department,
+            year: c.year,
+            classLevel: c.class,
+            isActive: Boolean(c.isActive),
+            teachers: Array.isArray(c.teachers) ? c.teachers.map(t => {
+                const u = t.user || {};
+                const fullName = [u.firstName, u.lastName].filter(Boolean).join(' ').trim();
+                return fullName || 'Unassigned';
+            }) : []
+        }));
+    }
+
+        const Session = {
+            KEY: 'rt_student_mock_session',
+            get() { try { return JSON.parse(sessionStorage.getItem(this.KEY)); } catch (_) { return null; } },
+            set(user) { sessionStorage.setItem(this.KEY, JSON.stringify(user)); },
+            clear() { sessionStorage.removeItem(this.KEY); }
+        };
+
+        const NAV_ITEMS = [
+                { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+                { id: 'courses', label: 'My Courses', icon: 'book-open' },
+        { id: 'results', label: 'My Results', icon: 'file-bar-chart' },
+            { id: 'transcript', label: 'Transcript', icon: 'scroll-text' },
+            { id: 'flags', label: 'Result Flags', icon: 'flag' },
+            { id: 'notifications', label: 'Notifications', icon: 'bell' },
+            { id: 'profile', label: 'Profile', icon: 'user-circle' }
+        ];
+
+        function cloneLogo() { return document.getElementById('logoMarkTpl').content.cloneNode(true); }
+        function mountLogo(slotId, label) {
+            const slot = document.getElementById(slotId);
+            slot.appendChild(cloneLogo());
+            if (label) { const span = document.createElement('span'); span.textContent = label; slot.appendChild(span); }
+        }
+        function showToast(message, kind = 'default') {
+            const stack = document.getElementById('toastStack');
+            const el = document.createElement('div');
+            el.className = 'toast' + (kind !== 'default' ? ' ' + kind : '');
+            const iconName = kind === 'success' ? 'check-circle' : kind === 'error' ? 'alert-circle' : kind === 'warn' ? 'alert-triangle' : 'info';
+            el.innerHTML = `<i data-lucide="${iconName}" style="width:16px;height:16px;flex-shrink:0;margin-top:1px"></i><span>${message}</span>`;
+            stack.appendChild(el); lucide.createIcons();
+            setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(-4px)'; el.style.transition = 'all .2s'; setTimeout(() => el.remove(), 200); }, 3600);
+        }
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            nav.innerHTML = '';
+            NAV_ITEMS.forEach(item => {
+                const a = document.createElement('a');
+                a.href = '#' + item.id; a.className = 'sidebar-link'; a.dataset.route = item.id;
+                a.innerHTML = `<i data-lucide="${item.icon}" class="sidebar-link-icon"></i> ${item.label}${item.id === 'notifications' ? '<span class="sidebar-link-count" id="navNotifCount" hidden></span>' : ''}`;
+                nav.appendChild(a);
+            });
+            lucide.createIcons();
+        }
+
+        function navigate(routeId) {
+            if (!routeId || !NAV_ITEMS.find(n => n.id === routeId)) routeId = 'dashboard';
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('is-active'));
+            document.querySelectorAll('.sidebar-link[data-route]').forEach(l => l.classList.toggle('is-active', l.dataset.route === routeId));
+            const el = document.getElementById('view-' + routeId);
+            el.classList.add('is-active');
+            document.getElementById('topbarTitle').textContent = el.dataset.title || routeId;
+            closeMobileSidebar();
+            window.scrollTo(0, 0);
+      if (routeId === 'courses') renderCoursesView();
+            if (routeId === 'results') renderResultsTable();
+            if (routeId === 'flags') renderFlagsTable();
+            if (routeId === 'notifications') renderNotificationsFull();
+            if (routeId === 'transcript') renderTranscriptView();
+        }
+        window.addEventListener('hashchange', () => navigate(location.hash.replace('#', '')));
+        document.querySelectorAll('[data-route-link]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); location.hash = el.dataset.routeLink; }));
+
+        function openMobileSidebar() { document.getElementById('sidebar').classList.add('is-open'); document.getElementById('sidebarOverlay').classList.add('is-active'); }
+        function closeMobileSidebar() { document.getElementById('sidebar').classList.remove('is-open'); document.getElementById('sidebarOverlay').classList.remove('is-active'); }
+        document.getElementById('menuToggleBtn').addEventListener('click', openMobileSidebar);
+        document.getElementById('sidebarOverlay').addEventListener('click', closeMobileSidebar);
+
+     let currentUser = null;
+        let allResults = [];
+        let allNotifications = [];
+        let allCourses = [];
+        let dashboardStats = null;
+       // set after OTP verify, cleared once the activation-triggered password set succeeds
+
+      
+      async function loadAllData() {
+            allCourses = await StudentData.getCourses();
+            const resultEntries = await StudentData.getResults();
+            allResults = mergeCoursesWithResults(allCourses, resultEntries);
+            allNotifications = await StudentData.getNotifications();
+        }
+    function computeRegisteredCourseIds() {
+            const registered = new Set(RegisteredCoursesStore.get());
+            const validIds = new Set(allCourses.map(c => c.id));
+            return Array.from(registered).filter(id => validIds.has(id));
+        }
+
+        function renderDashboard() {
+            const registeredCount = computeRegisteredCourseIds().length;
+
+            document.getElementById('statCourses').textContent = registeredCount;
+            document.getElementById('statPublished').textContent = (dashboardStats && dashboardStats.publishedResults != null) ? dashboardStats.publishedResults : allResults.filter(r => r.status === 'pass' || r.status === 'fail').length;
+            document.getElementById('statPending').textContent = (dashboardStats && dashboardStats.pendingResults != null) ? dashboardStats.pendingResults : allResults.filter(r => r.status === 'pending').length;
+            document.getElementById('statFlags').textContent = (dashboardStats && dashboardStats.activeFlags != null) ? dashboardStats.activeFlags : allResults.filter(r => r.isFlagged).length;
+
+            const recent = allResults.filter(r => r.status === 'pass' || r.status === 'fail').slice(0, 4);
+            document.getElementById('recentResultsList').innerHTML = recent.map(r => `
+        <div class="activity-row">
+            <div class="activity-icon"><i data-lucide="book-open" style="width:15px;height:15px"></i></div>
+            <div style="flex:1"><div class="activity-text"><strong>${r.title}</strong></div><div class="activity-time">Total ${r.total}/100 · Grade ${r.grade}</div></div>
+            <span class="badge blue">${r.grade}</span>
+        </div>`).join('') || '<p style="font-size:13px;color:var(--text-tertiary)">No published results yet.</p>';
+
+            renderNotifDashList();
+            updateNotifBadges();
+            lucide.createIcons();
+        }
+        function renderNotifDashList() {
+            const list = allNotifications.slice(0, 4);
+            document.getElementById('dashNotifList').innerHTML = list.map(n => `
+        <div class="activity-row">
+            <div class="activity-icon ${n.read ? '' : 'unread'}"><i data-lucide="${n.kind === 'flag' ? 'flag' : n.kind === 'result' ? 'check-circle' : 'info'}" style="width:14px;height:14px"></i></div>
+            <div><div class="activity-text">${n.text}</div><div class="activity-time">${n.time}</div></div>
+        </div>`).join('') || '<p style="font-size:13px;color:var(--text-tertiary)">Nothing new.</p>';
+        }
+        function updateNotifBadges() {
+            const unread = allNotifications.filter(n => !n.read).length;
+            const dot = document.getElementById('notifDot');
+            const count = document.getElementById('navNotifCount');
+            dot.hidden = unread === 0;
+            if (count) { count.hidden = unread === 0; count.textContent = unread; }
+        }
+
+     
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#transcriptPrintBtn')) window.print();
+        });
+
+     function renderTranscriptView() {
+            document.getElementById('transcriptStudentName').textContent = currentUser.userName || '—';
+            document.getElementById('transcriptRegNo').textContent = currentUser.regNo || '—';
+            document.getElementById('transcriptProgramme').textContent = currentUser.programme || '—';
+
+            const bySubmission = {};
+            allResults.filter(r => r.status === 'pass' || r.status === 'fail').forEach(r => {
+                const key = r.resultId ?? 'unassigned';
+                if (!bySubmission[key]) bySubmission[key] = { submittedAt: r.submittedAt, rows: [] };
+                bySubmission[key].rows.push(r);
+            });
+            const groupKeys = Object.keys(bySubmission).sort((a, b) => new Date(bySubmission[b].submittedAt || 0) - new Date(bySubmission[a].submittedAt || 0));
+            document.getElementById('transcriptSessionGroups').innerHTML = groupKeys.length ? groupKeys.map(key => {
+                const group = bySubmission[key];
+                const dateLabel = group.submittedAt ? new Date(group.submittedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) : (currentUser.session || 'Current Session');
+                return `<div class="card" style="margin-bottom:16px">
+                    <div class="panel-title"><h2>${dateLabel}</h2></div>
+                    <div class="table-wrap" style="border:none">
+                        <div class="table-scroll">
+                            <table class="rt-table">
+                                <thead><tr><th>Course</th><th>Total</th><th>Grade</th></tr></thead>
+                                <tbody>${group.rows.map(r => `<tr><td class="cell-primary">${r.title}</td><td>${r.total ?? '—'}</td><td><span class="badge blue">${r.grade ?? '—'}</span></td></tr>`).join('')}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('') : '<div class="empty-state"><div class="empty-icon"><i data-lucide="scroll-text" style="width:26px;height:26px"></i></div><div class="empty-title">Nothing to show yet</div><div class="empty-desc">Your transcript fills in as results are published.</div></div>';
+            lucide.createIcons();
+        }
+    function renderCoursesView() {
+            const grid = document.getElementById('coursesGrid');
+            const empty = document.getElementById('coursesEmptyState');
+            empty.hidden = allCourses.length > 0;
+            const registeredIds = new Set(RegisteredCoursesStore.get());
+            grid.innerHTML = allCourses.map(c => {
+                const isRegistered = registeredIds.has(c.id);
+                const statusBadge = isRegistered ? '<span class="badge success">Registered</span>' : (c.isActive === false ? '<span class="badge slate">Inactive</span>' : '<span class="badge gold">Not registered</span>');
+                // Every course gets a checkbox, pre-checked if already registered. The
+                // register endpoint REPLACES the full registration set on the backend,
+                // so every call must send the complete list the student wants registered
+                // — not just newly-selected ones — or previously registered courses
+                // get silently dropped.
+                return `
+    <div class="card">
+        <div class="panel-title" style="margin-bottom:10px">
+            <h2 style="font-size:14.5px">${c.name || 'Untitled course'}</h2>
+            ${statusBadge}
+        </div>
+        <div class="stat-lbl" style="margin-bottom:8px">${c.department || '—'}${c.year ? ' · ' + c.year.replace('YEAR_', 'Year ') : ''}</div>
+        <div class="stat-lbl" style="margin-bottom:10px">Lecturer${c.teachers && c.teachers.length > 1 ? 's' : ''}: <span class="cell-primary" style="font-weight:600">${(c.teachers && c.teachers.length) ? c.teachers.join(', ') : 'Not yet assigned'}</span></div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer"><input type="checkbox" class="course-select-cb" data-course-id="${c.id}" ${isRegistered ? 'checked' : ''} style="width:16px;height:16px;accent-color:var(--primary)"> ${isRegistered ? 'Keep registered' : 'Select to register'}</label>
+    </div>`;
+            }).join('');
+            lucide.createIcons();
+            updateRegisterCoursesButton();
+            document.querySelectorAll('.course-select-cb').forEach(cb => cb.addEventListener('change', updateRegisterCoursesButton));
+        }
+    function updateRegisterCoursesButton() {
+        const btn = document.getElementById('registerCoursesBtn');
+        if (!btn) return;
+        const count = document.querySelectorAll('.course-select-cb:checked').length;
+        btn.disabled = count === 0;
+        btn.querySelector('.btn-label').innerHTML = count > 0
+            ? `<i data-lucide="check-circle" style="width:14px;height:14px"></i> Register ${count} course${count === 1 ? '' : 's'}`
+            : `<i data-lucide="check-circle" style="width:14px;height:14px"></i> Register selected courses`;
+        lucide.createIcons();
+    }
+            
+
+       function renderResultsTable() {
+            const search = document.getElementById('resultsSearchInput').value.trim().toLowerCase();
+            const status = document.getElementById('resultsStatusFilter').value;
+            const flaggedOnly = document.getElementById('resultsFlaggedOnly').checked;
+            let rows = allResults.filter(r => {
+                if (search && !r.title.toLowerCase().includes(search)) return false;
+                if (status !== 'all' && r.status !== status) return false;
+                if (flaggedOnly && !r.isFlagged) return false;
+                return true;
+            });
+
+            document.getElementById('resultsTableBody').innerHTML = rows.map(r => {
+                const statusBadge = r.status === 'pass' ? '<span class="badge success">Passed</span>'
+                    : r.status === 'fail' ? '<span class="badge error">Failed</span>'
+                        : '<span class="badge gold">Awaiting result</span>';
+                const flagBadge = r.isFlagged ? ' <span class="badge slate" title="Flagged"><i data-lucide="flag" style="width:10px;height:10px"></i></span>' : '';
+                return `<tr>
+            <td class="cell-primary">${r.title}${flagBadge}</td>
+            <td>${r.ca ?? '—'}</td>
+            <td>${r.exam ?? '—'}</td>
+            <td class="cell-primary">${r.total ?? '—'}</td>
+            <td>${r.grade ? `<span class="badge blue">${r.grade}</span>` : '—'}</td>
+            <td>${statusBadge}</td>
+            <td class="cell-actions">
+                ${r.entryId && !r.isFlagged ? `<button class="row-icon-btn" data-flag-entry="${r.entryId}" title="Flag this result"><i data-lucide="flag" style="width:15px;height:15px"></i></button>` : ''}
+                ${r.entryId && r.isFlagged ? `<button class="row-icon-btn" data-unflag-entry="${r.entryId}" title="Withdraw flag"><i data-lucide="undo-2" style="width:15px;height:15px"></i></button>` : ''}
+            </td>
+        </tr>`;
+            }).join('');
+            document.getElementById('resultsFootInfo').textContent = `${rows.length} course${rows.length === 1 ? '' : 's'}`;
+            lucide.createIcons();
+
+            document.querySelectorAll('[data-flag-entry]').forEach(btn => btn.addEventListener('click', () => openFlagModal(Number(btn.dataset.flagEntry))));
+            document.querySelectorAll('[data-unflag-entry]').forEach(btn => btn.addEventListener('click', () => handleUnflag(Number(btn.dataset.unflagEntry))));
+        }
+      document.getElementById('resultsSearchInput').addEventListener('input', renderResultsTable);
+        document.getElementById('resultsStatusFilter').addEventListener('change', renderResultsTable);
+        document.getElementById('resultsFlaggedOnly').addEventListener('change', renderResultsTable);
+
+       document.getElementById('resultsExportBtn').addEventListener('click', () => {
+            const rows = [['Course', 'CA', 'Exam', 'Total', 'Grade', 'Status']];
+            allResults.forEach(r => rows.push([r.title, r.ca ?? '', r.exam ?? '', r.total ?? '', r.grade ?? '', r.status]));
+            const csv = rows.map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'my-results.csv'; a.click();
+            URL.revokeObjectURL(url);
+            showToast('Results exported as CSV.', 'success');
+        });
+      document.getElementById('resultsPrintBtn').addEventListener('click', () => window.print());
+
+  document.getElementById('registerCoursesBtn').addEventListener('click', async () => {
+        const ids = Array.from(document.querySelectorAll('.course-select-cb:checked')).map(cb => Number(cb.dataset.courseId));
+        if (!ids.length) return;
+        const btn = document.getElementById('registerCoursesBtn');
+        btn.classList.add('is-loading'); btn.disabled = true;
+        try {
+            const res = await StudentData.registerCourses(ids);
+            const summary = res && res.data && res.data.summary;
+            // POST /student/courses/register REPLACES the student's full registration —
+            // the returned `courses` list is the new complete set. Mirror it exactly
+            // instead of merging with whatever was stored locally before.
+            const registeredNow = (res && res.data && Array.isArray(res.data.courses)) ? res.data.courses.map(c => c.id) : ids;
+            RegisteredCoursesStore.set(registeredNow);
+            allCourses = await StudentData.getCourses();
+            renderCoursesView();
+            renderDashboard();
+            if (summary) {
+                showToast(`Registered ${summary.successfullyRegistered} of ${summary.totalRequested} course${summary.totalRequested === 1 ? '' : 's'}.${summary.invalidCourses ? ` ${summary.invalidCourses} invalid.` : ''}`, summary.invalidCourses ? 'warn' : 'success');
+            } else {
+                showToast('Courses registered.', 'success');
+            }
+        } catch (err) {
+            showToast(err.message || 'Could not register courses. Please try again.', 'error');
+        } finally {
+            btn.classList.remove('is-loading'); btn.disabled = false;
+        }
+    });
+
+      function openFlagModal(entryId) {
+            const course = allResults.find(r => r.entryId === entryId);
+            if (!course) return;
+            document.getElementById('flagCourseSummary').innerHTML = `
+        <div><div class="fc-title">${course.title}</div><div class="fc-sub">CA ${course.ca ?? '—'}/30 · Exam ${course.exam ?? '—'}/70 · Total ${course.total ?? '—'}/100 · Grade ${course.grade ?? '—'}</div></div>`;
+            document.getElementById('flagForm').reset();
+            document.getElementById('flagCharCounter').textContent = '0 / 600';
+            document.getElementById('flagForm').dataset.entryId = entryId;
+            const overlay = document.getElementById('flagOverlay'), modal = document.getElementById('flagModal');
+            overlay.hidden = false; modal.hidden = false;
+            requestAnimationFrame(() => { overlay.classList.add('is-visible'); modal.classList.add('is-open'); });
+        }
+        function closeFlagModal() {
+            const overlay = document.getElementById('flagOverlay'), modal = document.getElementById('flagModal');
+            overlay.classList.remove('is-visible'); modal.classList.remove('is-open');
+            setTimeout(() => { overlay.hidden = true; modal.hidden = true; }, 200);
+        }
+        document.getElementById('flagModalClose').addEventListener('click', closeFlagModal);
+        document.getElementById('flagCancelBtn').addEventListener('click', closeFlagModal);
+        document.getElementById('flagOverlay').addEventListener('click', closeFlagModal);
+        document.getElementById('flagDesc').addEventListener('input', (e) => { document.getElementById('flagCharCounter').textContent = `${e.target.value.length} / 600`; });
+   document.getElementById('flagForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const entryId = Number(e.target.dataset.entryId);
+        const course = allResults.find(r => r.entryId === entryId);
+        const reason = document.getElementById('flagReason').value;
+        const desc = document.getElementById('flagDesc').value.trim();
+        const errEl = document.getElementById('flagDescError');
+        if (!reason) { showToast('Select a reason for the flag.', 'error'); return; }
+        if (desc.length < 15) { errEl.textContent = 'Please add a little more detail (at least 15 characters).'; return; }
+        errEl.textContent = '';
+
+        const btn = document.getElementById('flagSubmitBtn');
+        btn.classList.add('is-loading'); btn.disabled = true;
+        try {
+            // Backend only accepts { description } — fold the chosen reason into the
+            // text itself so it isn't lost, since there's no separate `reason` field.
+            const reasonLabel = REASON_LABELS[reason] || reason;
+            const fullDescription = `[${reasonLabel}] ${desc}`;
+            const res = await FlagsApi.create(entryId, { description: fullDescription });
+            const updatedEntry = res && res.data && res.data.entry;
+            if (course) {
+                course.isFlagged = true;
+                course.flag = (updatedEntry && updatedEntry.flag) || reason;
+                course.flagDescription = (updatedEntry && updatedEntry.flagDescription) || fullDescription;
+                if (updatedEntry && updatedEntry.status) {
+                    course.status = (updatedEntry.status || '').toUpperCase() === 'PASS' ? 'pass' : ((updatedEntry.status || '').toUpperCase() === 'FAIL' ? 'fail' : 'pending');
+                }
+            }
+            closeFlagModal();
+            showToast(`Flag submitted${course ? ' for ' + course.title : ''}. Your lecturer will be notified.`, 'success');
+            renderResultsTable();
+            renderDashboard();
+        } catch (err) {
+            showToast(err.message || 'Could not submit the flag. Please try again.', 'error');
+        } finally {
+            btn.classList.remove('is-loading'); btn.disabled = false;
+        }
+    });
+
+     async function handleUnflag(entryId) {
+            const course = allResults.find(r => r.entryId === entryId);
+            try {
+                const res = await FlagsApi.remove(entryId);
+                const updatedEntry = res && res.data && res.data.entry;
+                if (course) {
+                    course.isFlagged = false;
+                    course.flag = null;
+                    course.flagDescription = null;
+                    if (updatedEntry) {
+                        course.ca = updatedEntry.caScore ?? course.ca;
+                        course.exam = updatedEntry.examScore ?? course.exam;
+                        course.total = updatedEntry.totalScore ?? course.total;
+                        course.grade = updatedEntry.grade ?? course.grade;
+                        if (updatedEntry.status) {
+                            course.status = (updatedEntry.status || '').toUpperCase() === 'PASS' ? 'pass' : ((updatedEntry.status || '').toUpperCase() === 'FAIL' ? 'fail' : 'pending');
+                        }
+                    }
+                }
+                showToast('Flag withdrawn.', 'default');
+                renderResultsTable();
+                renderDashboard();
+            } catch (err) {
+                showToast(err.message || 'Could not withdraw the flag. Please try again.', 'error');
+            }
+        }
+
+     const REASON_LABELS = { ca_score: 'Incorrect CA score', exam_score: 'Incorrect exam score', grade_computation: "Grade doesn't match scores", not_reflecting: 'Result not reflecting', other: 'Other' };
+                const FLAG_STEPS = [
+                        { key: 'submitted', label: 'Submitted', icon: 'send' },
+                        { key: 'pending_review', label: 'Pending Review', icon: 'clock' },
+                        { key: 'resolved', label: 'Approved', icon: 'check' }
+                    ];
+        const FLAG_STATUS_BADGE = {
+            pending: '<span class="badge gold">Pending Review</span>',
+            pending_review: '<span class="badge gold">Pending Review</span>',
+            assigned: '<span class="badge blue">Assigned to Lecturer</span>',
+            under_review: '<span class="badge blue">Under Review</span>',
+            reviewed: '<span class="badge teal">Reviewed</span>',
+            resolved: '<span class="badge success">Approved</span>',
+            rejected: '<span class="badge error">Rejected</span>'
+        };
+        function renderFlagStepper(status) {
+            const normalized = (status || '').toLowerCase() === 'pending' ? 'pending_review' : (status || '').toLowerCase();
+            if (normalized === 'rejected') {
+                return `<div class="flag-stepper">
+                    <div class="flag-step is-done"><div class="flag-step-line"></div><div class="flag-step-dot"><i data-lucide="check" style="width:12px;height:12px"></i></div><div class="flag-step-lbl">Submitted</div></div>
+                    <div class="flag-step is-rejected"><div class="flag-step-dot"><i data-lucide="x" style="width:12px;height:12px"></i></div><div class="flag-step-lbl">Rejected</div></div>
+                </div>`;
+            }
+            const idx = Math.max(0, FLAG_STEPS.findIndex(s => s.key === normalized));
+            return `<div class="flag-stepper">${FLAG_STEPS.map((s, i) => {
+                const cls = i < idx ? 'is-done' : i === idx ? 'is-current' : '';
+                const dotContent = i < idx ? '<i data-lucide="check" style="width:12px;height:12px"></i>' : (i + 1);
+                return `<div class="flag-step ${cls}"><div class="flag-step-line"></div><div class="flag-step-dot">${dotContent}</div><div class="flag-step-lbl">${s.label}</div></div>`;
+            }).join('')}</div>`;
+        }
+
+      
+                               // Confirmed against a real /student/results/flags entry (Aug 27 2026):
+                                // the backend has no isResolved/status field for the flag pipeline —
+                                // only `resolution` (lecturer's note) and `resolvedAt` (timestamp), which
+                                // are only present once a lecturer has actually resolved the flag. The
+                                // reason label isn't a separate field either — it's embedded as a
+                                // "[Reason label] rest of the message" prefix inside flagDescription,
+                                // exactly as it was written on submit (see flagForm submit handler).
+                                function splitFlagDescription(raw) {
+                                    if (!raw) return { reasonLabel: null, description: '' };
+                                    const m = /^\[(.*?)\]\s*([\s\S]*)$/.exec(raw);
+                                    return m ? { reasonLabel: m[1], description: m[2] } : { reasonLabel: null, description: raw };
+                                }
+                                function normalizeFlagListItem(f) {
+                                    const isResolved = Boolean(f.resolution) || Boolean(f.resolvedAt);
+                                    const { reasonLabel, description } = splitFlagDescription(f.flagDescription ?? f.description ?? f.note);
+                                    return {
+                                        entryId: f.entryId ?? f.resultEntryId ?? f.id,
+                                        courseName: f.courseName ?? (f.course && f.course.name) ?? f.courseTitle ?? 'Course',
+                                        reasonLabel: reasonLabel || 'Other',
+                                        description,
+                                        status: isResolved ? 'resolved' : 'pending_review',
+                                        response: f.resolution ?? f.resolutionDescription ?? f.response ?? null,
+                                        createdAt: f.submittedAt ?? f.createdAt ?? f.flaggedAt,
+                                        respondedAt: f.resolvedAt ?? f.respondedAt ?? f.updatedAt
+                                    };
+                                }
+      function relativeTimeFromNow(iso) {
+            if (!iso) return '';
+            const date = new Date(iso);
+            if (isNaN(date.getTime())) return '';
+            const diffMin = Math.round((Date.now() - date.getTime()) / 60000);
+            if (diffMin < 1) return 'Just now';
+            if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
+            const diffHr = Math.round(diffMin / 60);
+            if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? '' : 's'} ago`;
+            const diffDay = Math.round(diffHr / 24);
+            if (diffDay < 7) return `${diffDay} day${diffDay === 1 ? '' : 's'} ago`;
+            return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+        // Backend `type` values aren't enumerated in Swagger yet — bucket by substring so
+        // this keeps working once real type strings (e.g. RESULT_PUBLISHED, FLAG_ASSIGNED)
+        // are confirmed, without needing another frontend change.
+        function notificationKindFromType(type) {
+            const t = (type || '').toUpperCase();
+            if (t.includes('FLAG')) return 'flag';
+            if (t.includes('RESULT')) return 'result';
+            return 'general';
+        }
+        function normalizeNotifications(raw) {
+            const arr = (raw && raw.data && Array.isArray(raw.data.notifications)) ? raw.data.notifications : [];
+            return arr.map(n => ({
+                id: n.id,
+                kind: notificationKindFromType(n.type),
+                text: n.message || n.title || 'Notification',
+                time: relativeTimeFromNow(n.createdAt),
+                read: Boolean(n.isRead),
+                entityType: n.entityType || null,
+                entityId: n.entityId ?? null
+            }));
+        }
+             let currentFlagsList = [];
+                // Confirmed against Swagger: GET /student/results/flags nests the array under
+                // data.flaggedEntries (not data itself, and not data.flags). Keep the looser
+                // fallbacks after it purely as a safety net in case the backend shape shifts.
+                function extractFlagsArray(raw) {
+                    if (!raw) return [];
+                    if (raw.data && Array.isArray(raw.data.flaggedEntries)) return raw.data.flaggedEntries;
+                    if (Array.isArray(raw.data)) return raw.data;
+                    if (Array.isArray(raw)) return raw;
+                    console.warn('[renderFlagsTable] Unrecognized /student/results/flags response shape:', raw);
+                    return [];
+                }
+                async function renderFlagsTable() {
+                    let raw;
+                    try { raw = await FlagsApi.list(); } catch (err) { showToast(err.message || 'Could not load your flags.', 'error'); raw = null; }
+                    const arr = extractFlagsArray(raw);
+                    currentFlagsList = arr.map(normalizeFlagListItem);
+            document.getElementById('flagsTable').style.display = currentFlagsList.length ? '' : 'none';
+            document.getElementById('flagsEmptyState').hidden = currentFlagsList.length > 0;
+            document.getElementById('flagsTableBody').innerHTML = currentFlagsList.map(f => `
+        <tr>
+            <td class="cell-primary">${f.courseName}</td>
+                       <td>${f.reasonLabel || '—'}</td>
+            <td>${f.createdAt ? new Date(f.createdAt).toLocaleDateString() : '—'}</td>
+            <td>${FLAG_STATUS_BADGE[f.status] || f.status}</td>
+            <td>${f.response ? f.response.slice(0, 40) + (f.response.length > 40 ? '…' : '') : '<span style="color:var(--text-tertiary)">Awaiting response</span>'}</td>
+            <td class="cell-actions"><button class="row-icon-btn" data-view-flag="${f.entryId}" title="View"><i data-lucide="eye" style="width:15px;height:15px"></i></button></td>
+        </tr>`).join('');
+            lucide.createIcons();
+            document.querySelectorAll('[data-view-flag]').forEach(btn => btn.addEventListener('click', () => openFlagDetail(Number(btn.dataset.viewFlag))));
+        }
+       async function openFlagDetail(entryId) {
+            // Fall back to the already-loaded list item immediately so the modal opens
+            // without a blank flash, then replace with fresh detail once it arrives.
+            let f = currentFlagsList.find(x => x.entryId === entryId);
+            if (!f) return;
+            renderFlagDetailModal(f);
+
+            const overlay = document.getElementById('flagDetailOverlay'), modal = document.getElementById('flagDetailModal');
+            overlay.hidden = false; modal.hidden = false;
+            requestAnimationFrame(() => { overlay.classList.add('is-visible'); modal.classList.add('is-open'); });
+
+            if (CONFIG.DATA_MODE !== 'live') return;
+            try {
+                const raw = await FlagsApi.getById(entryId);
+                if (raw && raw.data) {
+                    const fresh = normalizeFlagListItem(raw.data);
+                    renderFlagDetailModal(fresh);
+                }
+            } catch (err) {
+                // Keep showing the list-derived version; no need to interrupt the user with a toast here.
+                console.warn('[openFlagDetail] getById failed', err);
+            }
+        }
+        function renderFlagDetailModal(f) {
+                      document.getElementById('flagDetailTitle').textContent = `${f.courseName} — ${f.reasonLabel || 'Flag'}`;
+            document.getElementById('flagDetailSummary').innerHTML = `<div><div class="fc-title">${f.courseName}</div></div>${FLAG_STATUS_BADGE[f.status] || ''}`;
+            document.getElementById('flagDetailStepper').innerHTML = renderFlagStepper(f.status);
+            let thread = `<div class="thread-msg mine">${f.description || ''}<div class="tm-meta">You · ${f.createdAt ? new Date(f.createdAt).toLocaleString() : ''}</div></div>`;
+            if (f.response) thread += `<div class="thread-msg theirs">${f.response}<div class="tm-meta">Lecturer/Admin · ${f.respondedAt ? new Date(f.respondedAt).toLocaleString() : ''}</div></div>`;
+            else thread += `<p style="font-size:13px;color:var(--text-tertiary);text-align:center;padding:10px 0">Awaiting a response.</p>`;
+            document.getElementById('flagDetailThread').innerHTML = thread;
+            lucide.createIcons();
+        }
+        function closeFlagDetail() {
+            const overlay = document.getElementById('flagDetailOverlay'), modal = document.getElementById('flagDetailModal');
+            overlay.classList.remove('is-visible'); modal.classList.remove('is-open');
+            setTimeout(() => { overlay.hidden = true; modal.hidden = true; }, 200);
+        }
+        document.getElementById('flagDetailClose').addEventListener('click', closeFlagDetail);
+        document.getElementById('flagDetailOverlay').addEventListener('click', closeFlagDetail);
+
+        function renderNotificationsFull() {
+            document.getElementById('notifFullList').innerHTML = allNotifications.map(n => `
+        <div class="activity-row">
+            <div class="activity-icon ${n.read ? '' : 'unread'}"><i data-lucide="${n.kind === 'flag' ? 'flag' : n.kind === 'result' ? 'check-circle' : 'info'}" style="width:15px;height:15px"></i></div>
+            <div><div class="activity-text">${n.text}</div><div class="activity-time">${n.time}</div></div>
+        </div>`).join('');
+            lucide.createIcons();
+        }
+      document.getElementById('markAllReadBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('markAllReadBtn');
+            if (CONFIG.DATA_MODE === 'mock') {
+                allNotifications.forEach(n => n.read = true);
+                renderNotificationsFull(); updateNotifBadges();
+                showToast('All notifications marked as read.', 'default');
+                return;
+            }
+            btn.classList.add('is-loading'); btn.disabled = true;
+            // Per Swagger, marking as read happens via the same GET endpoint with markAsRead=true.
+            const raw = await apiGet(CONFIG.ENDPOINTS.notifications + '?markAsRead=true');
+            if (raw) {
+                allNotifications = normalizeNotifications(raw);
+                renderNotificationsFull(); updateNotifBadges(); renderNotifDashList();
+                showToast('All notifications marked as read.', 'default');
+            } else {
+                showToast('Could not mark notifications as read. Please try again.', 'error');
+            }
+            btn.classList.remove('is-loading'); btn.disabled = false;
+        });
+
+        document.getElementById('profilePwForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const cur = document.getElementById('curPw').value, next = document.getElementById('newPw').value;
+            if (!cur || !next) { showToast('Enter your current and new password.', 'error'); return; }
+            if (next.length < 8) { showToast('New password must be at least 8 characters.', 'error'); return; }
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.classList.add('is-loading'); btn.disabled = true;
+            setTimeout(() => { btn.classList.remove('is-loading'); btn.disabled = false; showToast('This will update once the change-password endpoint is connected.', 'warn'); e.target.reset(); }, 700);
+        });
+
+        const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        function showBanner(el, kind, message) {
+            if (!message) { el.hidden = true; return; }
+            el.className = 'auth-banner ' + kind;
+            const iconName = kind === 'success' ? 'check-circle' : kind === 'warn' ? 'alert-triangle' : 'alert-circle';
+            el.innerHTML = `<i data-lucide="${iconName}" style="width:16px;height:16px"></i><span>${message}</span>`;
+            el.hidden = false; lucide.createIcons();
+        }
+        function setFieldError(fieldWrap, errEl, message) { errEl.textContent = message || ''; fieldWrap.classList.toggle('has-error', Boolean(message)); }
+        function setLoading(btn, isLoading) { btn.disabled = isLoading; btn.classList.toggle('is-loading', isLoading); }
+        function hideEl(el) { el.hidden = true; }
+
+             const RESET_PW_COPY = {
+                    default: { title: 'Choose a new password', sub: 'Enter a new password for your account.' },
+                    activation: { title: 'Set your password', sub: 'Your account has been activated. Choose a password to sign in and access your student dashboard.' }
+                };
+                const RESET_PW_SUCCESS_COPY = {
+                    default: 'Your password has been updated. Sign in with your new password.',
+                    activation: 'Your password has been set. Sign in with your new password to access your student dashboard.'
+                };
+                function setResetPasswordCopy(mode) {
+                    const copy = RESET_PW_COPY[mode] || RESET_PW_COPY.default;
+                    document.getElementById('resetPwTitle').textContent = copy.title;
+                    document.getElementById('resetPwSub').textContent = copy.sub;
+                }
+                const authViews = { viewSignIn: document.getElementById('viewSignIn'), viewForgot: document.getElementById('viewForgot'), viewActivate: document.getElementById('viewActivate'), viewResetPassword: document.getElementById('viewResetPassword') };
+        function showAuthView(id) {
+            Object.values(authViews).forEach(v => v.classList.remove('is-active'));
+            authViews[id].classList.add('is-active');
+            const heading = authViews[id].querySelector('h2');
+            if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
+        }
+        document.querySelectorAll('[data-view-link]').forEach(link => {
+            const target = link.getAttribute('data-view-link');
+            if (authViews[target]) link.addEventListener('click', (e) => { e.preventDefault(); showAuthView(target); });
+        });
+        document.querySelectorAll('.auth-password-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.getAttribute('data-toggle-for'));
+                const icon = btn.querySelector('i');
+                const isHidden = input.type === 'password';
+                input.type = isHidden ? 'text' : 'password';
+                icon.setAttribute('data-lucide', isHidden ? 'eye-off' : 'eye');
+                lucide.createIcons();
+            });
+        });
+
+      if (CONFIG.DATA_MODE === 'mock') document.getElementById('devModeBanner').hidden = false;
+        if (CONFIG.DATA_MODE === 'mock') { const devBadge = document.getElementById('devDataBadge'); if (devBadge) devBadge.hidden = false; }
+        (function restoreRememberedEmail() {
+            const remembered = localStorage.getItem('rt_student_remembered_email');
+            if (remembered) { document.getElementById('loginEmail').value = remembered; document.getElementById('rememberMe').checked = true; }
+        })();
+
+        async function enterApp(user) {
+            currentUser = user;
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('appShell').classList.add('is-active');
+            const initials = (user.userName || 'Student').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+            document.getElementById('topbarAvatar').textContent = initials;
+            document.getElementById('topbarName').textContent = user.userName || 'Student';
+            document.getElementById('profileAvatar').textContent = initials;
+            document.getElementById('profileName').textContent = user.userName || 'Student';
+            document.getElementById('profileEmail').textContent = user.email || '';
+            document.getElementById('profileRegNo').value = user.regNo || '—';
+            document.getElementById('profileDept').value = user.department || '—';
+            document.getElementById('profileLevel').value = user.level || '—';
+            document.getElementById('profileSession').value = user.session || '—';
+            // The welcome heading always reflects the identity captured at activation
+            // (or returned by the live profile endpoint) — never a hardcoded name.
+            document.getElementById('welcomeName').textContent = user.userName ? `, ${user.userName}` : '';
+
+          renderSidebar();
+            await loadAllData();
+            await loadDashboardStats();
+            renderDashboard();
+            navigate(location.hash.replace('#', '') || 'dashboard');
+            if (!location.hash) location.hash = 'dashboard';
+     if (currentUser.mustChangePassword) openMustChangePwModal();
+            else if (!getEffectiveYearEnum()) openYearConfirmModal();
+        }
+
+        (function initSignIn() {
+            const form = document.getElementById('signInForm');
+            const banner = document.getElementById('signInBanner');
+            const submit = document.getElementById('signInSubmit');
+            const emailField = document.getElementById('fieldEmail');
+            const passwordField = document.getElementById('fieldPassword');
+            const emailInput = document.getElementById('loginEmail');
+            const passwordInput = document.getElementById('loginPassword');
+            const emailErr = document.getElementById('loginEmailError');
+            const passwordErr = document.getElementById('loginPasswordError');
+            let isSubmitting = false;
+
+            function validate() {
+                let ok = true;
+                const email = emailInput.value.trim();
+                if (!email) { setFieldError(emailField, emailErr, 'Enter your email address.'); ok = false; }
+                else if (!EMAIL_RE.test(email)) { setFieldError(emailField, emailErr, 'Enter a valid email address.'); ok = false; }
+                else setFieldError(emailField, emailErr, '');
+                if (!passwordInput.value) { setFieldError(passwordField, passwordErr, 'Enter your password.'); ok = false; }
+                else setFieldError(passwordField, passwordErr, '');
+                return ok;
+            }
+            [emailInput, passwordInput].forEach(input => input.addEventListener('input', () => { if (input.closest('.auth-field').classList.contains('has-error')) validate(); }));
+
+                        form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isSubmitting) return;
+                hideEl(banner);
+                if (!resetToken) { showBanner(banner, 'error', 'This reset link is missing or invalid. Request a new one.'); return; }
+                if (!validate()) return;
+                if (!navigator.onLine) { showBanner(banner, 'error', "You're offline. Check your connection and try again."); return; }
+
+                isSubmitting = true; setLoading(submit, true);
+                try {
+                    await StudentAuth.resetPassword(resetToken, pwInput.value);
+                    formWrap.hidden = true; successWrap.hidden = false;
+                } catch (err) {
+                    showBanner(banner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
+                } finally {
+                    isSubmitting = false; setLoading(submit, false);
+                }
+            });
+        })();
+
+        (function initForgot() {
+            const form = document.getElementById('forgotForm');
+            const banner = document.getElementById('forgotBanner');
+            const submit = document.getElementById('forgotSubmit');
+            const emailField = document.getElementById('fieldForgotEmail');
+            const emailInput = document.getElementById('forgotEmail');
+            const emailErr = document.getElementById('forgotEmailError');
+            const formWrap = document.getElementById('forgotFormWrap');
+            const successWrap = document.getElementById('forgotSuccessWrap');
+            const successDesc = document.getElementById('forgotSuccessDesc');
+            let isSubmitting = false;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isSubmitting) return;
+                hideEl(banner);
+                const email = emailInput.value.trim();
+                if (!email) { setFieldError(emailField, emailErr, 'Enter your email address.'); return; }
+                if (!EMAIL_RE.test(email)) { setFieldError(emailField, emailErr, 'Enter a valid email address.'); return; }
+                setFieldError(emailField, emailErr, '');
+                if (!navigator.onLine) { showBanner(banner, 'error', "You're offline. Check your connection and try again."); return; }
+
+                isSubmitting = true; setLoading(submit, true);
+                try {
+                    await StudentAuth.forgotPassword(email);
+                    successDesc.textContent = `If an account exists for ${email}, a reset link is on its way.`;
+                    formWrap.hidden = true; successWrap.hidden = false;
+                } catch (err) {
+                    showBanner(banner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
+                } finally {
+                    isSubmitting = false; setLoading(submit, false);
+                }
+            });
+        })();
+
+      (function initResetPassword() {
+            const form = document.getElementById('resetPwForm');
+            const banner = document.getElementById('resetPwBanner');
+            const submit = document.getElementById('resetPwSubmit');
+            const pwField = document.getElementById('fieldResetPw');
+            const pwInput = document.getElementById('resetPwNew');
+            const pwErr = document.getElementById('resetPwError');
+            const confirmField = document.getElementById('fieldResetPwConfirm');
+            const confirmInput = document.getElementById('resetPwConfirm');
+            const confirmErr = document.getElementById('resetPwConfirmError');
+            const formWrap = document.getElementById('resetPwFormWrap');
+            const successWrap = document.getElementById('resetPwSuccessWrap');
+            let isSubmitting = false;
+
+            const urlParams = new URLSearchParams(location.search);
+            const resetToken = urlParams.get('token');
+            if (resetToken) showAuthView('viewResetPassword');
+
+            function validate() {
+                let ok = true;
+                if (!pwInput.value) { setFieldError(pwField, pwErr, 'Choose a new password.'); ok = false; }
+                else if (pwInput.value.length < 8) { setFieldError(pwField, pwErr, 'Use at least 8 characters.'); ok = false; }
+                else setFieldError(pwField, pwErr, '');
+                if (!confirmInput.value) { setFieldError(confirmField, confirmErr, 'Confirm your new password.'); ok = false; }
+                else if (confirmInput.value !== pwInput.value) { setFieldError(confirmField, confirmErr, "Passwords don't match."); ok = false; }
+                else setFieldError(confirmField, confirmErr, '');
+                return ok;
+            }
+            [pwInput, confirmInput].forEach(input => input.addEventListener('input', () => { if (input.closest('.auth-field').classList.contains('has-error')) validate(); }));
+
+                     form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              if (isSubmitting) return;
+              hideEl(banner);
+              const isActivationFlow = !resetToken && Boolean(pendingActivationEmail);
+              if (!resetToken && !isActivationFlow) { showBanner(banner, 'error', 'This reset link is missing or invalid. Request a new one.'); return; }
+              if (!validate()) return;
+              if (!navigator.onLine) { showBanner(banner, 'error', "You're offline. Check your connection and try again."); return; }
+
+              isSubmitting = true; setLoading(submit, true);
+              try {
+                  if (isActivationFlow) {
+                      await StudentAuth.setPasswordAfterActivation(pendingActivationEmail, pwInput.value);
+                      document.getElementById('resetPwSuccessTitle').textContent = 'Password set';
+                      document.getElementById('resetPwSuccessDesc').textContent = RESET_PW_SUCCESS_COPY.activation;
+                      pendingActivationEmail = null;
+                  } else {
+                      await StudentAuth.resetPassword(resetToken, pwInput.value);
+                      document.getElementById('resetPwSuccessTitle').textContent = 'Password reset';
+                      document.getElementById('resetPwSuccessDesc').textContent = RESET_PW_SUCCESS_COPY.default;
+                  }
+                  formWrap.hidden = true; successWrap.hidden = false;
+              } catch (err) {
+                  showBanner(banner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
+              } finally {
+                  isSubmitting = false; setLoading(submit, false);
+              }
+          });
+      })();
+
+     (function initActivate() {
+            const formWrap = document.getElementById('activateFormWrap');
+            const otpWrap = document.getElementById('activateOtpWrap');
+            const step3 = document.getElementById('activateStep3Wrap');
+            const form = document.getElementById('activateForm');
+            const banner = document.getElementById('activateBanner');
+            const submit = document.getElementById('activateSubmit');
+            const emailField = document.getElementById('fieldActivateEmail');
+            const emailInput = document.getElementById('activateEmail');
+            const emailErr = document.getElementById('activateEmailError');
+
+          let pendingUserId = null;
+         let isSubmitting = false;
+         function resetForm() {
+             pendingUserId = null;
+             sessionStorage.removeItem('rt_pending_activation_userid');
+                formWrap.hidden = false; otpWrap.hidden = true; step3.hidden = true;
+                form.reset(); hideEl(banner);
+                setFieldError(emailField, emailErr, '');
+                ['ActFirstName', 'ActLastName', 'ActYear', 'ActDepartment'].forEach(id => {
+                    const wrap = document.getElementById('field' + id);
+                    const err = document.getElementById(id[0].toLowerCase() + id.slice(1) + 'Error');
+                    if (wrap && err) setFieldError(wrap, err, '');
+                });
+                document.getElementById('actTermsError').textContent = '';
+            }
+            document.querySelector('[data-view-link="viewActivate"]').addEventListener('click', resetForm);
+
+            function validateForm() {
+                let ok = true;
+                const firstNameWrap = document.getElementById('fieldActFirstName'), firstNameErr = document.getElementById('actFirstNameError');
+                const lastNameWrap = document.getElementById('fieldActLastName'), lastNameErr = document.getElementById('actLastNameError');
+                const yearWrap = document.getElementById('fieldActYear'), yearErr = document.getElementById('actYearError');
+                const deptWrap = document.getElementById('fieldActDepartment'), deptErr = document.getElementById('actDepartmentError');
+                const termsErr = document.getElementById('actTermsError');
+
+                const firstName = document.getElementById('actFirstName').value.trim();
+                const lastName = document.getElementById('actLastName').value.trim();
+                const email = emailInput.value.trim();
+                const year = document.getElementById('actYear').value;
+                const department = document.getElementById('actDepartment').value.trim();
+                const nameRe = /^[a-zA-Z' -]{2,}$/;
+
+                if (!firstName) { setFieldError(firstNameWrap, firstNameErr, 'Enter your first name.'); ok = false; }
+                else if (!nameRe.test(firstName)) { setFieldError(firstNameWrap, firstNameErr, 'Letters only, please.'); ok = false; }
+                else setFieldError(firstNameWrap, firstNameErr, '');
+
+                if (!lastName) { setFieldError(lastNameWrap, lastNameErr, 'Enter your last name.'); ok = false; }
+                else if (!nameRe.test(lastName)) { setFieldError(lastNameWrap, lastNameErr, 'Letters only, please.'); ok = false; }
+                else setFieldError(lastNameWrap, lastNameErr, '');
+
+                if (!email) { setFieldError(emailField, emailErr, 'Enter your institutional email.'); ok = false; }
+                else if (!EMAIL_RE.test(email)) { setFieldError(emailField, emailErr, 'Enter a valid email address.'); ok = false; }
+                else setFieldError(emailField, emailErr, '');
+
+                if (!year) { setFieldError(yearWrap, yearErr, 'Select your year.'); ok = false; }
+                else setFieldError(yearWrap, yearErr, '');
+
+                if (!department) { setFieldError(deptWrap, deptErr, 'Enter your department.'); ok = false; }
+                else setFieldError(deptWrap, deptErr, '');
+
+                if (!document.getElementById('actTerms').checked) { termsErr.textContent = 'You must accept the Terms of Use and Privacy Policy to continue.'; ok = false; }
+                else termsErr.textContent = '';
+
+                return ok;
+            }
+            ['actFirstName', 'actLastName', 'actYear', 'actDepartment'].forEach(id => {
+                document.getElementById(id).addEventListener(id === 'actYear' ? 'change' : 'input', () => {
+                    const wrap = document.getElementById('field' + id[0].toUpperCase() + id.slice(1));
+                    if (wrap.classList.contains('has-error')) validateForm();
+                });
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isSubmitting) return;
+                hideEl(banner);
+                if (!validateForm()) return;
+                if (!navigator.onLine) { showBanner(banner, 'error', "You're offline. Check your connection and try again."); return; }
+
+                isSubmitting = true; setLoading(submit, true);
+                try {
+                    const email = emailInput.value.trim();
+                    const payload = {
+                        firstName: document.getElementById('actFirstName').value.trim(),
+                        lastName: document.getElementById('actLastName').value.trim(),
+                        email,
+                        year: document.getElementById('actYear').value,
+                        department: document.getElementById('actDepartment').value.trim()
+                    };
+                   const { data } = await StudentAuth.activateAccount(payload);
+                    pendingUserId = data && data.data ? data.data.userId : null;
+                    if (!pendingUserId) { showBanner(banner, 'error', "Something went wrong starting activation. Please try again."); return; }
+                    sessionStorage.setItem('rt_pending_activation_userid', String(pendingUserId));
+                    document.getElementById('activateOtpSub').textContent = `We've sent a 6-digit code to ${email}.`;
+                    formWrap.hidden = true; otpWrap.hidden = false;
+                    hideEl(document.getElementById('activateOtpBanner'));
+                    document.getElementById('activateOtpForm').reset();
+                } catch (err) {
+                    showBanner(banner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
+                } finally {
+                    isSubmitting = false; setLoading(submit, false);
+                }
+            });
+
+            const otpForm = document.getElementById('activateOtpForm');
+            const otpBanner = document.getElementById('activateOtpBanner');
+            const otpSubmit = document.getElementById('activateOtpSubmit');
+            const otpField = document.getElementById('fieldActivateOtp');
+            const otpInput = document.getElementById('activateOtpInput');
+            const otpErr = document.getElementById('activateOtpError');
+            let otpSubmitting = false;
+
+            otpForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (otpSubmitting) return;
+                hideEl(otpBanner);
+                const otp = otpInput.value.trim();
+                if (!otp) { setFieldError(otpField, otpErr, 'Enter the code from your email.'); return; }
+                setFieldError(otpField, otpErr, '');
+                if (!navigator.onLine) { showBanner(otpBanner, 'error', "You're offline. Check your connection and try again."); return; }
+
+               otpSubmitting = true; setLoading(otpSubmit, true);
+                try {
+                    const userId = pendingUserId || Number(sessionStorage.getItem('rt_pending_activation_userid'));
+                    if (!userId) { showBanner(otpBanner, 'error', 'Your activation session expired. Please start again.'); return; }
+                                     await StudentAuth.verifyOtp(userId, otp);
+                    sessionStorage.removeItem('rt_pending_activation_userid');
+                    const activatedEmail = emailInput.value.trim();
+                    // No reset token is returned by verify-otp, so the only backend-supported
+                    // way to get one is via forgot-password, which emails a working link.
+                    // Best-effort: activation itself already succeeded, so don't block the
+                    // success screen if this secondary call fails.
+                    try { await StudentAuth.forgotPassword(activatedEmail); } catch (_) { /* activation still succeeded */ }
+                    otpWrap.hidden = true; step3.hidden = false;
+                } catch (err) {
+                    showBanner(otpBanner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
+                } finally {
+                    otpSubmitting = false; setLoading(otpSubmit, false);
+                }
+            });
+        })();
+
+        // ---- Mandatory password change on first login (temporary-password enforcement) ----
+        function openMustChangePwModal() {
+            const overlay = document.getElementById('mustChangeOverlay'), modal = document.getElementById('mustChangeModal');
+            overlay.hidden = false; modal.hidden = false;
+            requestAnimationFrame(() => { overlay.classList.add('is-visible'); modal.classList.add('is-open'); });
+        }
+        function closeMustChangePwModal() {
+            const overlay = document.getElementById('mustChangeOverlay'), modal = document.getElementById('mustChangeModal');
+            overlay.classList.remove('is-visible'); modal.classList.remove('is-open');
+            setTimeout(() => { overlay.hidden = true; modal.hidden = true; }, 200);
+        }
+        document.getElementById('mustChangeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cur = document.getElementById('mustChangeCurPw').value;
+            const next = document.getElementById('mustChangeNewPw').value;
+            const confirm = document.getElementById('mustChangeConfirmPw').value;
+            const errEl = document.getElementById('mustChangeError');
+            if (!cur || !next || !confirm) { errEl.textContent = 'Fill in every field.'; return; }
+            if (next.length < 8) { errEl.textContent = 'New password must be at least 8 characters.'; return; }
+            if (next !== confirm) { errEl.textContent = "New password and confirmation don't match."; return; }
+            if (next === cur) { errEl.textContent = 'New password must be different from the temporary password.'; return; }
+            errEl.textContent = '';
+            const btn = document.getElementById('mustChangeSubmit');
+            btn.classList.add('is-loading'); btn.disabled = true;
+            try {
+                await StudentAuth.changePassword(cur, next);
+                currentUser.mustChangePassword = false;
+                if (CONFIG.DATA_MODE === 'mock') Session.set(currentUser);
+                closeMustChangePwModal();
+                showToast('Password updated. You\u2019re all set.', 'success');
+            } catch (err) {
+                errEl.textContent = err instanceof StudentAuth.AuthError ? err.message : 'Something went wrong. Please try again.';
+            } finally {
+                btn.classList.remove('is-loading'); btn.disabled = false;
+            }
+    });
+
+        // ---- One-time year confirmation for accounts /student/profile doesn't return a year for yet ----
+        function openYearConfirmModal() {
+            const overlay = document.getElementById('yearConfirmOverlay'), modal = document.getElementById('yearConfirmModal');
+            overlay.hidden = false; modal.hidden = false;
+            requestAnimationFrame(() => { overlay.classList.add('is-visible'); modal.classList.add('is-open'); });
+        }
+        function closeYearConfirmModal() {
+            const overlay = document.getElementById('yearConfirmOverlay'), modal = document.getElementById('yearConfirmModal');
+            overlay.classList.remove('is-visible'); modal.classList.remove('is-open');
+            setTimeout(() => { overlay.hidden = true; modal.hidden = true; }, 200);
+        }
+        document.getElementById('yearConfirmForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const year = document.getElementById('yearConfirmSelect').value;
+            const errEl = document.getElementById('yearConfirmError');
+            if (!year) { errEl.textContent = 'Select your year to continue.'; return; }
+            errEl.textContent = '';
+            const btn = document.getElementById('yearConfirmSubmit');
+            btn.classList.add('is-loading'); btn.disabled = true;
+            setStoredYearOverride(year);
+            allCourses = await StudentData.getCourses();
+            if (location.hash.replace('#', '') === 'courses') renderCoursesView();
+            btn.classList.remove('is-loading'); btn.disabled = false;
+            closeYearConfirmModal();
+            showToast('Year confirmed. Your courses have been loaded.', 'success');
+        });
+
+        function openLogoutModal() {
+            const overlay = document.getElementById('logoutOverlay'), modal = document.getElementById('logoutModal');
+            overlay.hidden = false; modal.hidden = false;
+            requestAnimationFrame(() => { overlay.classList.add('is-visible'); modal.classList.add('is-open'); });
+        }
+        function closeLogoutModal() {
+            const overlay = document.getElementById('logoutOverlay'), modal = document.getElementById('logoutModal');
+            overlay.classList.remove('is-visible'); modal.classList.remove('is-open');
+            setTimeout(() => { overlay.hidden = true; modal.hidden = true; }, 200);
+        }
+        document.getElementById('logoutBtn').addEventListener('click', (e) => { e.preventDefault(); openLogoutModal(); });
+        document.getElementById('logoutModalClose').addEventListener('click', closeLogoutModal);
+        document.getElementById('logoutOverlay').addEventListener('click', closeLogoutModal);
+        document.getElementById('logoutStayBtn').addEventListener('click', closeLogoutModal);
+        document.getElementById('logoutConfirmBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('logoutConfirmBtn');
+            btn.classList.add('is-loading'); btn.disabled = true;
+            try { await StudentAuth.logout(); } catch (_) { /* best-effort */ }
+            Session.clear();
+            btn.classList.remove('is-loading'); btn.disabled = false;
+            closeLogoutModal();
+            document.getElementById('appShell').classList.remove('is-active');
+            document.getElementById('loginScreen').style.display = 'grid';
+            document.getElementById('signInForm').reset();
+            location.hash = '';
+            showAuthView('viewSignIn');
+        });
+
+        mountLogo('brandLogoSlot', 'ResultTrack');
+        mountLogo('cardLogoSlot', 'ResultTrack');
+        mountLogo('sidebarLogoSlot', 'ResultTrack');
+        mountLogo('topbarBrandSlot', null);
+        lucide.createIcons();
+
+        (function boot() {
+            if (CONFIG.DATA_MODE === 'mock') {
+                const existing = Session.get();
+                if (existing) { enterApp(existing); return; }
+            }
+        })();
+    </script>
+</body>
+
+</html>
