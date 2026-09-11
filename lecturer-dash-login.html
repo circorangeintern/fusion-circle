@@ -17,9 +17,9 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         /* =========================================================
    RESULTTRACK — TEACHER/LECTURER DASHBOARD
@@ -81,7 +81,7 @@
             box-sizing: border-box;
         }
 
-             html {
+        html {
             -webkit-text-size-adjust: 100%;
             overflow-x: hidden;
             width: 100%;
@@ -407,7 +407,7 @@
             background: radial-gradient(circle at 15% 0%, var(--rt-emerald-50), var(--rt-bg) 55%);
         }
 
-               .auth-nav {
+        .auth-nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -473,7 +473,8 @@
             margin: 0 auto;
             padding: 40px clamp(20px, 5vw, 64px) 90px;
         }
-              @media (max-width:900px) {
+
+        @media (max-width:900px) {
             .landing-hero {
                 grid-template-columns: 1fr;
                 padding: 24px clamp(16px, 5vw, 64px) 48px;
@@ -984,7 +985,7 @@
             padding: 0 22px;
         }
 
-            .hamburger {
+        .hamburger {
             display: none;
             align-items: center;
             justify-content: center;
@@ -1148,7 +1149,7 @@
             color: var(--rt-ink-300);
         }
 
-           .content {
+        .content {
             flex: 1;
             padding: 26px clamp(18px, 3vw, 32px) 60px;
             max-width: 1400px;
@@ -1334,6 +1335,7 @@
             color: var(--rt-ink-500);
             margin: 0 0 16px;
         }
+
         .two-col {
             display: grid;
             grid-template-columns: 1.4fr 1fr;
@@ -2583,7 +2585,7 @@
         }
 
         /* ---------- Responsive sidebar ---------- */
-            @media (max-width:1000px) {
+        @media (max-width:1000px) {
             .sidebar {
                 transform: translateX(-100%);
                 box-shadow: var(--rt-shadow-lg);
@@ -2622,10 +2624,11 @@
             }
         }
 
-               @media (max-width:860px) {
+        @media (max-width:860px) {
             .topbar-search {
                 display: none;
             }
+
             .stat-grid {
                 gap: 12px;
             }
@@ -3144,23 +3147,23 @@
                         <span>Lecturer Portal — <span id="printBrandMeta"></span></span>
                     </div>
                 </div>
-                            <header class="topbar">
-                                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2">
-                                        <path d="M3 12h18M3 6h18M3 18h18" />
-                                    </svg></button>
-                                <div class="topbar-brand" id="topbarBrand">
-                                    <span class="brand-mark"><svg viewBox="0 0 44 44">
-                                            <path fill="#fff" d="M3,39 L3,25 L10,20 L10,39 Z" />
-                                            <path fill="#fff" d="M13,39 L13,17 L20,11 L20,39 Z" />
-                                            <path fill="#fff" d="M23,39 L23,10 L30,3 L30,39 Z" />
-                                            <polygon fill="#fff" opacity="0.3" points="5,35 8,35 19,15 16,15" />
-                                            <polygon fill="#E8A93C" points="18,38 22,38 32,17 28,17" />
-                                            <polygon fill="#E8A93C" points="27,19 32,17 44,2" />
-                                        </svg></span>
-                                    <strong>ResultTrack</strong>
-                                </div>
-                                <div class="topbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                <header class="topbar">
+                    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu"><svg viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12h18M3 6h18M3 18h18" />
+                        </svg></button>
+                    <div class="topbar-brand" id="topbarBrand">
+                        <span class="brand-mark"><svg viewBox="0 0 44 44">
+                                <path fill="#fff" d="M3,39 L3,25 L10,20 L10,39 Z" />
+                                <path fill="#fff" d="M13,39 L13,17 L20,11 L20,39 Z" />
+                                <path fill="#fff" d="M23,39 L23,10 L30,3 L30,39 Z" />
+                                <polygon fill="#fff" opacity="0.3" points="5,35 8,35 19,15 16,15" />
+                                <polygon fill="#E8A93C" points="18,38 22,38 32,17 28,17" />
+                                <polygon fill="#E8A93C" points="27,19 32,17 44,2" />
+                            </svg></span>
+                        <strong>ResultTrack</strong>
+                    </div>
+                    <div class="topbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
                             <path d="M21 21l-4.35-4.35" />
@@ -3227,18 +3230,18 @@
                 DATA_MODE: "live",
                 API_BASE: "https://resulttrack-backend.onrender.com/api/v1",
 
-             TOKEN_KEY: "rt_teacher_token",
+                TOKEN_KEY: "rt_teacher_token",
                 ROUTE_KEY: "rt_teacher_route",
                 MOCK_LATENCY_MS: 550,
                 PAGE_SIZE: 8,
                 MAX_UPLOAD_MB: 10,
                 ACCEPTED_UPLOAD_TYPES: [".csv", ".xls", ".xlsx"],
 
-              /* ==========================================================
-                     BACKEND API ENDPOINTS
-                     Matches the official ResultTrack API 
-                   
-                  ========================================================== */
+                /* ==========================================================
+                       BACKEND API ENDPOINTS
+                       Matches the official ResultTrack API 
+                     
+                    ========================================================== */
                 ENDPOINTS: {
 
                     /* =======================
@@ -3480,7 +3483,7 @@
                ========================================================================= */
             function delay(ms) { return new Promise(res => setTimeout(res, ms)); }
 
-         async function apiRequest(endpoint, { method = "GET", body = null, mockHandler = null } = {}) {
+            async function apiRequest(endpoint, { method = "GET", body = null, mockHandler = null } = {}) {
                 if (CONFIG.DATA_MODE === "mock") {
                     await delay(CONFIG.MOCK_LATENCY_MS);
                     if (typeof mockHandler === "function") return mockHandler(body);
@@ -3499,22 +3502,22 @@
                     headers: { "Content-Type": "application/json", ...(token ? { "Authorization": `Bearer ${token}` } : {}) },
                     body: body ? JSON.stringify(body) : undefined
                 });
-                         if (!res.ok) {
-                 const errBody = await res.json().catch(() => ({ message: "Request failed" }));
-                 const err = new Error(errBody.message || `Error ${res.status}`);
-                 err.status = res.status;
-                 if ((res.status === 401 || res.status === 403) && !endpoint.startsWith("/auth/")) {
-                     handleSessionInvalidated();
-                 }
-                 throw err;
-             }
+                if (!res.ok) {
+                    const errBody = await res.json().catch(() => ({ message: "Request failed" }));
+                    const err = new Error(errBody.message || `Error ${res.status}`);
+                    err.status = res.status;
+                    if ((res.status === 401 || res.status === 403) && !endpoint.startsWith("/auth/")) {
+                        handleSessionInvalidated();
+                    }
+                    throw err;
+                }
                 return res.json();
             }
             // ---- Field-name assumptions, isolated for easy correction ----
             // Adjust these two functions once you've confirmed real response
             // shapes from Swagger's "Try it out". Everything downstream reads
             // through them, so nothing else needs to change.
-           function normalizeCourseStudent(raw, courseId) {
+            function normalizeCourseStudent(raw, courseId) {
                 return {
                     id: raw.id ?? raw.studentId ?? raw._id,
                     name: raw.name ?? raw.fullName ?? `${raw.firstName || ""} ${raw.lastName || ""}`.trim(),
@@ -3526,7 +3529,7 @@
                     courseIds: [courseId]
                 };
             }
-         function normalizeResult(raw, course) {
+            function normalizeResult(raw, course) {
                 const ca = Number(raw.ca ?? raw.caScore ?? 0);
                 const exam = Number(raw.exam ?? raw.examScore ?? 0);
                 const score = raw.score ?? raw.totalScore ?? raw.total ?? (ca + exam);
@@ -3538,10 +3541,10 @@
                     matricNo: raw.regNo ?? raw.matricNo ?? raw.student?.matricNo ?? "—",
                     ca, exam, score,
                     grade: raw.grade ?? gradeFromScore(score),
-              status: raw.status ?? "Draft",
-                 uploadedAt: raw.uploadedAt ?? raw.updatedAt ?? raw.createdAt ?? new Date().toISOString()
-             };
-         }
+                    status: raw.status ?? "Draft",
+                    uploadedAt: raw.uploadedAt ?? raw.updatedAt ?? raw.createdAt ?? new Date().toISOString()
+                };
+            }
             function normalizeProfile(raw) {
                 const name = raw.displayName ?? raw.name ?? raw.fullName ?? `${raw.firstName || ""} ${raw.lastName || ""}`.trim();
                 return { ...raw, displayName: name || undefined };
@@ -3564,7 +3567,7 @@
                 };
             }
 
-          function normalizeFlagged(raw) {
+            function normalizeFlagged(raw) {
                 const resolved = !!raw.isResolved;
                 return {
                     id: raw.entryId ?? raw.id ?? raw._id,
@@ -3585,7 +3588,7 @@
                 };
             }
 
-                       function normalizeNotification(raw) {
+            function normalizeNotification(raw) {
                 return {
                     id: raw.id,
                     type: (raw.type || "announcement").toLowerCase(),
@@ -3596,7 +3599,7 @@
                 };
             }
 
-           function normalizeStudentResultsPayload(raw) {
+            function normalizeStudentResultsPayload(raw) {
                 if (!raw || !Array.isArray(raw.results)) return null;
                 const rows = [];
                 raw.results.forEach(entry => {
@@ -3622,7 +3625,7 @@
                 return { rows, student };
             }
 
-            
+
 
             const Api = {
                 login: (payload) => apiRequest(CONFIG.ENDPOINTS.LOGIN, {
@@ -3645,7 +3648,7 @@
 
                 getCourseResults: (courseId) => apiRequest(CONFIG.ENDPOINTS.COURSE_RESULTS(courseId), { mockHandler: () => ({ success: true, data: MockDB.grades.filter(g => g.courseId === courseId) }) }),
 
-                           bulkUploadResults: (courseId, rows) => {
+                bulkUploadResults: (courseId, rows) => {
                     // LIVE MODE — POST /teacher/courses/:courseId/results returns
                     // data.results[] with the actually-persisted rows (studentId,
                     // studentName, regNo, caScore, examScore, totalScore, grade,
@@ -3661,7 +3664,7 @@
                             body: { results: rows.map(r => ({ studentId: r.studentId, caScore: Number(r.ca) || 0, examScore: Number(r.exam) || 0 })) }
                         }).then(res => {
                             const data = res?.data;
-                          const course = MockDB.courses.find(c => String(c.id) === String(courseId)) || { id: courseId, code: data?.course?.name || "—", title: data?.course?.name || "—" };
+                            const course = MockDB.courses.find(c => String(c.id) === String(courseId)) || { id: courseId, code: data?.course?.name || "—", title: data?.course?.name || "—" };
                             if (data && Array.isArray(data.results)) {
                                 data.results.forEach(raw => {
                                     const normalized = normalizeResult(raw, course);
@@ -3691,14 +3694,14 @@
                         }
                     });
                 },
-              updateResult: (entryId, payload) => {
+                updateResult: (entryId, payload) => {
                     if (CONFIG.DATA_MODE === "live") {
                         const body = {};
                         if (payload.ca !== undefined) body.caScore = payload.ca;
                         if (payload.exam !== undefined) body.examScore = payload.exam;
                         if (payload.flag !== undefined) body.flag = payload.flag;
                         return apiRequest(CONFIG.ENDPOINTS.RESULT_BY_ID(entryId), { method: "PATCH", body }).then(res => {
-                                                      const raw = res?.data?.entry;
+                            const raw = res?.data?.entry;
                             if (raw) {
                                 const g = MockDB.grades.find(x => String(x.id) === String(entryId));
                                 if (g) {
@@ -3727,12 +3730,12 @@
 
                 getFlagged: () => apiRequest(CONFIG.ENDPOINTS.FLAGGED_RESULTS, { mockHandler: () => ({ success: true, data: MockDB.flagged }) }),
                 getFlaggedById: (entryId) => apiRequest(CONFIG.ENDPOINTS.FLAGGED_RESULT_BY_ID(entryId), { mockHandler: () => ({ success: true, data: MockDB.flagged.find(f => f.id === entryId) }) }),
-             resolveFlagged: (entryId, payload) => {
+                resolveFlagged: (entryId, payload) => {
                     if (CONFIG.DATA_MODE === "live") {
                         return apiRequest(CONFIG.ENDPOINTS.FLAGGED_RESULT_RESOLVE(entryId), {
                             method: "PATCH", body: { resolutionDescription: payload.reviewNotes }
                         }).then(res => {
-                         if (res?.data) {
+                            if (res?.data) {
                                 const f = MockDB.flagged.find(x => String(x.id) === String(entryId));
                                 if (f) Object.assign(f, normalizeFlagged(res.data));
                                 logActivity("flag", `Resolved a flagged result for <b>${res.data.studentName || (f && f.studentName) || 'student'}</b>`);
@@ -3753,10 +3756,10 @@
                         }
                     });
                 },
-               reopenFlagged: (entryId) => {
+                reopenFlagged: (entryId) => {
                     if (CONFIG.DATA_MODE === "live") {
                         return apiRequest(CONFIG.ENDPOINTS.FLAGGED_RESULT_RESOLVE(entryId), { method: "DELETE" }).then(res => {
-                              const raw = res?.data;
+                            const raw = res?.data;
                             const f = MockDB.flagged.find(x => String(x.id) === String(entryId));
                             if (raw && f) {
                                 f.status = raw.isResolved ? "Resolved" : "Unresolved";
@@ -3778,9 +3781,9 @@
                         }
                     });
                 },
-          getNotifications: () => apiRequest(CONFIG.ENDPOINTS.NOTIFICATIONS, { mockHandler: () => ({ success: true, data: MockDB.notifications }) }),
+                getNotifications: () => apiRequest(CONFIG.ENDPOINTS.NOTIFICATIONS, { mockHandler: () => ({ success: true, data: MockDB.notifications }) }),
 
-              addGrade: (payload) => {
+                addGrade: (payload) => {
                     if (CONFIG.DATA_MODE === "live") {
                         return Api.bulkUploadResults(payload.courseId, [{ studentId: payload.studentId, name: payload.studentName, matric: payload.matricNo, ca: payload.ca, exam: payload.exam }]);
                     }
@@ -3835,13 +3838,13 @@
             async function loadLiveDashboardData() {
                 if (CONFIG.DATA_MODE !== "live") return;
                 try {
-                  let profileRes;
+                    let profileRes;
                     try {
                         profileRes = await Api.getProfile();
                     } catch (err) {
                         profileRes = null;
                     }
-                   const coursesRes = await Api.getCourses().catch(() => ({ data: null }));
+                    const coursesRes = await Api.getCourses().catch(() => ({ data: null }));
                     if (profileRes?.data) {
                         Object.assign(MockDB.profile, normalizeProfile(profileRes.data));
                         localStorage.setItem("rt_teacher_name", MockDB.profile.displayName || "");
@@ -3870,7 +3873,7 @@
                     const allResults = [];
 
                     await Promise.all(activeCourses.map(async (course) => {
-                   const [studentsRes, resultsRes] = await Promise.all([
+                        const [studentsRes, resultsRes] = await Promise.all([
                             Api.getCourseStudents(course.id).catch(() => ({ data: {} })),
                             Api.getCourseResults(course.id).catch(() => ({ data: [] }))
                         ]);
@@ -3885,7 +3888,7 @@
                             if (studentMap.has(s.id)) studentMap.get(s.id).courseIds.push(course.id);
                             else studentMap.set(s.id, s);
                         });
-                     const rawResults = Array.isArray(resultsRes.data?.results) ? resultsRes.data.results
+                        const rawResults = Array.isArray(resultsRes.data?.results) ? resultsRes.data.results
                             : Array.isArray(resultsRes.data) ? resultsRes.data
                                 : [];
                         if (!rawResults.length && resultsRes.data && !resultsRes.data.results) {
@@ -3901,7 +3904,7 @@
                         Api.getFlagged().catch(() => ({ data: [] })),
                         Api.getNotifications().catch(() => ({ data: [] }))
                     ]);
-                 if (flaggedRes?.data) {
+                    if (flaggedRes?.data) {
                         const rawFlagged = Array.isArray(flaggedRes.data.flaggedEntries) ? flaggedRes.data.flaggedEntries
                             : Array.isArray(flaggedRes.data) ? flaggedRes.data
                                 : Array.isArray(flaggedRes.data.flagged) ? flaggedRes.data.flagged
@@ -3914,7 +3917,7 @@
                             console.warn("Unexpected /teacher/results/flagged response shape — keeping previous flagged list.", flaggedRes.data);
                         }
                     }
-                   if (notifRes?.data) {
+                    if (notifRes?.data) {
                         const rawNotifs = Array.isArray(notifRes.data.notifications) ? notifRes.data.notifications
                             : Array.isArray(notifRes.data) ? notifRes.data
                                 : null;
@@ -3924,7 +3927,7 @@
                             console.warn("Unexpected /teacher/notifications/me response shape — keeping previous notifications list.", notifRes.data);
                         }
                     }
-       } catch (err) {
+                } catch (err) {
                     Toast("error", "Couldn't load some dashboard data", err.message || "Please refresh to try again.");
                 }
             }
@@ -4185,7 +4188,7 @@
                     closeSidebarMobile();
                     Utils.qs("#mainContent").scrollTo?.({ top: 0 });
                     window.scrollTo({ top: 0, behavior: "instant" });
-               const routeLabel = route.charAt(0).toUpperCase() + route.slice(1);
+                    const routeLabel = route.charAt(0).toUpperCase() + route.slice(1);
                     document.title = `${routeLabel} · ResultTrack Lecturer`;
                     try { localStorage.setItem(CONFIG.ROUTE_KEY, JSON.stringify({ route, opts })); } catch (_e) { }
                 },
@@ -4311,8 +4314,8 @@
                 const iconMap = { upload: "upload-cloud", edit: "pencil", flag: "flag", profile: "user", course: "book-plus" };
                 return `<li><div class="tl-dot"><i data-lucide="${iconMap[a.icon] || 'circle'}"></i></div><div class="tl-body"><p>${a.text}</p><time>${Utils.timeAgo(a.time)}</time></div></li>`;
             }
-          function StatusPill(status) {
-               const map = { Published: "pill-success", Draft: "pill-warn", Resolved: "pill-success", Unresolved: "pill-warn", "Under Review": "pill-info", Pending: "pill-warn", Registered: "pill-success", "Not Registered": "pill-danger", active: "pill-success", archived: "pill-neutral", PASS: "pill-success", FAIL: "pill-danger" };
+            function StatusPill(status) {
+                const map = { Published: "pill-success", Draft: "pill-warn", Resolved: "pill-success", Unresolved: "pill-warn", "Under Review": "pill-info", Pending: "pill-warn", Registered: "pill-success", "Not Registered": "pill-danger", active: "pill-success", archived: "pill-neutral", PASS: "pill-success", FAIL: "pill-danger" };
                 const label = status === "PASS" ? "Passed" : status === "FAIL" ? "Failed" : status;
                 return `<span class="pill ${map[status] || 'pill-neutral'}">${Utils.escapeHtml(label)}</span>`;
             }
@@ -4399,7 +4402,7 @@
 
             /* ---------------- COURSES ---------------- */
             Views.courses = () => {
-              const cols = [
+                const cols = [
                     { key: "title", label: "Course name", sortable: true, wrap: true, render: r => `<span class="cell-primary">${Utils.escapeHtml(r.title)}</span>` },
                     { key: "department", label: "Department", sortable: true },
                     { key: "year", label: "Year", sortable: true },
@@ -4421,7 +4424,7 @@
     <div class="card card-pad">
       ${DataTable({
                         key: "courses", columns: cols, rows: MockDB.courses, filters, searchKeys: ["title", "department", "class"], emptyIcon: "book-open", emptyTitle: "No courses found", emptyDesc: "Add a course or adjust your filters.",
-         rowActionsHtml: (r) => `
+                        rowActionsHtml: (r) => `
           <button class="btn btn-ghost btn-sm btn-icon" data-view-course="${r.id}" aria-label="View"><i data-lucide="eye"></i></button>
           ${CONFIG.DATA_MODE === "live" ? "" : `<button class="btn btn-ghost btn-sm btn-icon" data-edit-course="${r.id}" aria-label="Edit"><i data-lucide="pencil"></i></button>`}
         ` })}
@@ -4433,7 +4436,7 @@
                 Utils.qsa("[data-edit-course]").forEach(b => b.addEventListener("click", () => openAddCourseModal(b.getAttribute("data-edit-course"))));
             };
             function openViewCourseModal(id) {
-              const c = MockDB.courses.find(x => String(x.id) === String(id)); if (!c) return;
+                const c = MockDB.courses.find(x => String(x.id) === String(id)); if (!c) return;
                 Modal.open({
                     title: c.title, subtitle: `${c.code} · ${c.unit} units`,
                     bodyHtml: `
@@ -4449,7 +4452,7 @@
                 Utils.qs('[data-open-modal="uploadResults"]').addEventListener("click", (e) => { Modal.close(); openUploadResultsModal(c.id); });
             }
             function openAddCourseModal(editId = null) {
-               const editing = MockDB.courses.find(x => String(x.id) === String(editId));
+                const editing = MockDB.courses.find(x => String(x.id) === String(editId));
                 Modal.open({
                     title: editing ? "Edit course" : "Add course", subtitle: editing ? "Update this course's details." : "Add a new course to your teaching load.",
                     bodyHtml: `
@@ -4525,7 +4528,7 @@
     <div class="file-chip"><i data-lucide="file-spreadsheet"></i><div style="flex:1;"><div class="fc-name">${Utils.escapeHtml(file.name)}</div><div class="fc-size">${(file.size / 1024).toFixed(1)} KB</div></div><button class="btn btn-ghost btn-sm btn-icon" id="removeFile-${kind}" aria-label="Remove"><i data-lucide="x"></i></button></div>
     <div class="progress-bar"><div class="pb-fill" id="pbFill-${kind}"></div></div>
   `;
-              if (window.lucide) lucide.createIcons();
+                if (window.lucide) lucide.createIcons();
                 Utils.qs(`#removeFile-${kind}`).addEventListener("click", () => { info.innerHTML = ""; Utils.qs(`#validationResult-${kind}`).innerHTML = ""; Utils.qs("#confirmImport").disabled = true; if (kind === "results") delete ImportState.results; });
                 const fill = Utils.qs(`#pbFill-${kind}`);
                 let pct = 0;
@@ -4554,7 +4557,7 @@
   `;
                 const confirmBtn = Utils.qs("#confirmImport");
                 confirmBtn.disabled = false;
-             confirmBtn.onclick = async () => {
+                confirmBtn.onclick = async () => {
                     confirmBtn.disabled = true; confirmBtn.innerHTML = "Importing…";
                     try {
                         if (CONFIG.DATA_MODE === "live") {
@@ -4569,7 +4572,7 @@
                     } catch (err) { Toast("error", "Import failed", err.message); confirmBtn.disabled = false; confirmBtn.innerHTML = "<i data-lucide=\"upload\"></i>Import"; }
                 };
             }
-           function mockParseRows(kind) {
+            function mockParseRows(kind) {
                 const n = 20 + Math.floor(rnd() * 20);
                 const rows = [];
                 for (let i = 0; i < n; i++) {
@@ -4673,7 +4676,7 @@
                 }
             }
 
-          
+
 
             /* ---------------- STUDENTS ---------------- */
             Views.students = () => {
@@ -4703,7 +4706,7 @@
   `;
             };
             PostRender.students = () => { Utils.qsa("[data-view-student]").forEach(b => b.addEventListener("click", () => openViewStudentModal(b.getAttribute("data-view-student")))); };
-  function studentResultsBodyHtml(s, grades) {
+            function studentResultsBodyHtml(s, grades) {
                 return `
       <div class="detail-list" style="margin-bottom:16px;">
         <div class="detail-item"><span class="di-label">Level</span><span class="di-value">${s.level}</span></div>
@@ -4729,7 +4732,7 @@
                     footHtml: `<button class="btn btn-secondary" id="closeStudentView">Close</button>`
                 });
                 Utils.qs("#closeStudentView").addEventListener("click", Modal.close);
-          if (CONFIG.DATA_MODE === "live") {
+                if (CONFIG.DATA_MODE === "live") {
                     Api.getStudentResults(id).then(res => {
                         const payload = normalizeStudentResultsPayload(res?.data);
                         const overlay = Utils.qs("#modalOverlay");
@@ -4795,8 +4798,8 @@
                     { key: "grade", label: "Grade", sortable: true, render: r => `<span class="pill pill-neutral">${r.grade}</span>` },
                     { key: "status", label: "Status", render: r => StatusPill(r.status) }
                 ];
-             const courseOptions = MockDB.courses.map(c => ({ value: c.id, label: c.title }));
-              const filters = [
+                const courseOptions = MockDB.courses.map(c => ({ value: c.id, label: c.title }));
+                const filters = [
                     { key: "courseCode", label: "Course", options: courseOptions },
                     { key: "status", label: "Outcome", options: [{ value: "PASS", label: "Passed" }, { value: "FAIL", label: "Failed" }, { value: "Published", label: "Published (mock)" }, { value: "Draft", label: "Draft (mock)" }] }
                 ];
@@ -4820,7 +4823,7 @@
                 Utils.qsa("[data-view-result]").forEach(b => b.addEventListener("click", () => openViewResultModal(b.getAttribute("data-view-result"))));
                 Utils.qsa("[data-edit-result]").forEach(b => b.addEventListener("click", () => openEditResultModal(b.getAttribute("data-edit-result"))));
             };
-                     function openViewResultModal(id) {
+            function openViewResultModal(id) {
                 const g = MockDB.grades.find(x => String(x.id) === String(id)); if (!g) return;
                 Modal.open({
                     title: g.studentName, subtitle: `${g.courseCode} — ${g.courseTitle}`,
@@ -4841,9 +4844,9 @@
                 Utils.qs("#closeResultView").addEventListener("click", Modal.close);
                 Utils.qs("#editFromView").addEventListener("click", () => { Modal.close(); openEditResultModal(id); });
             }
-                     function openEditResultModal(id) {
+            function openEditResultModal(id) {
                 const g = MockDB.grades.find(x => String(x.id) === String(id)); if (!g) return;
-               Modal.open({
+                Modal.open({
                     title: "Edit result", subtitle: `${g.studentName} · ${g.courseCode}`,
                     bodyHtml: `
       <div class="grid-2">
@@ -4868,13 +4871,13 @@
                     } catch (err) { Toast("error", "Could not update result", err.message); }
                 });
             }
-                     function openAddResultModal(preselectCourseId) {
-                              function studentOptionsFor(courseId) {
-                             if (!courseId) return '<option value="">Select a course first</option>';
-                             const enrolled = MockDB.students.filter(s => (s.courseIds || []).some(cid => String(cid) === String(courseId)));
-                             if (!enrolled.length) return '<option value="">No students registered for this course</option>';
-                             return '<option value="">Select student</option>' + enrolled.map(s => `<option value="${s.id}">${Utils.escapeHtml(s.name)} — ${s.matricNo}</option>`).join("");
-                         }
+            function openAddResultModal(preselectCourseId) {
+                function studentOptionsFor(courseId) {
+                    if (!courseId) return '<option value="">Select a course first</option>';
+                    const enrolled = MockDB.students.filter(s => (s.courseIds || []).some(cid => String(cid) === String(courseId)));
+                    if (!enrolled.length) return '<option value="">No students registered for this course</option>';
+                    return '<option value="">Select student</option>' + enrolled.map(s => `<option value="${s.id}">${Utils.escapeHtml(s.name)} — ${s.matricNo}</option>`).join("");
+                }
                 Modal.open({
                     title: "Add result", subtitle: "Manually record a single student's result.",
                     bodyHtml: `
@@ -4911,7 +4914,7 @@
                     } catch (err) { Toast("error", "Could not add result", err.message); }
                 });
             }
-           function openUploadResultsModal(preselectCourseId) {
+            function openUploadResultsModal(preselectCourseId) {
                 delete ImportState.results;
                 Modal.open({
                     title: "Bulk upload results", subtitle: "Upload results for an entire course at once.", wide: true,
@@ -4931,10 +4934,10 @@
     `,
                     footHtml: `<button class="btn btn-secondary" id="cancelUploadResults">Cancel</button><button class="btn btn-primary" id="confirmImport" disabled><i data-lucide="upload"></i>Upload results</button>`
                 });
-            wireDropzone("results");
-               Utils.qs("#cancelUploadResults").addEventListener("click", Modal.close);
-               Utils.qs("#ur_course").addEventListener("change", () => { if (ImportState.results) renderResultsValidation(); });
-           }
+                wireDropzone("results");
+                Utils.qs("#cancelUploadResults").addEventListener("click", Modal.close);
+                Utils.qs("#ur_course").addEventListener("change", () => { if (ImportState.results) renderResultsValidation(); });
+            }
 
             /* ---------------- FLAGGED RESULTS ---------------- */
             Views.flagged = () => {
@@ -4946,7 +4949,7 @@
                     { key: "status", label: "Status", sortable: true, render: r => StatusPill(r.status) },
                     { key: "date", label: "Date", sortable: true, render: r => Utils.timeAgo(r.date) }
                 ];
-               const filters = [{ key: "status", label: "Status", options: [{ value: "Unresolved", label: "Unresolved" }, { value: "Resolved", label: "Resolved" }] }];
+                const filters = [{ key: "status", label: "Status", options: [{ value: "Unresolved", label: "Unresolved" }, { value: "Resolved", label: "Resolved" }] }];
                 return `
     ${PageHead({ crumbs: [{ label: "Dashboard", route: "overview" }, { label: "Flagged Results", route: "flagged" }], title: "Flagged Results", desc: "Review and resolve grade complaints raised by students." })}
     <div class="card card-pad">
@@ -4960,7 +4963,7 @@
             PostRender.flagged = () => { bindFlagRowOpens(); Utils.qsa("[data-review-flag]").forEach(b => b.addEventListener("click", () => openFlagReviewModal(b.getAttribute("data-review-flag")))); };
             function bindFlagRowOpens() { Utils.qsa("[data-open-flag]").forEach(b => b.addEventListener("click", () => openFlagReviewModal(b.getAttribute("data-open-flag")))); }
 
-        function flagReviewBodyHtml(f) {
+            function flagReviewBodyHtml(f) {
                 return `
       <div class="flag-thread">
         <div class="ft-head"><b>${Utils.escapeHtml(f.studentName)}</b><time>${Utils.formatDate(f.date)}</time></div>
@@ -4980,7 +4983,7 @@
       </div>
     `;
             }
-         function wireFlagReviewModal(id, f) {
+            function wireFlagReviewModal(id, f) {
                 Utils.qs("#closeFlagReview").addEventListener("click", Modal.close);
                 Utils.qs("#rejectFlagBtn").addEventListener("click", async () => {
                     try {
@@ -5000,7 +5003,7 @@
                 });
             }
             function openFlagReviewModal(id) {
-               const f = MockDB.flagged.find(x => String(x.id) === String(id)); if (!f) return;
+                const f = MockDB.flagged.find(x => String(x.id) === String(id)); if (!f) return;
                 Modal.open({
                     title: "Review flagged result", subtitle: `${f.studentName} · ${f.courseCode}`, wide: true,
                     bodyHtml: flagReviewBodyHtml(f),
@@ -5323,7 +5326,7 @@
                 Modal.confirm({
                     title: "Log out of ResultTrack?", message: "You'll need to sign in again to access your dashboard.",
                     confirmLabel: "Log out", cancelLabel: "Stay signed in", danger: true, icon: "log-out",
-                 onConfirm: async () => {
+                    onConfirm: async () => {
                         try { await Api.logout(); } catch (_e) { }
                         clearSession();
                         State.authed = false;
@@ -5336,14 +5339,14 @@
             /* =========================================================================
                11. AUTH VIEW SWITCHING (landing / login / activate / dashboard)
                ========================================================================= */
-          function clearSession() {
+            function clearSession() {
                 localStorage.removeItem(CONFIG.TOKEN_KEY);
                 localStorage.removeItem("rt_teacher_id");
                 localStorage.removeItem("rt_teacher_authed");
                 localStorage.removeItem("rt_teacher_name");
                 localStorage.removeItem(CONFIG.ROUTE_KEY);
             }
-                        let sessionInvalidatedHandled = false;
+            let sessionInvalidatedHandled = false;
             function handleSessionInvalidated() {
                 if (sessionInvalidatedHandled) return;
                 if (localStorage.getItem("rt_teacher_authed") !== "1") return;
@@ -5360,7 +5363,7 @@
             function showView(name) {
                 Utils.qsa(".view").forEach(v => v.classList.remove("active"));
                 Utils.qs("#appShell").classList.remove("active");
-          if (name === "dashboard") {
+                if (name === "dashboard") {
                     restoreSessionIdentity();
                     Utils.qs("#appShell").classList.add("active");
                     refreshTopbarIdentity(); refreshNavBadges();
@@ -5399,7 +5402,7 @@
                 if (!valid) return;
                 const btn = Utils.qs("#loginSubmitBtn");
                 btn.disabled = true; btn.textContent = "Signing in…";
-             try {
+                try {
                     const res = await Api.login({ email: email.value.trim(), password: pw.value });
 
                     // Real backend shape: { data: { id, userName, role } } — no token,
@@ -5407,17 +5410,17 @@
                     if (res.data && res.data.token) {
                         localStorage.setItem(CONFIG.TOKEN_KEY, res.data.token);
                     }
-                     if (res.data && res.data.id) {
-                     localStorage.setItem("rt_teacher_id", res.data.id);
-                 }
-                 localStorage.setItem("rt_teacher_authed", "1");
+                    if (res.data && res.data.id) {
+                        localStorage.setItem("rt_teacher_id", res.data.id);
+                    }
+                    localStorage.setItem("rt_teacher_authed", "1");
 
                     // Seed MockDB.profile with what the login response gives us so the
                     // dashboard doesn't render blank/undefined until a full profile
                     // fetch (if/when GET /teacher/profile is confirmed) fills it in.
-                   MockDB.profile.id = res.data.id;
-                 MockDB.profile.displayName = res.data.userName || res.data.name || MockDB.profile.displayName;
-                 localStorage.setItem("rt_teacher_name", MockDB.profile.displayName || "");
+                    MockDB.profile.id = res.data.id;
+                    MockDB.profile.displayName = res.data.userName || res.data.name || MockDB.profile.displayName;
+                    localStorage.setItem("rt_teacher_name", MockDB.profile.displayName || "");
 
                     MockDB.loginHistory.unshift({ device: "This device · Chrome", location: "Ila-Orangun, Osun State, NG", ip: "105.112.44.21", time: new Date().toISOString(), current: true });
                     Toast("success", "Welcome back", `Signed in as ${MockDB.profile.displayName}.`);
@@ -5508,7 +5511,7 @@
                             department: Utils.qs("#department").value
                         };
                         console.log("ACTIVATE PAYLOAD:", JSON.stringify(payload));
-                     const res = await Api.activate(payload);
+                        const res = await Api.activate(payload);
                         const uid = res?.data?.userId ?? res?.userId ?? res?.data?.id ?? res?.id ?? null;
                         State.activateUserId = uid;
                         if (uid) {
@@ -5532,7 +5535,7 @@
                 const btn = Utils.qs("#activateNextBtn");
                 btn.disabled = true; btn.textContent = "Activating…";
                 try {
-                  if (!State.activateUserId) State.activateUserId = localStorage.getItem("rt_activation_userid");
+                    if (!State.activateUserId) State.activateUserId = localStorage.getItem("rt_activation_userid");
                     if (!State.activateUserId) throw new Error("We couldn't get a user ID from the activation step, so we can't verify your code yet. This needs a backend fix — /auth/activate-account should return a userId in its response.");
                     await Api.verifyOtp({ userId: State.activateUserId, otp: Utils.qs("#otpCode").value.trim() });
                     localStorage.removeItem("rt_activation_userid");
@@ -5551,7 +5554,7 @@
             /* =========================================================================
                12. BOOT
                ========================================================================= */
-                       function boot() {
+            function boot() {
                 if (window.lucide) lucide.createIcons();
                 renderActivateStep();
 
@@ -5572,10 +5575,10 @@
                     if (!scaffold) return;
                     scaffold.classList.toggle("scrolled", window.scrollY > 4);
                 }, { passive: true });
-                               const modeText = Utils.qs("#modeFlagText");
-                           if (modeText) modeText.textContent = CONFIG.DATA_MODE === "mock" ? "Mock data mode" : "Live data mode";
-                           const modeFlagEl = Utils.qs("#modeFlag");
-                           if (modeFlagEl) modeFlagEl.classList.toggle("live", CONFIG.DATA_MODE === "live");
+                const modeText = Utils.qs("#modeFlagText");
+                if (modeText) modeText.textContent = CONFIG.DATA_MODE === "mock" ? "Mock data mode" : "Live data mode";
+                const modeFlagEl = Utils.qs("#modeFlag");
+                if (modeFlagEl) modeFlagEl.classList.toggle("live", CONFIG.DATA_MODE === "live");
                 // Reset password now lives on its own shared page (see /reset-password),
                 // used by every role — students, lecturers, admins alike — since the
                 // backend endpoint auth/reset-password has no role distinction. If a
@@ -5586,7 +5589,7 @@
                     window.location.replace(`/reset-password?token=${encodeURIComponent(resetToken)}`);
                     return;
                 }
-               if (localStorage.getItem("rt_teacher_authed") === "1") {
+                if (localStorage.getItem("rt_teacher_authed") === "1") {
                     showView("dashboard");
                 } else {
                     showView("landing");
