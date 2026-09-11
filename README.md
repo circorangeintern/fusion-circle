@@ -473,7 +473,7 @@ CI/CD
 - GitHub
 
 ---
-main live demo : https://resultrackdemo.vercel.app
+main live demo : https://result-track-demo.vercel.app
 # Future Roadmap
 
 Upcoming platform improvements include:
