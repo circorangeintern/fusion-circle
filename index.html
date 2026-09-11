@@ -4873,229 +4873,228 @@
                 padding: 22px 16px 18px;
             }
         }
+
         /* ===========================
    LOGIN DROPDOWN
 =========================== */
 
-.login-dropdown{
-    position:relative;
-}
+        .login-dropdown {
+            position: relative;
+        }
 
-.login-toggle{
-    display:flex;
-    align-items:center;
-    gap:.45rem;
-    cursor:pointer;
-}
+        .login-toggle {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            cursor: pointer;
+        }
 
-.login-arrow{
-    transition:.25s ease;
-}
+        .login-arrow {
+            transition: .25s ease;
+        }
 
-.login-menu{
+        .login-menu {
 
-    position:absolute;
+            position: absolute;
 
-    top:calc(100% + 14px);
-    right:0;
+            top: calc(100% + 14px);
+            right: 0;
 
-    width:360px;
+            width: 360px;
 
-    background:#fff;
+            background: #fff;
 
-    border:1px solid rgba(15,23,42,.08);
+            border: 1px solid rgba(15, 23, 42, .08);
 
-    border-radius:18px;
+            border-radius: 18px;
 
-    box-shadow:
-    0 25px 60px rgba(15,23,42,.16);
+            box-shadow:
+                0 25px 60px rgba(15, 23, 42, .16);
 
-    overflow:hidden;
+            overflow: hidden;
 
-    opacity:0;
+            opacity: 0;
 
-    visibility:hidden;
+            visibility: hidden;
 
-    transform:translateY(12px) scale(.97);
+            transform: translateY(12px) scale(.97);
 
-    transition:
-    opacity .25s,
-    transform .25s,
-    visibility .25s;
+            transition:
+                opacity .25s,
+                transform .25s,
+                visibility .25s;
 
-    z-index:9999;
-}
+            z-index: 9999;
+        }
 
-.login-dropdown.active .login-menu{
+        .login-dropdown.active .login-menu {
 
-    opacity:1;
+            opacity: 1;
 
-    visibility:visible;
+            visibility: visible;
 
-    transform:translateY(0) scale(1);
+            transform: translateY(0) scale(1);
 
-}
+        }
 
-.login-dropdown.active .login-arrow{
+        .login-dropdown.active .login-arrow {
 
-    transform:rotate(180deg);
+            transform: rotate(180deg);
 
-}
+        }
 
-.login-option{
+        .login-option {
 
-    display:flex;
+            display: flex;
 
-    align-items:flex-start;
+            align-items: flex-start;
 
-    gap:16px;
+            gap: 16px;
 
-    padding:18px 20px;
+            padding: 18px 20px;
 
-    text-decoration:none;
+            text-decoration: none;
 
-    color:#111827;
+            color: #111827;
 
-    transition:.25s;
+            transition: .25s;
 
-    border-bottom:1px solid #F3F4F6;
+            border-bottom: 1px solid #F3F4F6;
 
-}
+        }
 
-.login-option:last-child{
+        .login-option:last-child {
 
-    border-bottom:none;
+            border-bottom: none;
 
-}
+        }
 
-.login-option:hover{
+        .login-option:hover {
 
-    background:#F5FAFF;
+            background: #F5FAFF;
 
-}
+        }
 
-.login-icon{
+        .login-icon {
 
-    width:50px;
+            width: 50px;
 
-    height:50px;
+            height: 50px;
 
-    border-radius:14px;
+            border-radius: 14px;
 
-    display:grid;
+            display: grid;
 
-    place-items:center;
+            place-items: center;
 
-    background:#EAF7F6;
+            background: #EAF7F6;
 
-    font-size:1.4rem;
+            font-size: 1.4rem;
 
-    flex-shrink:0;
+            flex-shrink: 0;
 
-}
+        }
 
-.login-content{
+        .login-content {
 
-    display:flex;
+            display: flex;
 
-    flex-direction:column;
+            flex-direction: column;
 
-}
+        }
 
-.login-title{
+        .login-title {
 
-    font-family:"Sora",sans-serif;
+            font-family: "Sora", sans-serif;
 
-    font-size:15px;
+            font-size: 15px;
 
-    font-weight:700;
+            font-weight: 700;
 
-    color:#0F172A;
+            color: #0F172A;
 
-    margin-bottom:4px;
+            margin-bottom: 4px;
 
-}
+        }
 
-.login-content small{
+        .login-content small {
 
-    font-family:"Inter",sans-serif;
+            font-family: "Inter", sans-serif;
 
-    color:#64748B;
+            color: #64748B;
 
-    line-height:1.5;
+            line-height: 1.5;
 
-    font-size:13px;
+            font-size: 13px;
 
-}
+        }
 
-/* ===========================
+        /* ===========================
    MOBILE
 =========================== */
 
-@media(max-width:768px){
+        @media(max-width:768px) {
 
-.login-menu{
+            .login-menu {
 
-    width:min(92vw,340px);
+                width: min(92vw, 340px);
 
-    right:-10px;
+                right: -10px;
 
-}
+            }
 
-.login-option{
+            .login-option {
 
-    padding:16px;
+                padding: 16px;
 
-}
+            }
 
-.login-icon{
+            .login-icon {
 
-    width:44px;
+                width: 44px;
 
-    height:44px;
+                height: 44px;
 
-}
+            }
 
-}
+        }
 
-/* ============================================
+        /* ============================================
    FIX: force navbar logo/text to keep their
    real color while the mobile nav panel is open
    (only kicks in on mobile, doesn't touch desktop)
    ============================================ */
-@media (max-width: 900px) {
+        @media (max-width: 900px) {
 
-    body:has(.nav-mobile.open) .nav-logo span {
-        color: var(--text-primary) !important;
-        -webkit-text-fill-color: var(--text-primary) !important;
-        opacity: 1 !important;
-    }
+            body:has(.nav-mobile.open) .nav-logo span {
+                color: var(--text-primary) !important;
+                -webkit-text-fill-color: var(--text-primary) !important;
+                opacity: 1 !important;
+            }
 
-    body:has(.nav-mobile.open) .nav-logo .rt-logo-mark .rt-bar {
-        fill: var(--primary) !important;
-        opacity: 1 !important;
-    }
+            body:has(.nav-mobile.open) .nav-logo .rt-logo-mark .rt-bar {
+                fill: var(--primary) !important;
+                opacity: 1 !important;
+            }
 
-    body:has(.nav-mobile.open) .nav-logo .rt-logo-mark .rt-highlight {
-        fill: #ffffff !important;
-        opacity: .3 !important;
-    }
+            body:has(.nav-mobile.open) .nav-logo .rt-logo-mark .rt-highlight {
+                fill: #ffffff !important;
+                opacity: .3 !important;
+            }
 
-    body:has(.nav-mobile.open) .nav-logo .rt-logo-mark .rt-arrow {
-        fill: var(--accent) !important;
-        opacity: 1 !important;
-    }
+            body:has(.nav-mobile.open) .nav-logo .rt-logo-mark .rt-arrow {
+                fill: var(--accent) !important;
+                opacity: 1 !important;
+            }
 
-    /* keep the navbar itself opaque so the logo has a
+            /* keep the navbar itself opaque so the logo has a
        proper background to sit on, not the transparent
        top-of-page state */
-    body:has(.nav-mobile.open) #navbar {
-        background: var(--surface) !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,.06) !important;
-    }
-}
-
-
+            body:has(.nav-mobile.open) #navbar {
+                background: var(--surface) !important;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, .06) !important;
+            }
+        }
     </style>
 
 
@@ -5161,36 +5160,36 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </button>
-                
+
                         <div class="login-menu">
-                
+
                             <a href="student-dash-login.html" class="login-option">
                                 <div class="login-icon">🎓</div>
-                
+
                                 <div class="login-content">
                                     <span class="login-title">Student Portal</span>
                                     <small>View results, raise flags and track academic progress.</small>
                                 </div>
                             </a>
-                
+
                             <a href="lecturer-dash-login.html" class="login-option">
                                 <div class="login-icon">👨‍🏫</div>
-                
+
                                 <div class="login-content">
                                     <span class="login-title">Lecturer Portal</span>
                                     <small>Manage scores, publish results and respond to flags.</small>
                                 </div>
                             </a>
-                
+
                             <a href="admin-login.html" class="login-option">
                                 <div class="login-icon">🛡️</div>
-                
+
                                 <div class="login-content">
                                     <span class="login-title">Administrator Portal</span>
                                     <small>Configure sessions, manage users and oversee the system.</small>
                                 </div>
                             </a>
-                
+
                         </div>
                     </div>
                 </div>
@@ -6225,24 +6224,26 @@
                                 across the platform.</p>
                         </div>
                     </div>
-                <div class="faq-item">
-                    <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
-                        <span class="faq-q-text">How does ResultTrack integrate with a university's academic systems?</span>
-                        <span class="faq-q-icon" aria-hidden="true">+</span>
-                    </div>
-                    <div class="faq-a">
-                        <p>
-                            ResultTrack is designed with a secure, API-ready architecture that enables seamless
-                            integration with university academic systems. Its modular infrastructure supports
-                            authentication, student and lecturer management, course administration, result processing,
-                            and verified academic records, allowing institutions to connect their existing systems
-                            without requiring a complete overhaul of their current infrastructure.
-                        </p>
-                    </div>
-                </div>
+                    <div class="faq-item">
+                        <div class="faq-q" role="button" aria-expanded="false" tabindex="0">
+                            <span class="faq-q-text">How does ResultTrack integrate with a university's academic
+                                systems?</span>
+                            <span class="faq-q-icon" aria-hidden="true">+</span>
+                        </div>
+                        <div class="faq-a">
+                            <p>
+                                ResultTrack is designed with a secure, API-ready architecture that enables seamless
+                                integration with university academic systems. Its modular infrastructure supports
+                                authentication, student and lecturer management, course administration, result
+                                processing,
+                                and verified academic records, allowing institutions to connect their existing systems
+                                without requiring a complete overhaul of their current infrastructure.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 
@@ -6591,7 +6592,7 @@
                     <h5>Company</h5>
                     <ul>
                         <li><a href="#">About</a></li>
-                        
+
                         <li><a href="#faq">Contact</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>
@@ -6601,9 +6602,9 @@
             <div class="footer-bottom">
                 <span class="footer-copy">© 2025 ResultTrack. All rights reserved.</span>
                 <div class="footer-links">
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms of Service</a>
-                <a href="accessibility.html">Accessibility</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="accessibility.html">Accessibility</a>
                 </div>
             </div>
         </div>
@@ -7330,49 +7331,49 @@
         setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
         // Drop-down for the login form
         const loginDropdown = document.querySelector(".login-dropdown");
-            const loginToggle = document.querySelector(".login-toggle");
+        const loginToggle = document.querySelector(".login-toggle");
 
-            loginToggle.addEventListener("click", (e) => {
+        loginToggle.addEventListener("click", (e) => {
 
-                e.stopPropagation();
+            e.stopPropagation();
 
-                loginDropdown.classList.toggle("active");
+            loginDropdown.classList.toggle("active");
 
-                loginToggle.setAttribute(
-                    "aria-expanded",
-                    loginDropdown.classList.contains("active")
-                );
+            loginToggle.setAttribute(
+                "aria-expanded",
+                loginDropdown.classList.contains("active")
+            );
 
-            });
+        });
 
-            // Close when clicking outside
-            document.addEventListener("click", () => {
+        // Close when clicking outside
+        document.addEventListener("click", () => {
+
+            loginDropdown.classList.remove("active");
+
+            loginToggle.setAttribute("aria-expanded", "false");
+
+        });
+
+        // Prevent closing when clicking inside the dropdown
+        document.querySelector(".login-menu").addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+        });
+
+        // Close with Escape key
+        document.addEventListener("keydown", (e) => {
+
+            if (e.key === "Escape") {
 
                 loginDropdown.classList.remove("active");
 
                 loginToggle.setAttribute("aria-expanded", "false");
 
-            });
+            }
 
-            // Prevent closing when clicking inside the dropdown
-            document.querySelector(".login-menu").addEventListener("click", (e) => {
-
-                e.stopPropagation();
-
-            });
-
-            // Close with Escape key
-            document.addEventListener("keydown", (e) => {
-
-                if (e.key === "Escape") {
-
-                    loginDropdown.classList.remove("active");
-
-                    loginToggle.setAttribute("aria-expanded", "false");
-
-                }
-
-            });
+        });
     </script>
 </body>
 
