@@ -2026,109 +2026,121 @@
                         <p class="auth-view-foot">Not a student? <a href="index.html">Return to ResultTrack</a></p>
                     </section>
 
-                <section class="auth-view" id="viewActivate" aria-labelledby="activateTitle">
-                    <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
-                            style="width:14px;height:14px"></i> Back to sign in</a>
-                
-                    <div id="activateFormWrap">
-                        <div class="auth-view-icon"><i data-lucide="user-check" style="width:22px;height:22px"></i>
+                    <section class="auth-view" id="viewActivate" aria-labelledby="activateTitle">
+                        <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
+                                style="width:14px;height:14px"></i> Back to sign in</a>
+
+                        <div id="activateFormWrap">
+                            <div class="auth-view-icon"><i data-lucide="user-check" style="width:22px;height:22px"></i>
+                            </div>
+                            <h2 class="auth-view-title" id="activateTitle">Activate your account</h2>
+                            <p class="auth-view-sub">Enter your name, institutional email, year, and department. If it
+                                matches your academic record, we'll email you a one-time code.</p>
+                            <div class="auth-banner error" id="activateBanner" role="alert" hidden></div>
+
+                            <form class="auth-form" id="activateForm" novalidate>
+                                <div class="form-grid" style="margin-bottom:0">
+                                    <div class="form-field" id="fieldActFirstName">
+                                        <label for="actFirstName">First name</label>
+                                        <input type="text" id="actFirstName" autocomplete="given-name"
+                                            placeholder="John">
+                                        <span class="form-field-error" id="actFirstNameError"></span>
+                                    </div>
+                                    <div class="form-field" id="fieldActLastName">
+                                        <label for="actLastName">Last name</label>
+                                        <input type="text" id="actLastName" autocomplete="family-name"
+                                            placeholder="Doe">
+                                        <span class="form-field-error" id="actLastNameError"></span>
+                                    </div>
+                                </div>
+                                <div class="auth-field" id="fieldActivateEmail">
+                                    <label for="activateEmail">Institutional email</label>
+                                    <div class="auth-input-wrap">
+                                        <i data-lucide="mail" class="auth-input-icon"
+                                            style="width:16px;height:16px"></i>
+                                        <input type="email" id="activateEmail" name="email" autocomplete="username"
+                                            required aria-describedby="activateEmailError"
+                                            placeholder="you@university.edu.ng">
+                                    </div>
+                                    <span class="auth-field-error" id="activateEmailError" role="alert"></span>
+                                </div>
+                                <div class="form-field" id="fieldActYear">
+                                    <label for="actYear">Year</label>
+                                    <select id="actYear">
+                                        <option value="" disabled selected>Select your year</option>
+                                        <option value="YEAR_1">Year 1</option>
+                                        <option value="YEAR_2">Year 2</option>
+                                        <option value="YEAR_3">Year 3</option>
+                                        <option value="YEAR_4">Year 4</option>
+                                        <option value="YEAR_5">Year 5</option>
+                                        <option value="YEAR_6">Year 6</option>
+                                        <option value="YEAR_7">Year 7</option>
+                                    </select>
+                                    <span class="form-field-error" id="actYearError"></span>
+                                </div>
+                                <div class="form-field" id="fieldActDepartment">
+                                    <label for="actDepartment">Department <span
+                                            style="font-weight:400;color:var(--text-tertiary)">(as it
+                                            appears on your admission letter)</span></label>
+                                    <input type="text" id="actDepartment" placeholder="Computer Science">
+                                    <span class="form-field-error" id="actDepartmentError"></span>
+                                </div>
+
+                                <div class="auth-remember">
+                                    <input type="checkbox" id="actTerms">
+                                    <label for="actTerms">I accept the Terms of Use and Privacy Policy</label>
+                                </div>
+                                <span class="form-field-error" id="actTermsError"
+                                    style="display:block;margin-top:-10px"></span>
+
+                                <button type="submit" class="btn btn-primary auth-submit" id="activateSubmit">
+                                    <span class="btn-label"><i data-lucide="send" style="width:15px;height:15px"></i>
+                                        Send activation
+                                        code</span>
+                                    <span class="spinner" aria-hidden="true"></span>
+                                </button>
+                            </form>
                         </div>
-                        <h2 class="auth-view-title" id="activateTitle">Activate your account</h2>
-                        <p class="auth-view-sub">Enter your name, institutional email, year, and department. If it
-                            matches your academic record, we'll email you a one-time code.</p>
-                        <div class="auth-banner error" id="activateBanner" role="alert" hidden></div>
-                
-                        <form class="auth-form" id="activateForm" novalidate>
-                            <div class="form-grid" style="margin-bottom:0">
-                                <div class="form-field" id="fieldActFirstName">
-                                    <label for="actFirstName">First name</label>
-                                    <input type="text" id="actFirstName" autocomplete="given-name" placeholder="John">
-                                    <span class="form-field-error" id="actFirstNameError"></span>
+
+                        <div id="activateOtpWrap" hidden>
+                            <div class="auth-view-icon"><i data-lucide="shield-check"
+                                    style="width:22px;height:22px"></i></div>
+                            <h2 class="auth-view-title">Enter your activation code</h2>
+                            <p class="auth-view-sub" id="activateOtpSub">We've sent a 6-digit code to your email.</p>
+                            <div class="auth-banner error" id="activateOtpBanner" role="alert" hidden></div>
+                            <form class="auth-form" id="activateOtpForm" novalidate>
+                                <div class="auth-field" id="fieldActivateOtp">
+                                    <label for="activateOtpInput">Activation code</label>
+                                    <div class="auth-input-wrap">
+                                        <i data-lucide="key-round" class="auth-input-icon"
+                                            style="width:16px;height:16px"></i>
+                                        <input type="text" id="activateOtpInput" inputmode="numeric"
+                                            autocomplete="one-time-code" placeholder="123456" style="padding-left:40px">
+                                    </div>
+                                    <span class="auth-field-error" id="activateOtpError" role="alert"></span>
                                 </div>
-                                <div class="form-field" id="fieldActLastName">
-                                    <label for="actLastName">Last name</label>
-                                    <input type="text" id="actLastName" autocomplete="family-name" placeholder="Doe">
-                                    <span class="form-field-error" id="actLastNameError"></span>
-                                </div>
-                            </div>
-                            <div class="auth-field" id="fieldActivateEmail">
-                                <label for="activateEmail">Institutional email</label>
-                                <div class="auth-input-wrap">
-                                    <i data-lucide="mail" class="auth-input-icon" style="width:16px;height:16px"></i>
-                                    <input type="email" id="activateEmail" name="email" autocomplete="username" required
-                                        aria-describedby="activateEmailError" placeholder="you@university.edu.ng">
-                                </div>
-                                <span class="auth-field-error" id="activateEmailError" role="alert"></span>
-                            </div>
-                            <div class="form-field" id="fieldActYear">
-                                <label for="actYear">Year</label>
-                                <select id="actYear">
-                                    <option value="" disabled selected>Select your year</option>
-                                    <option value="YEAR_1">Year 1</option>
-                                    <option value="YEAR_2">Year 2</option>
-                                    <option value="YEAR_3">Year 3</option>
-                                    <option value="YEAR_4">Year 4</option>
-                                    <option value="YEAR_5">Year 5</option>
-                                    <option value="YEAR_6">Year 6</option>
-                                    <option value="YEAR_7">Year 7</option>
-                                </select>
-                                <span class="form-field-error" id="actYearError"></span>
-                            </div>
-                            <div class="form-field" id="fieldActDepartment">
-                                <label for="actDepartment">Department <span style="font-weight:400;color:var(--text-tertiary)">(as it
-                                        appears on your admission letter)</span></label>
-                                <input type="text" id="actDepartment" placeholder="Computer Science">
-                                <span class="form-field-error" id="actDepartmentError"></span>
-                            </div>
-                
-                            <div class="auth-remember">
-                                <input type="checkbox" id="actTerms">
-                                <label for="actTerms">I accept the Terms of Use and Privacy Policy</label>
-                            </div>
-                            <span class="form-field-error" id="actTermsError" style="display:block;margin-top:-10px"></span>
-                
-                            <button type="submit" class="btn btn-primary auth-submit" id="activateSubmit">
-                                <span class="btn-label"><i data-lucide="send" style="width:15px;height:15px"></i> Send activation
-                                    code</span>
-                                <span class="spinner" aria-hidden="true"></span>
-                            </button>
-                        </form>
-                    </div>
-                
-                    <div id="activateOtpWrap" hidden>
-                        <div class="auth-view-icon"><i data-lucide="shield-check" style="width:22px;height:22px"></i></div>
-                        <h2 class="auth-view-title">Enter your activation code</h2>
-                        <p class="auth-view-sub" id="activateOtpSub">We've sent a 6-digit code to your email.</p>
-                        <div class="auth-banner error" id="activateOtpBanner" role="alert" hidden></div>
-                        <form class="auth-form" id="activateOtpForm" novalidate>
-                            <div class="auth-field" id="fieldActivateOtp">
-                                <label for="activateOtpInput">Activation code</label>
-                                <div class="auth-input-wrap">
-                                    <i data-lucide="key-round" class="auth-input-icon" style="width:16px;height:16px"></i>
-                                    <input type="text" id="activateOtpInput" inputmode="numeric" autocomplete="one-time-code"
-                                        placeholder="123456" style="padding-left:40px">
-                                </div>
-                                <span class="auth-field-error" id="activateOtpError" role="alert"></span>
-                            </div>
-                            <button type="submit" class="btn btn-primary auth-submit" id="activateOtpSubmit">
-                                <span class="btn-label"><i data-lucide="check-circle" style="width:15px;height:15px"></i> Verify
-                                    code</span>
-                                <span class="spinner" aria-hidden="true"></span>
-                            </button>
-                        </form>
-                    </div>
-                
-                    <div id="activateStep3Wrap" hidden>
-                        <div class="auth-success">
-                            <div class="auth-success-icon"><i data-lucide="mail-check" style="width:24px;height:24px"></i></div>
-                                                    <h2 class="auth-success-title">Account activated</h2>
-                                                    <p class="auth-success-desc">Your account is active. We've also emailed you a link to set your password — open it,
-                                                        choose a password, then come back here and sign in.</p>
-                            <a href="#" class="btn btn-primary" data-view-link="viewSignIn" style="margin-top:14px"><span
-                                    class="btn-label">Go to sign in</span></a>
+                                <button type="submit" class="btn btn-primary auth-submit" id="activateOtpSubmit">
+                                    <span class="btn-label"><i data-lucide="check-circle"
+                                            style="width:15px;height:15px"></i> Verify
+                                        code</span>
+                                    <span class="spinner" aria-hidden="true"></span>
+                                </button>
+                            </form>
                         </div>
-                    </div>
-                </section>
+
+                        <div id="activateStep3Wrap" hidden>
+                            <div class="auth-success">
+                                <div class="auth-success-icon"><i data-lucide="mail-check"
+                                        style="width:24px;height:24px"></i></div>
+                                <h2 class="auth-success-title">Account activated</h2>
+                                <p class="auth-success-desc">Your account is active. We've also emailed you a link to
+                                    set your password — open it,
+                                    choose a password, then come back here and sign in.</p>
+                                <a href="#" class="btn btn-primary" data-view-link="viewSignIn"
+                                    style="margin-top:14px"><span class="btn-label">Go to sign in</span></a>
+                            </div>
+                        </div>
+                    </section>
 
                     <section class="auth-view" id="viewForgot" aria-labelledby="forgotTitle">
                         <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
@@ -2170,63 +2182,73 @@
                                         class="btn-label">Back to sign in</span></a>
                             </div>
                         </div>
-                </section>
-                
-                <section class="auth-view" id="viewResetPassword" aria-labelledby="resetPwTitle">
-                    <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
-                            style="width:14px;height:14px"></i> Back to sign in</a>
-                    <div id="resetPwFormWrap">
-                        <div class="auth-view-icon"><i data-lucide="key-round" style="width:22px;height:22px"></i></div>
-                                            <h2 class="auth-view-title" id="resetPwTitle">Choose a new password</h2>
-                                            <p class="auth-view-sub" id="resetPwSub">Enter a new password for your account.</p>
-                        <div class="auth-banner error" id="resetPwBanner" role="alert" hidden></div>
-                        <form class="auth-form" id="resetPwForm" novalidate>
-                            <div class="auth-field" id="fieldResetPw">
-                                <label for="resetPwNew">New password</label>
-                                <div class="auth-input-wrap">
-                                    <i data-lucide="lock" class="auth-input-icon" style="width:16px;height:16px"></i>
-                                    <input type="password" id="resetPwNew" autocomplete="new-password" required
-                                        aria-describedby="resetPwError" placeholder="At least 8 characters">
-                                    <button type="button" class="auth-password-toggle" data-toggle-for="resetPwNew"
-                                        aria-label="Show password"><i data-lucide="eye" style="width:16px;height:16px"></i></button>
-                                </div>
-                                <span class="auth-field-error" id="resetPwError" role="alert"></span>
+                    </section>
+
+                    <section class="auth-view" id="viewResetPassword" aria-labelledby="resetPwTitle">
+                        <a href="#" class="auth-back-link" data-view-link="viewSignIn"><i data-lucide="arrow-left"
+                                style="width:14px;height:14px"></i> Back to sign in</a>
+                        <div id="resetPwFormWrap">
+                            <div class="auth-view-icon"><i data-lucide="key-round" style="width:22px;height:22px"></i>
                             </div>
-                            <div class="auth-field" id="fieldResetPwConfirm">
-                                <label for="resetPwConfirm">Confirm new password</label>
-                                <div class="auth-input-wrap">
-                                    <i data-lucide="lock" class="auth-input-icon" style="width:16px;height:16px"></i>
-                                    <input type="password" id="resetPwConfirm" autocomplete="new-password" required
-                                        aria-describedby="resetPwConfirmError" placeholder="Re-enter your new password">
-                                    <button type="button" class="auth-password-toggle" data-toggle-for="resetPwConfirm"
-                                        aria-label="Show password"><i data-lucide="eye" style="width:16px;height:16px"></i></button>
+                            <h2 class="auth-view-title" id="resetPwTitle">Choose a new password</h2>
+                            <p class="auth-view-sub" id="resetPwSub">Enter a new password for your account.</p>
+                            <div class="auth-banner error" id="resetPwBanner" role="alert" hidden></div>
+                            <form class="auth-form" id="resetPwForm" novalidate>
+                                <div class="auth-field" id="fieldResetPw">
+                                    <label for="resetPwNew">New password</label>
+                                    <div class="auth-input-wrap">
+                                        <i data-lucide="lock" class="auth-input-icon"
+                                            style="width:16px;height:16px"></i>
+                                        <input type="password" id="resetPwNew" autocomplete="new-password" required
+                                            aria-describedby="resetPwError" placeholder="At least 8 characters">
+                                        <button type="button" class="auth-password-toggle" data-toggle-for="resetPwNew"
+                                            aria-label="Show password"><i data-lucide="eye"
+                                                style="width:16px;height:16px"></i></button>
+                                    </div>
+                                    <span class="auth-field-error" id="resetPwError" role="alert"></span>
                                 </div>
-                                <span class="auth-field-error" id="resetPwConfirmError" role="alert"></span>
-                            </div>
-                            <button type="submit" class="btn btn-primary auth-submit" id="resetPwSubmit">
-                                <span class="btn-label"><i data-lucide="check-circle" style="width:15px;height:15px"></i> Reset
-                                    password</span>
-                                <span class="spinner" aria-hidden="true"></span>
-                            </button>
-                        </form>
-                    </div>
-                    <div id="resetPwSuccessWrap" hidden>
-                        <div class="auth-success">
-                            <div class="auth-success-icon"><i data-lucide="check-circle" style="width:24px;height:24px"></i></div>
-                                                    <h2 class="auth-success-title" id="resetPwSuccessTitle">Password reset</h2>
-                                                    <p class="auth-success-desc" id="resetPwSuccessDesc">Your password has been updated. Sign in with your new password.</p>
-                            <a href="#" class="btn btn-primary" data-view-link="viewSignIn"><span class="btn-label">Back to sign
-                                    in</span></a>
+                                <div class="auth-field" id="fieldResetPwConfirm">
+                                    <label for="resetPwConfirm">Confirm new password</label>
+                                    <div class="auth-input-wrap">
+                                        <i data-lucide="lock" class="auth-input-icon"
+                                            style="width:16px;height:16px"></i>
+                                        <input type="password" id="resetPwConfirm" autocomplete="new-password" required
+                                            aria-describedby="resetPwConfirmError"
+                                            placeholder="Re-enter your new password">
+                                        <button type="button" class="auth-password-toggle"
+                                            data-toggle-for="resetPwConfirm" aria-label="Show password"><i
+                                                data-lucide="eye" style="width:16px;height:16px"></i></button>
+                                    </div>
+                                    <span class="auth-field-error" id="resetPwConfirmError" role="alert"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary auth-submit" id="resetPwSubmit">
+                                    <span class="btn-label"><i data-lucide="check-circle"
+                                            style="width:15px;height:15px"></i> Reset
+                                        password</span>
+                                    <span class="spinner" aria-hidden="true"></span>
+                                </button>
+                            </form>
                         </div>
-                    </div>
-                </section>
-                
+                        <div id="resetPwSuccessWrap" hidden>
+                            <div class="auth-success">
+                                <div class="auth-success-icon"><i data-lucide="check-circle"
+                                        style="width:24px;height:24px"></i></div>
+                                <h2 class="auth-success-title" id="resetPwSuccessTitle">Password reset</h2>
+                                <p class="auth-success-desc" id="resetPwSuccessDesc">Your password has been updated.
+                                    Sign in with your new password.</p>
+                                <a href="#" class="btn btn-primary" data-view-link="viewSignIn"><span
+                                        class="btn-label">Back to sign
+                                        in</span></a>
+                            </div>
+                        </div>
+                    </section>
+
                 </div>
-                </div>
-                </main>
-                </div>
-                
-                <div id="appShell">
+            </div>
+        </main>
+    </div>
+
+    <div id="appShell">
         <div id="sidebarOverlay"></div>
 
         <aside id="sidebar" aria-label="Student navigation">
@@ -2271,40 +2293,45 @@
                             <h1>Welcome back<span id="welcomeName"></span></h1>
                             <p>Here's where things stand this semester.</p>
                         </div>
-                    <span class="badge dev" id="devDataBadge" hidden><i data-lucide="flask-conical" style="width:12px;height:12px"></i>
-                        Development data</span>
+                        <span class="badge dev" id="devDataBadge" hidden><i data-lucide="flask-conical"
+                                style="width:12px;height:12px"></i>
+                            Development data</span>
                     </div>
 
-            <div class="stat-grid">
-                <div class="stat-card">
-                    <div class="stat-card-top">
-                        <div class="stat-icon blue"><i data-lucide="book-open" style="width:18px;height:18px"></i></div>
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <div class="stat-icon blue"><i data-lucide="book-open"
+                                        style="width:18px;height:18px"></i></div>
+                            </div>
+                            <div class="stat-val" id="statCourses">0</div>
+                            <div class="stat-lbl">Registered courses</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <div class="stat-icon teal"><i data-lucide="check-circle"
+                                        style="width:18px;height:18px"></i></div>
+                            </div>
+                            <div class="stat-val" id="statPublished">0</div>
+                            <div class="stat-lbl">Results published</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <div class="stat-icon gold"><i data-lucide="clock" style="width:18px;height:18px"></i>
+                                </div>
+                            </div>
+                            <div class="stat-val" id="statPending">0</div>
+                            <div class="stat-lbl">Awaiting result</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-top">
+                                <div class="stat-icon error"><i data-lucide="flag" style="width:18px;height:18px"></i>
+                                </div>
+                            </div>
+                            <div class="stat-val" id="statFlags">0</div>
+                            <div class="stat-lbl">Active flags</div>
+                        </div>
                     </div>
-                    <div class="stat-val" id="statCourses">0</div>
-                    <div class="stat-lbl">Registered courses</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-top">
-                        <div class="stat-icon teal"><i data-lucide="check-circle" style="width:18px;height:18px"></i></div>
-                    </div>
-                    <div class="stat-val" id="statPublished">0</div>
-                    <div class="stat-lbl">Results published</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-top">
-                        <div class="stat-icon gold"><i data-lucide="clock" style="width:18px;height:18px"></i></div>
-                    </div>
-                    <div class="stat-val" id="statPending">0</div>
-                    <div class="stat-lbl">Awaiting result</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-top">
-                        <div class="stat-icon error"><i data-lucide="flag" style="width:18px;height:18px"></i></div>
-                    </div>
-                    <div class="stat-val" id="statFlags">0</div>
-                    <div class="stat-lbl">Active flags</div>
-                </div>
-            </div>
 
                     <div class="dash-grid">
                         <div class="card">
@@ -2322,29 +2349,32 @@
                     </div>
                 </section>
 
-            <section class="view" id="view-courses" data-title="My Courses">
-                <div class="view-header">
-                    <div>
-                        <h1>My Courses</h1>
-                        <p>Select the courses you want to register for this session, then confirm below. Registered courses are
-                            visible to your lecturers.</p>
+                <section class="view" id="view-courses" data-title="My Courses">
+                    <div class="view-header">
+                        <div>
+                            <h1>My Courses</h1>
+                            <p>Select the courses you want to register for this session, then confirm below. Registered
+                                courses are
+                                visible to your lecturers.</p>
+                        </div>
+                        <div class="view-header-actions">
+                            <button class="btn btn-primary btn-sm" id="registerCoursesBtn" disabled><span
+                                    class="btn-label"><i data-lucide="check-circle" style="width:14px;height:14px"></i>
+                                    Register selected
+                                    courses</span><span class="spinner"></span></button>
+                        </div>
                     </div>
-                    <div class="view-header-actions">
-                        <button class="btn btn-primary btn-sm" id="registerCoursesBtn" disabled><span class="btn-label"><i
-                                    data-lucide="check-circle" style="width:14px;height:14px"></i> Register selected
-                                courses</span><span class="spinner"></span></button>
-                    </div>
-                </div>
-                <div id="coursesGrid" class="courses-grid"></div>
+                    <div id="coursesGrid" class="courses-grid"></div>
                     <div class="empty-state" id="coursesEmptyState" hidden>
                         <div class="empty-icon"><i data-lucide="book-open" style="width:26px;height:26px"></i></div>
                         <div class="empty-title">No courses found</div>
-                        <div class="empty-desc">Nothing is registered to your account yet for this session. Check back once course
+                        <div class="empty-desc">Nothing is registered to your account yet for this session. Check back
+                            once course
                             registration opens, or contact your department.</div>
                     </div>
                 </section>
-                
-                
+
+
 
                 <section class="view" id="view-results" data-title="My Results">
                     <div class="view-header">
@@ -2360,22 +2390,23 @@
                                     style="width:14px;height:14px"></i> Print</button>
                         </div>
                     </div>
-                <div class="toolbar">
-                    <div class="search-wrap"><i data-lucide="search" style="width:15px;height:15px"></i><input type="text"
-                            id="resultsSearchInput" placeholder="Search by course title…"></div>
-                    <select class="select-filter" id="resultsStatusFilter">
-                        <option value="all">All statuses</option>
-                        <option value="pass">Passed</option>
-                        <option value="fail">Failed</option>
-                        <option value="pending">Awaiting result</option>
-                    </select>
-                    <label
-                        style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-secondary);cursor:pointer;white-space:nowrap">
-                        <input type="checkbox" id="resultsFlaggedOnly" style="width:16px;height:16px;accent-color:var(--primary)">
-                        Flagged only
-                    </label>
-                    <div class="toolbar-spacer"></div>
-                </div>
+                    <div class="toolbar">
+                        <div class="search-wrap"><i data-lucide="search" style="width:15px;height:15px"></i><input
+                                type="text" id="resultsSearchInput" placeholder="Search by course title…"></div>
+                        <select class="select-filter" id="resultsStatusFilter">
+                            <option value="all">All statuses</option>
+                            <option value="pass">Passed</option>
+                            <option value="fail">Failed</option>
+                            <option value="pending">Awaiting result</option>
+                        </select>
+                        <label
+                            style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-secondary);cursor:pointer;white-space:nowrap">
+                            <input type="checkbox" id="resultsFlaggedOnly"
+                                style="width:16px;height:16px;accent-color:var(--primary)">
+                            Flagged only
+                        </label>
+                        <div class="toolbar-spacer"></div>
+                    </div>
                     <div class="table-wrap">
                         <div class="table-scroll">
                             <table class="rt-table" id="resultsTable">
@@ -2420,10 +2451,10 @@
                                 <div class="stat-lbl">Registration number</div>
                                 <div class="cell-primary" id="transcriptRegNo" style="margin-top:2px">—</div>
                             </div>
-                        <div>
-                            <div class="stat-lbl">Programme</div>
-                            <div class="cell-primary" id="transcriptProgramme" style="margin-top:2px">—</div>
-                        </div>
+                            <div>
+                                <div class="stat-lbl">Programme</div>
+                                <div class="cell-primary" id="transcriptProgramme" style="margin-top:2px">—</div>
+                            </div>
                         </div>
                     </div>
                     <div id="transcriptSessionGroups"></div>
@@ -2605,66 +2636,67 @@
                                 data-lucide="lock" style="width:14px;height:14px"></i> Update password &amp;
                             continue</span><span class="spinner"></span></button>
                 </div>
-</form>
-</div>
-</div>
-</div>
-
-<div class="modal-overlay" id="yearConfirmOverlay" hidden></div>
-<div class="modal" id="yearConfirmModal" role="dialog" aria-modal="true" aria-labelledby="yearConfirmTitle" hidden>
-    <div class="modal-inner">
-        <div class="modal-header">
-            <div class="modal-icon warn"><i data-lucide="calendar-range" style="width:20px;height:20px"></i></div>
-            <div class="modal-title" id="yearConfirmTitle">Confirm your year</div>
-            <p class="modal-desc">Your profile doesn't have your academic year on file yet. Select it below so we can
-                load your registered courses — you won't be asked again on this device.</p>
-        </div>
-        <form id="yearConfirmForm">
-            <div class="form-field">
-                <label for="yearConfirmSelect">Year</label>
-                <select id="yearConfirmSelect">
-                    <option value="" disabled selected>Select your year</option>
-                    <option value="YEAR_1">Year 1</option>
-                    <option value="YEAR_2">Year 2</option>
-                    <option value="YEAR_3">Year 3</option>
-                    <option value="YEAR_4">Year 4</option>
-                    <option value="YEAR_5">Year 5</option>
-                    <option value="YEAR_6">Year 6</option>
-                    <option value="YEAR_7">Year 7</option>
-                </select>
-                <span class="form-field-error" id="yearConfirmError"></span>
-            </div>
-            <div class="form-actions" style="justify-content:flex-end;border-top:none;padding-top:0">
-                <button type="submit" class="btn btn-primary" id="yearConfirmSubmit"><span class="btn-label"><i
-                            data-lucide="check-circle" style="width:14px;height:14px"></i> Confirm &amp;
-                        continue</span><span class="spinner"></span></button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="modal-overlay" id="logoutOverlay" hidden></div>
-<div class="modal" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle" hidden>
-    <div class="modal-inner">
-        <button type="button" class="modal-close" id="logoutModalClose" aria-label="Close"><i data-lucide="x"
-                style="width:16px;height:16px"></i></button>
-        <div class="modal-header">
-            <div class="modal-icon warn"><i data-lucide="log-out" style="width:20px;height:20px"></i></div>
-            <div class="modal-title" id="logoutModalTitle">Log out?</div>
-            <p class="modal-desc">You'll need to sign in again to view your results and flags.</p>
-        </div>
-        <div class="form-actions" style="border-top:none;padding-top:0">
-            <button type="button" class="btn btn-outline" id="logoutStayBtn">Stay signed in</button>
-            <button type="button" class="btn btn-primary" id="logoutConfirmBtn"
-                style="background:var(--error);border-color:var(--error)"><span class="btn-label"><i
-                        data-lucide="log-out" style="width:14px;height:14px"></i> Log out</span><span
-                    class="spinner"></span></button>
+            </form>
         </div>
     </div>
-</div>
+    </div>
 
-<script>
-    const CONFIG = {
+    <div class="modal-overlay" id="yearConfirmOverlay" hidden></div>
+    <div class="modal" id="yearConfirmModal" role="dialog" aria-modal="true" aria-labelledby="yearConfirmTitle" hidden>
+        <div class="modal-inner">
+            <div class="modal-header">
+                <div class="modal-icon warn"><i data-lucide="calendar-range" style="width:20px;height:20px"></i></div>
+                <div class="modal-title" id="yearConfirmTitle">Confirm your year</div>
+                <p class="modal-desc">Your profile doesn't have your academic year on file yet. Select it below so we
+                    can
+                    load your registered courses — you won't be asked again on this device.</p>
+            </div>
+            <form id="yearConfirmForm">
+                <div class="form-field">
+                    <label for="yearConfirmSelect">Year</label>
+                    <select id="yearConfirmSelect">
+                        <option value="" disabled selected>Select your year</option>
+                        <option value="YEAR_1">Year 1</option>
+                        <option value="YEAR_2">Year 2</option>
+                        <option value="YEAR_3">Year 3</option>
+                        <option value="YEAR_4">Year 4</option>
+                        <option value="YEAR_5">Year 5</option>
+                        <option value="YEAR_6">Year 6</option>
+                        <option value="YEAR_7">Year 7</option>
+                    </select>
+                    <span class="form-field-error" id="yearConfirmError"></span>
+                </div>
+                <div class="form-actions" style="justify-content:flex-end;border-top:none;padding-top:0">
+                    <button type="submit" class="btn btn-primary" id="yearConfirmSubmit"><span class="btn-label"><i
+                                data-lucide="check-circle" style="width:14px;height:14px"></i> Confirm &amp;
+                            continue</span><span class="spinner"></span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="logoutOverlay" hidden></div>
+    <div class="modal" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle" hidden>
+        <div class="modal-inner">
+            <button type="button" class="modal-close" id="logoutModalClose" aria-label="Close"><i data-lucide="x"
+                    style="width:16px;height:16px"></i></button>
+            <div class="modal-header">
+                <div class="modal-icon warn"><i data-lucide="log-out" style="width:20px;height:20px"></i></div>
+                <div class="modal-title" id="logoutModalTitle">Log out?</div>
+                <p class="modal-desc">You'll need to sign in again to view your results and flags.</p>
+            </div>
+            <div class="form-actions" style="border-top:none;padding-top:0">
+                <button type="button" class="btn btn-outline" id="logoutStayBtn">Stay signed in</button>
+                <button type="button" class="btn btn-primary" id="logoutConfirmBtn"
+                    style="background:var(--error);border-color:var(--error)"><span class="btn-label"><i
+                            data-lucide="log-out" style="width:14px;height:14px"></i> Log out</span><span
+                        class="spinner"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
             DATA_MODE: "live",
             API_BASE_URL: "https://resulttrack-backend.onrender.com/api/v1",
             ENDPOINTS: {
@@ -2672,7 +2704,7 @@
                    AUTHENTICATION
                   
                 ========================================================== */
-                  
+
                 LOGIN: "/auth/login",
                 LOGOUT: "/auth/logout",
                 FORGOT_PASSWORD: "/auth/forgot-password",
@@ -2736,25 +2768,25 @@
             },
             // Mock "institution records" directory used by the Activate Account flow.
             // In production this becomes a backend lookup keyed by institutional email / matric no.
-           MOCK_ACTIVATION_DIRECTORY: [
-            {
-                email: "student@resulttrack.edu.ng",
-                firstName: "Amaka",
-                middleName: "Chiamaka",
-                lastName: "Okafor",
-                year: "YEAR_3",
-                department: "Computer Science",
-                regNo: "19/CSC/0421",
-                programme: "B.Sc. Computer Science",
-                faculty: "Natural and Applied Sciences",
-                level: "300L",
-                session: "2024/2025",
-                academicStatus: "Active",
-                photoUrl: "",
-                alreadyActivated: false,
-                mockOtp: "123456"
-            }
-        ]
+            MOCK_ACTIVATION_DIRECTORY: [
+                {
+                    email: "student@resulttrack.edu.ng",
+                    firstName: "Amaka",
+                    middleName: "Chiamaka",
+                    lastName: "Okafor",
+                    year: "YEAR_3",
+                    department: "Computer Science",
+                    regNo: "19/CSC/0421",
+                    programme: "B.Sc. Computer Science",
+                    faculty: "Natural and Applied Sciences",
+                    level: "300L",
+                    session: "2024/2025",
+                    academicStatus: "Active",
+                    photoUrl: "",
+                    alreadyActivated: false,
+                    mockOtp: "123456"
+                }
+            ]
         };
 
         // Persists the profile captured during activation, keyed by institutional email.
@@ -2816,7 +2848,7 @@
                 }
                 return { status: response.status, data };
             }
-           function mockAuthDelay(ms) { return new Promise(res => setTimeout(res, ms)); }
+            function mockAuthDelay(ms) { return new Promise(res => setTimeout(res, ms)); }
             async function liveGet(path) {
                 const controller = new AbortController();
                 const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
@@ -2852,7 +2884,7 @@
                 if (!raw) return null;
                 const p = raw.data || raw;
                 if (!p || typeof p !== 'object') return null;
-              return {
+                return {
                     id: p.id ?? p.userId ?? p._id,
                     userName: p.userName ?? p.fullName ?? p.name,
                     email: p.email,
@@ -2880,12 +2912,12 @@
                 }
                 throw new AuthError("That email or password doesn't look right.", { status: 401, kind: 'auth' });
             }
-         async function mockForgot(_email) { await mockAuthDelay(600); return { status: 200, data: { success: true, code: 'OK' } }; }
+            async function mockForgot(_email) { await mockAuthDelay(600); return { status: 200, data: { success: true, code: 'OK' } }; }
             async function mockResetPassword(_token, _password) { await mockAuthDelay(700); return { status: 200, data: { status: 'success', message: 'Password reset.' } }; }
 
             // Step 1 of activation: student submits name + email + year + department.
             // Backend matches this against institution records and, if matched, emails an OTP.
-         async function mockActivateAccount(payload) {
+            async function mockActivateAccount(payload) {
                 await mockAuthDelay(750);
                 const record = CONFIG.MOCK_ACTIVATION_DIRECTORY.find(s => s.email.toLowerCase() === payload.email.trim().toLowerCase());
                 if (!record) throw new AuthError("We couldn't match those details to a student record. Confirm your institutional email and try again, or contact the registry.", { status: 404, kind: 'auth' });
@@ -2898,7 +2930,7 @@
             // we're sending { email, otp } here since no step in this flow ever returns a
             // userId. Flagged for backend confirmation; swap the payload key in
             // StudentAuth.verifyOtp() below if the backend actually requires userId.
-         async function mockVerifyOtp(userId, otp) {
+            async function mockVerifyOtp(userId, otp) {
                 await mockAuthDelay(700);
                 const record = CONFIG.MOCK_ACTIVATION_DIRECTORY.find(s => s.mockUserId === userId);
                 if (!record) throw new AuthError("We couldn't find that activation request. Start again.", { status: 404, kind: 'auth' });
@@ -2906,19 +2938,19 @@
                 record.alreadyActivated = true;
                 return { status: 200, data: { success: true, code: 'OK', message: 'Account activated successfully, you can now set your password using the password reset link.', error: null } };
             }
-                      async function mockChangePassword(_currentPassword, _newPassword) {
+            async function mockChangePassword(_currentPassword, _newPassword) {
                 await mockAuthDelay(700);
                 return { status: 200, data: { status: 'success', message: 'Password updated.' } };
             }
             return {
                 AuthError,
-           login(email, password) { return CONFIG.DATA_MODE === 'mock' ? mockLogin(email, password) : liveRequest(CONFIG.ENDPOINTS.LOGIN, { email, password }); },
-            forgotPassword(email) { return CONFIG.DATA_MODE === 'mock' ? mockForgot(email) : liveRequest(CONFIG.ENDPOINTS.FORGOT_PASSWORD, { email }); },
+                login(email, password) { return CONFIG.DATA_MODE === 'mock' ? mockLogin(email, password) : liveRequest(CONFIG.ENDPOINTS.LOGIN, { email, password }); },
+                forgotPassword(email) { return CONFIG.DATA_MODE === 'mock' ? mockForgot(email) : liveRequest(CONFIG.ENDPOINTS.FORGOT_PASSWORD, { email }); },
                 resetPassword(token, password) { return CONFIG.DATA_MODE === 'mock' ? mockResetPassword(token, password) : liveRequest(CONFIG.ENDPOINTS.RESET_PASSWORD, { token, password }); },
-             activateAccount(payload) { return CONFIG.DATA_MODE === 'mock' ? mockActivateAccount(payload) : liveRequest(CONFIG.ENDPOINTS.ACTIVATE, payload); },
-            verifyOtp(userId, otp) { return CONFIG.DATA_MODE === 'mock' ? mockVerifyOtp(userId, otp) : liveRequest(CONFIG.ENDPOINTS.VERIFY_OTP, { userId, otp }); },
+                activateAccount(payload) { return CONFIG.DATA_MODE === 'mock' ? mockActivateAccount(payload) : liveRequest(CONFIG.ENDPOINTS.ACTIVATE, payload); },
+                verifyOtp(userId, otp) { return CONFIG.DATA_MODE === 'mock' ? mockVerifyOtp(userId, otp) : liveRequest(CONFIG.ENDPOINTS.VERIFY_OTP, { userId, otp }); },
                 changePassword(currentPassword, newPassword) { return CONFIG.DATA_MODE === 'mock' ? mockChangePassword(currentPassword, newPassword) : liveRequest(CONFIG.ENDPOINTS.changePassword, { currentPassword, newPassword }); },
-                           logout() { return CONFIG.DATA_MODE === 'mock' ? mockAuthDelay(200) : liveRequest(CONFIG.ENDPOINTS.LOGOUT, {}); },
+                logout() { return CONFIG.DATA_MODE === 'mock' ? mockAuthDelay(200) : liveRequest(CONFIG.ENDPOINTS.LOGOUT, {}); },
                 async getProfile() {
                     if (CONFIG.DATA_MODE === 'mock') return mockGetProfile();
                     const raw = await liveGet(CONFIG.ENDPOINTS.profile);
@@ -2927,22 +2959,22 @@
             };
         })();
 
-      
+
 
         const RegisteredCoursesStore = (function () {
-                // Prefer regNo (stable, backend-issued) over email, since /student/profile is
-                // still in development and email casing can vary between logins.
-                function storeKey() {
-                    const idPart = (currentUser && (currentUser.regNo || currentUser.id || (currentUser.email && currentUser.email.trim().toLowerCase()))) || 'unknown';
-                    return 'rt_registered_courses_' + idPart;
-                }
-                return {
-                    get() { try { return JSON.parse(localStorage.getItem(storeKey())) || []; } catch (_) { return []; } },
-                    set(ids) { localStorage.setItem(storeKey(), JSON.stringify(ids)); }
-                };
-            })();
+            // Prefer regNo (stable, backend-issued) over email, since /student/profile is
+            // still in development and email casing can vary between logins.
+            function storeKey() {
+                const idPart = (currentUser && (currentUser.regNo || currentUser.id || (currentUser.email && currentUser.email.trim().toLowerCase()))) || 'unknown';
+                return 'rt_registered_courses_' + idPart;
+            }
+            return {
+                get() { try { return JSON.parse(localStorage.getItem(storeKey())) || []; } catch (_) { return []; } },
+                set(ids) { localStorage.setItem(storeKey(), JSON.stringify(ids)); }
+            };
+        })();
 
-       const DEV_RESULTS = [
+        const DEV_RESULTS = [
             { id: 1, entryId: 101, title: 'CSC 301 — Data Structures', ca: 28, exam: 62, total: 90, grade: 'A', status: 'pass', isFlagged: false, flag: null, flagDescription: null },
             { id: 2, entryId: 102, title: 'CSC 303 — Operating Systems', ca: 29, exam: 66, total: 95, grade: 'A', status: 'pass', isFlagged: false, flag: null, flagDescription: null },
             { id: 3, entryId: 103, title: 'CSC 305 — Database Systems', ca: 24, exam: 54, total: 78, grade: 'B', status: 'pass', isFlagged: false, flag: null, flagDescription: null },
@@ -2957,65 +2989,65 @@
             { id: 'n4', kind: 'general', text: 'The 2024/2025 Semester 2 academic calendar has been released.', time: '3 days ago', read: true },
             { id: 'n5', kind: 'flag', text: 'A previous flag you raised was approved and your result was updated.', time: '1 week ago', read: true }
         ];
-    function mockDataDelay(ms) { return new Promise(res => setTimeout(res, ms || 350)); }
- const StudentData = {
-        async getResults() {
-            if (CONFIG.DATA_MODE === 'mock') { await mockDataDelay(); return JSON.parse(JSON.stringify(DEV_RESULTS)); }
-            const raw = await apiGet(CONFIG.ENDPOINTS.results);
-            return normalizeResultEntries(raw);
-        },
-      async getNotifications() {
-         if (CONFIG.DATA_MODE === 'mock') { await mockDataDelay(200); return JSON.parse(JSON.stringify(DEV_NOTIFICATIONS)); }
-         const raw = await apiGet(CONFIG.ENDPOINTS.notifications);
-         return normalizeNotifications(raw);
-     },
-        async getCourses() {
-            if (CONFIG.DATA_MODE === 'mock') {
-                await mockDataDelay(300);
-                // Mock mode has no dedicated course directory — derive a simple list
-                // from the dev results so the view isn't empty during local testing.
-                return DEV_RESULTS.map(r => ({ id: r.id, name: r.title, department: (currentUser && currentUser.department) || '—', year: null, classLevel: null, isActive: true, teachers: [] }));
+        function mockDataDelay(ms) { return new Promise(res => setTimeout(res, ms || 350)); }
+        const StudentData = {
+            async getResults() {
+                if (CONFIG.DATA_MODE === 'mock') { await mockDataDelay(); return JSON.parse(JSON.stringify(DEV_RESULTS)); }
+                const raw = await apiGet(CONFIG.ENDPOINTS.results);
+                return normalizeResultEntries(raw);
+            },
+            async getNotifications() {
+                if (CONFIG.DATA_MODE === 'mock') { await mockDataDelay(200); return JSON.parse(JSON.stringify(DEV_NOTIFICATIONS)); }
+                const raw = await apiGet(CONFIG.ENDPOINTS.notifications);
+                return normalizeNotifications(raw);
+            },
+            async getCourses() {
+                if (CONFIG.DATA_MODE === 'mock') {
+                    await mockDataDelay(300);
+                    // Mock mode has no dedicated course directory — derive a simple list
+                    // from the dev results so the view isn't empty during local testing.
+                    return DEV_RESULTS.map(r => ({ id: r.id, name: r.title, department: (currentUser && currentUser.department) || '—', year: null, classLevel: null, isActive: true, teachers: [] }));
+                }
+                const yearEnum = getEffectiveYearEnum();
+                const query = yearEnum ? `?year=${encodeURIComponent(yearEnum)}` : '';
+                console.log('[getCourses] currentUser.level =', currentUser && currentUser.level, '→ query:', query || '(none)');
+                const raw = await apiGet(CONFIG.ENDPOINTS.courses + query);
+                console.log('[getCourses] raw response:', raw);
+                const normalized = normalizeCourseList(raw);
+                console.log('[getCourses] normalized:', normalized);
+                return normalized;
+            },
+            async registerCourses(courseIds) {
+                if (CONFIG.DATA_MODE === 'mock') {
+                    await mockDataDelay(500);
+                    return { success: true, message: 'Mock registration complete.', data: { summary: { totalRequested: courseIds.length, successfullyRegistered: courseIds.length, invalidCourses: 0, invalidCourseIds: [] }, courses: courseIds.map(id => ({ id })) } };
+                }
+                return apiPost(CONFIG.ENDPOINTS.registerCourses, { courseIds });
             }
-   const yearEnum = getEffectiveYearEnum();
-            const query = yearEnum ? `?year=${encodeURIComponent(yearEnum)}` : '';
-            console.log('[getCourses] currentUser.level =', currentUser && currentUser.level, '→ query:', query || '(none)');
-            const raw = await apiGet(CONFIG.ENDPOINTS.courses + query);
-            console.log('[getCourses] raw response:', raw);
-            const normalized = normalizeCourseList(raw);
-    console.log('[getCourses] normalized:', normalized);
-          return normalized;
-      },
-      async registerCourses(courseIds) {
-          if (CONFIG.DATA_MODE === 'mock') {
-              await mockDataDelay(500);
-              return { success: true, message: 'Mock registration complete.', data: { summary: { totalRequested: courseIds.length, successfullyRegistered: courseIds.length, invalidCourses: 0, invalidCourseIds: [] }, courses: courseIds.map(id => ({ id })) } };
-          }
-          return apiPost(CONFIG.ENDPOINTS.registerCourses, { courseIds });
-      }
-  };
+        };
 
-    // Best-effort GET for live-mode analytics — returns null on any failure so a
-    // flaky/in-development endpoint never blocks rendering the dashboard.
-  async function apiGet(path) {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
-        try {
-            const response = await fetch(CONFIG.API_BASE_URL + path, {
-                method: 'GET', headers: { 'Content-Type': 'application/json' },
-                credentials: 'include', signal: controller.signal
-            });
-            clearTimeout(timer);
-            if (!response.ok) {
-                let bodyText = '';
-                try { bodyText = await response.text(); } catch (_) { /* ignore */ }
-                console.warn(`[apiGet] ${path} → ${response.status} ${response.statusText}`, bodyText);
-                return null;
-            }
-            try { return await response.json(); } catch (err) {
-                console.warn(`[apiGet] ${path} → 200 but body wasn't valid JSON`, err);
-                return null;
-            }
-    } catch (err) {
+        // Best-effort GET for live-mode analytics — returns null on any failure so a
+        // flaky/in-development endpoint never blocks rendering the dashboard.
+        async function apiGet(path) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT_MS);
+            try {
+                const response = await fetch(CONFIG.API_BASE_URL + path, {
+                    method: 'GET', headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', signal: controller.signal
+                });
+                clearTimeout(timer);
+                if (!response.ok) {
+                    let bodyText = '';
+                    try { bodyText = await response.text(); } catch (_) { /* ignore */ }
+                    console.warn(`[apiGet] ${path} → ${response.status} ${response.statusText}`, bodyText);
+                    return null;
+                }
+                try { return await response.json(); } catch (err) {
+                    console.warn(`[apiGet] ${path} → 200 but body wasn't valid JSON`, err);
+                    return null;
+                }
+            } catch (err) {
                 clearTimeout(timer);
                 console.warn(`[apiGet] ${path} → request failed`, err);
                 return null;
@@ -3024,7 +3056,7 @@
         class ApiError extends Error {
             constructor(message, { status = null, code = null } = {}) { super(message); this.status = status; this.code = code; }
         }
-     async function apiPost(path, body) { return apiRequest('POST', path, body); }
+        async function apiPost(path, body) { return apiRequest('POST', path, body); }
         async function apiPatch(path, body) { return apiRequest('PATCH', path, body); }
         async function apiRequest(method, path, body) {
             const controller = new AbortController();
@@ -3050,54 +3082,54 @@
             return data;
         }
         const FlagsApi = {
-                // Confirmed against Swagger: PATCH /student/courses/results/:entryId/flag, body { description }.
-                create(entryId, payload) { return apiPatch(CONFIG.ENDPOINTS.flagResult.replace(':entryId', entryId), payload); },
-                // Confirmed against Swagger: PATCH /student/courses/results/:entryId/unflag, body { description } (empty body accepted).
-                remove(entryId) { return apiPatch(CONFIG.ENDPOINTS.unflagResult.replace(':entryId', entryId), {}); },
-                list() { return apiGet(CONFIG.ENDPOINTS.flags); },
-                getById(entryId) { return apiGet(CONFIG.ENDPOINTS.flagById.replace(':entryId', entryId)); }
-            };
-        // /student/dashboard is still marked "in development" on the backend — field
-    // names aren't finalised, so pull whatever's there with fallbacks and let
-    // renderDashboard() fall back to locally computed numbers for anything missing.
-    function normalizeDashboardStats(raw) {
-        if (!raw) return null;
-        const d = raw.data || raw;
-        if (!d || typeof d !== 'object') return null;
-        return {
-            totalCourses: d.totalCourses ?? d.registeredCourses ?? d.coursesCount ?? d.courses,
-            publishedResults: d.publishedResults ?? d.publishedCount ?? d.published,
-            pendingResults: d.pendingResults ?? d.pendingCount ?? d.pending ?? d.awaitingResults,
-            activeFlags: d.activeFlags ?? d.flagsCount ?? d.flags,
-            completedUnits: d.completedUnits ?? d.creditsCompleted ?? d.unitsCompleted,
-            totalUnits: d.totalUnits ?? d.creditsTotal ?? d.requiredUnits ?? d.totalRequiredUnits
+            // Confirmed against Swagger: PATCH /student/courses/results/:entryId/flag, body { description }.
+            create(entryId, payload) { return apiPatch(CONFIG.ENDPOINTS.flagResult.replace(':entryId', entryId), payload); },
+            // Confirmed against Swagger: PATCH /student/courses/results/:entryId/unflag, body { description } (empty body accepted).
+            remove(entryId) { return apiPatch(CONFIG.ENDPOINTS.unflagResult.replace(':entryId', entryId), {}); },
+            list() { return apiGet(CONFIG.ENDPOINTS.flags); },
+            getById(entryId) { return apiGet(CONFIG.ENDPOINTS.flagById.replace(':entryId', entryId)); }
         };
-    }
-   async function loadDashboardStats() {
-        if (CONFIG.DATA_MODE !== 'live') { dashboardStats = null; return; }
-        const raw = await apiGet(CONFIG.ENDPOINTS.dashboard);
-        dashboardStats = normalizeDashboardStats(raw);
-    }
-    // Maps the student's level (e.g. "300L") to the YEAR_n enum /student/courses expects.
- // Resolves the YEAR_n enum /student/courses expects. Checks every field that
-    // could plausibly hold it, in order — an explicit "YEAR_3"-style value first,
-    // then a numeric fallback that handles both "300L" and a bare "3".
-    function resolveYearEnum(user) {
-        if (!user) return null;
-        const candidates = [user.year, user.currentYear, user.level, user.currentLevel];
-        for (const val of candidates) {
-            if (typeof val === 'string' && /^YEAR_[1-7]$/i.test(val.trim())) return val.trim().toUpperCase();
+        // /student/dashboard is still marked "in development" on the backend — field
+        // names aren't finalised, so pull whatever's there with fallbacks and let
+        // renderDashboard() fall back to locally computed numbers for anything missing.
+        function normalizeDashboardStats(raw) {
+            if (!raw) return null;
+            const d = raw.data || raw;
+            if (!d || typeof d !== 'object') return null;
+            return {
+                totalCourses: d.totalCourses ?? d.registeredCourses ?? d.coursesCount ?? d.courses,
+                publishedResults: d.publishedResults ?? d.publishedCount ?? d.published,
+                pendingResults: d.pendingResults ?? d.pendingCount ?? d.pending ?? d.awaitingResults,
+                activeFlags: d.activeFlags ?? d.flagsCount ?? d.flags,
+                completedUnits: d.completedUnits ?? d.creditsCompleted ?? d.unitsCompleted,
+                totalUnits: d.totalUnits ?? d.creditsTotal ?? d.requiredUnits ?? d.totalRequiredUnits
+            };
         }
-        for (const val of candidates) {
-            const n = parseInt((val || '').toString().replace(/\D/g, ''), 10);
-            if (!n) continue;
-            const year = n >= 100 ? Math.round(n / 100) : n; // "300L"/"300" → 3, bare "3" → 3
-            if (year >= 1 && year <= 7) return `YEAR_${year}`;
+        async function loadDashboardStats() {
+            if (CONFIG.DATA_MODE !== 'live') { dashboardStats = null; return; }
+            const raw = await apiGet(CONFIG.ENDPOINTS.dashboard);
+            dashboardStats = normalizeDashboardStats(raw);
         }
-        return null;
-    }
+        // Maps the student's level (e.g. "300L") to the YEAR_n enum /student/courses expects.
+        // Resolves the YEAR_n enum /student/courses expects. Checks every field that
+        // could plausibly hold it, in order — an explicit "YEAR_3"-style value first,
+        // then a numeric fallback that handles both "300L" and a bare "3".
+        function resolveYearEnum(user) {
+            if (!user) return null;
+            const candidates = [user.year, user.currentYear, user.level, user.currentLevel];
+            for (const val of candidates) {
+                if (typeof val === 'string' && /^YEAR_[1-7]$/i.test(val.trim())) return val.trim().toUpperCase();
+            }
+            for (const val of candidates) {
+                const n = parseInt((val || '').toString().replace(/\D/g, ''), 10);
+                if (!n) continue;
+                const year = n >= 100 ? Math.round(n / 100) : n; // "300L"/"300" → 3, bare "3" → 3
+                if (year >= 1 && year <= 7) return `YEAR_${year}`;
+            }
+            return null;
+        }
 
-      // /student/profile doesn't return a year/level field for every account yet
+        // /student/profile doesn't return a year/level field for every account yet
         // (still in development — this admin-created account is a case in point). When
         // we can't derive it automatically, ask the student once and remember their
         // answer on this device until the backend fills this in.
@@ -3108,18 +3140,18 @@
         function getStoredYearOverride() { return localStorage.getItem(yearOverrideKey()); }
         function setStoredYearOverride(yearEnum) { localStorage.setItem(yearOverrideKey(), yearEnum); }
         function getEffectiveYearEnum() { return resolveYearEnum(currentUser) || getStoredYearOverride(); }
-   function normalizeResultEntries(raw) {
-        const groups = (raw && raw.data && Array.isArray(raw.data.results)) ? raw.data.results : [];
-        const flat = [];
-        groups.forEach(group => {
-            (group.courses || []).forEach(c => {
-                flat.push({
-                    id: c.courseId,
-                    // Live API returns the result entry's identifier as "id" (confirmed
-                    // by the flag-endpoint response schema), not "entryId". Fall back
-                    // through both names so this keeps working either way.
-                    entryId: c.entryId ?? c.id,
-                    title: c.courseName,
+        function normalizeResultEntries(raw) {
+            const groups = (raw && raw.data && Array.isArray(raw.data.results)) ? raw.data.results : [];
+            const flat = [];
+            groups.forEach(group => {
+                (group.courses || []).forEach(c => {
+                    flat.push({
+                        id: c.courseId,
+                        // Live API returns the result entry's identifier as "id" (confirmed
+                        // by the flag-endpoint response schema), not "entryId". Fall back
+                        // through both names so this keeps working either way.
+                        entryId: c.entryId ?? c.id,
+                        title: c.courseName,
                         ca: c.caScore,
                         exam: c.examScore,
                         total: c.totalScore,
@@ -3149,21 +3181,21 @@
             return merged;
         }
         function normalizeCourseList(raw) {
-        const arr = (raw && Array.isArray(raw.data)) ? raw.data : (Array.isArray(raw) ? raw : []);
-        return arr.map(c => ({
-            id: c.id,
-            name: c.name,
-            department: c.department,
-            year: c.year,
-            classLevel: c.class,
-            isActive: Boolean(c.isActive),
-            teachers: Array.isArray(c.teachers) ? c.teachers.map(t => {
-                const u = t.user || {};
-                const fullName = [u.firstName, u.lastName].filter(Boolean).join(' ').trim();
-                return fullName || 'Unassigned';
-            }) : []
-        }));
-    }
+            const arr = (raw && Array.isArray(raw.data)) ? raw.data : (Array.isArray(raw) ? raw : []);
+            return arr.map(c => ({
+                id: c.id,
+                name: c.name,
+                department: c.department,
+                year: c.year,
+                classLevel: c.class,
+                isActive: Boolean(c.isActive),
+                teachers: Array.isArray(c.teachers) ? c.teachers.map(t => {
+                    const u = t.user || {};
+                    const fullName = [u.firstName, u.lastName].filter(Boolean).join(' ').trim();
+                    return fullName || 'Unassigned';
+                }) : []
+            }));
+        }
 
         const Session = {
             KEY: 'rt_student_mock_session',
@@ -3173,9 +3205,9 @@
         };
 
         const NAV_ITEMS = [
-                { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
-                { id: 'courses', label: 'My Courses', icon: 'book-open' },
-        { id: 'results', label: 'My Results', icon: 'file-bar-chart' },
+            { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+            { id: 'courses', label: 'My Courses', icon: 'book-open' },
+            { id: 'results', label: 'My Results', icon: 'file-bar-chart' },
             { id: 'transcript', label: 'Transcript', icon: 'scroll-text' },
             { id: 'flags', label: 'Result Flags', icon: 'flag' },
             { id: 'notifications', label: 'Notifications', icon: 'bell' },
@@ -3219,7 +3251,7 @@
             document.getElementById('topbarTitle').textContent = el.dataset.title || routeId;
             closeMobileSidebar();
             window.scrollTo(0, 0);
-      if (routeId === 'courses') renderCoursesView();
+            if (routeId === 'courses') renderCoursesView();
             if (routeId === 'results') renderResultsTable();
             if (routeId === 'flags') renderFlagsTable();
             if (routeId === 'notifications') renderNotificationsFull();
@@ -3233,21 +3265,21 @@
         document.getElementById('menuToggleBtn').addEventListener('click', openMobileSidebar);
         document.getElementById('sidebarOverlay').addEventListener('click', closeMobileSidebar);
 
-     let currentUser = null;
+        let currentUser = null;
         let allResults = [];
         let allNotifications = [];
         let allCourses = [];
         let dashboardStats = null;
-       // set after OTP verify, cleared once the activation-triggered password set succeeds
+        // set after OTP verify, cleared once the activation-triggered password set succeeds
 
-      
-      async function loadAllData() {
+
+        async function loadAllData() {
             allCourses = await StudentData.getCourses();
             const resultEntries = await StudentData.getResults();
             allResults = mergeCoursesWithResults(allCourses, resultEntries);
             allNotifications = await StudentData.getNotifications();
         }
-    function computeRegisteredCourseIds() {
+        function computeRegisteredCourseIds() {
             const registered = new Set(RegisteredCoursesStore.get());
             const validIds = new Set(allCourses.map(c => c.id));
             return Array.from(registered).filter(id => validIds.has(id));
@@ -3289,13 +3321,13 @@
             if (count) { count.hidden = unread === 0; count.textContent = unread; }
         }
 
-     
+
 
         document.addEventListener('click', (e) => {
             if (e.target.closest('#transcriptPrintBtn')) window.print();
         });
 
-     function renderTranscriptView() {
+        function renderTranscriptView() {
             document.getElementById('transcriptStudentName').textContent = currentUser.userName || '—';
             document.getElementById('transcriptRegNo').textContent = currentUser.regNo || '—';
             document.getElementById('transcriptProgramme').textContent = currentUser.programme || '—';
@@ -3324,7 +3356,7 @@
             }).join('') : '<div class="empty-state"><div class="empty-icon"><i data-lucide="scroll-text" style="width:26px;height:26px"></i></div><div class="empty-title">Nothing to show yet</div><div class="empty-desc">Your transcript fills in as results are published.</div></div>';
             lucide.createIcons();
         }
-    function renderCoursesView() {
+        function renderCoursesView() {
             const grid = document.getElementById('coursesGrid');
             const empty = document.getElementById('coursesEmptyState');
             empty.hidden = allCourses.length > 0;
@@ -3352,19 +3384,19 @@
             updateRegisterCoursesButton();
             document.querySelectorAll('.course-select-cb').forEach(cb => cb.addEventListener('change', updateRegisterCoursesButton));
         }
-    function updateRegisterCoursesButton() {
-        const btn = document.getElementById('registerCoursesBtn');
-        if (!btn) return;
-        const count = document.querySelectorAll('.course-select-cb:checked').length;
-        btn.disabled = count === 0;
-        btn.querySelector('.btn-label').innerHTML = count > 0
-            ? `<i data-lucide="check-circle" style="width:14px;height:14px"></i> Register ${count} course${count === 1 ? '' : 's'}`
-            : `<i data-lucide="check-circle" style="width:14px;height:14px"></i> Register selected courses`;
-        lucide.createIcons();
-    }
-            
+        function updateRegisterCoursesButton() {
+            const btn = document.getElementById('registerCoursesBtn');
+            if (!btn) return;
+            const count = document.querySelectorAll('.course-select-cb:checked').length;
+            btn.disabled = count === 0;
+            btn.querySelector('.btn-label').innerHTML = count > 0
+                ? `<i data-lucide="check-circle" style="width:14px;height:14px"></i> Register ${count} course${count === 1 ? '' : 's'}`
+                : `<i data-lucide="check-circle" style="width:14px;height:14px"></i> Register selected courses`;
+            lucide.createIcons();
+        }
 
-       function renderResultsTable() {
+
+        function renderResultsTable() {
             const search = document.getElementById('resultsSearchInput').value.trim().toLowerCase();
             const status = document.getElementById('resultsStatusFilter').value;
             const flaggedOnly = document.getElementById('resultsFlaggedOnly').checked;
@@ -3399,11 +3431,11 @@
             document.querySelectorAll('[data-flag-entry]').forEach(btn => btn.addEventListener('click', () => openFlagModal(Number(btn.dataset.flagEntry))));
             document.querySelectorAll('[data-unflag-entry]').forEach(btn => btn.addEventListener('click', () => handleUnflag(Number(btn.dataset.unflagEntry))));
         }
-      document.getElementById('resultsSearchInput').addEventListener('input', renderResultsTable);
+        document.getElementById('resultsSearchInput').addEventListener('input', renderResultsTable);
         document.getElementById('resultsStatusFilter').addEventListener('change', renderResultsTable);
         document.getElementById('resultsFlaggedOnly').addEventListener('change', renderResultsTable);
 
-       document.getElementById('resultsExportBtn').addEventListener('click', () => {
+        document.getElementById('resultsExportBtn').addEventListener('click', () => {
             const rows = [['Course', 'CA', 'Exam', 'Total', 'Grade', 'Status']];
             allResults.forEach(r => rows.push([r.title, r.ca ?? '', r.exam ?? '', r.total ?? '', r.grade ?? '', r.status]));
             const csv = rows.map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -3413,37 +3445,37 @@
             URL.revokeObjectURL(url);
             showToast('Results exported as CSV.', 'success');
         });
-      document.getElementById('resultsPrintBtn').addEventListener('click', () => window.print());
+        document.getElementById('resultsPrintBtn').addEventListener('click', () => window.print());
 
-  document.getElementById('registerCoursesBtn').addEventListener('click', async () => {
-        const ids = Array.from(document.querySelectorAll('.course-select-cb:checked')).map(cb => Number(cb.dataset.courseId));
-        if (!ids.length) return;
-        const btn = document.getElementById('registerCoursesBtn');
-        btn.classList.add('is-loading'); btn.disabled = true;
-        try {
-            const res = await StudentData.registerCourses(ids);
-            const summary = res && res.data && res.data.summary;
-            // POST /student/courses/register REPLACES the student's full registration —
-            // the returned `courses` list is the new complete set. Mirror it exactly
-            // instead of merging with whatever was stored locally before.
-            const registeredNow = (res && res.data && Array.isArray(res.data.courses)) ? res.data.courses.map(c => c.id) : ids;
-            RegisteredCoursesStore.set(registeredNow);
-            allCourses = await StudentData.getCourses();
-            renderCoursesView();
-            renderDashboard();
-            if (summary) {
-                showToast(`Registered ${summary.successfullyRegistered} of ${summary.totalRequested} course${summary.totalRequested === 1 ? '' : 's'}.${summary.invalidCourses ? ` ${summary.invalidCourses} invalid.` : ''}`, summary.invalidCourses ? 'warn' : 'success');
-            } else {
-                showToast('Courses registered.', 'success');
+        document.getElementById('registerCoursesBtn').addEventListener('click', async () => {
+            const ids = Array.from(document.querySelectorAll('.course-select-cb:checked')).map(cb => Number(cb.dataset.courseId));
+            if (!ids.length) return;
+            const btn = document.getElementById('registerCoursesBtn');
+            btn.classList.add('is-loading'); btn.disabled = true;
+            try {
+                const res = await StudentData.registerCourses(ids);
+                const summary = res && res.data && res.data.summary;
+                // POST /student/courses/register REPLACES the student's full registration —
+                // the returned `courses` list is the new complete set. Mirror it exactly
+                // instead of merging with whatever was stored locally before.
+                const registeredNow = (res && res.data && Array.isArray(res.data.courses)) ? res.data.courses.map(c => c.id) : ids;
+                RegisteredCoursesStore.set(registeredNow);
+                allCourses = await StudentData.getCourses();
+                renderCoursesView();
+                renderDashboard();
+                if (summary) {
+                    showToast(`Registered ${summary.successfullyRegistered} of ${summary.totalRequested} course${summary.totalRequested === 1 ? '' : 's'}.${summary.invalidCourses ? ` ${summary.invalidCourses} invalid.` : ''}`, summary.invalidCourses ? 'warn' : 'success');
+                } else {
+                    showToast('Courses registered.', 'success');
+                }
+            } catch (err) {
+                showToast(err.message || 'Could not register courses. Please try again.', 'error');
+            } finally {
+                btn.classList.remove('is-loading'); btn.disabled = false;
             }
-        } catch (err) {
-            showToast(err.message || 'Could not register courses. Please try again.', 'error');
-        } finally {
-            btn.classList.remove('is-loading'); btn.disabled = false;
-        }
-    });
+        });
 
-      function openFlagModal(entryId) {
+        function openFlagModal(entryId) {
             const course = allResults.find(r => r.entryId === entryId);
             if (!course) return;
             document.getElementById('flagCourseSummary').innerHTML = `
@@ -3464,46 +3496,46 @@
         document.getElementById('flagCancelBtn').addEventListener('click', closeFlagModal);
         document.getElementById('flagOverlay').addEventListener('click', closeFlagModal);
         document.getElementById('flagDesc').addEventListener('input', (e) => { document.getElementById('flagCharCounter').textContent = `${e.target.value.length} / 600`; });
-   document.getElementById('flagForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const entryId = Number(e.target.dataset.entryId);
-        const course = allResults.find(r => r.entryId === entryId);
-        const reason = document.getElementById('flagReason').value;
-        const desc = document.getElementById('flagDesc').value.trim();
-        const errEl = document.getElementById('flagDescError');
-        if (!reason) { showToast('Select a reason for the flag.', 'error'); return; }
-        if (desc.length < 15) { errEl.textContent = 'Please add a little more detail (at least 15 characters).'; return; }
-        errEl.textContent = '';
+        document.getElementById('flagForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const entryId = Number(e.target.dataset.entryId);
+            const course = allResults.find(r => r.entryId === entryId);
+            const reason = document.getElementById('flagReason').value;
+            const desc = document.getElementById('flagDesc').value.trim();
+            const errEl = document.getElementById('flagDescError');
+            if (!reason) { showToast('Select a reason for the flag.', 'error'); return; }
+            if (desc.length < 15) { errEl.textContent = 'Please add a little more detail (at least 15 characters).'; return; }
+            errEl.textContent = '';
 
-        const btn = document.getElementById('flagSubmitBtn');
-        btn.classList.add('is-loading'); btn.disabled = true;
-        try {
-            // Backend only accepts { description } — fold the chosen reason into the
-            // text itself so it isn't lost, since there's no separate `reason` field.
-            const reasonLabel = REASON_LABELS[reason] || reason;
-            const fullDescription = `[${reasonLabel}] ${desc}`;
-            const res = await FlagsApi.create(entryId, { description: fullDescription });
-            const updatedEntry = res && res.data && res.data.entry;
-            if (course) {
-                course.isFlagged = true;
-                course.flag = (updatedEntry && updatedEntry.flag) || reason;
-                course.flagDescription = (updatedEntry && updatedEntry.flagDescription) || fullDescription;
-                if (updatedEntry && updatedEntry.status) {
-                    course.status = (updatedEntry.status || '').toUpperCase() === 'PASS' ? 'pass' : ((updatedEntry.status || '').toUpperCase() === 'FAIL' ? 'fail' : 'pending');
+            const btn = document.getElementById('flagSubmitBtn');
+            btn.classList.add('is-loading'); btn.disabled = true;
+            try {
+                // Backend only accepts { description } — fold the chosen reason into the
+                // text itself so it isn't lost, since there's no separate `reason` field.
+                const reasonLabel = REASON_LABELS[reason] || reason;
+                const fullDescription = `[${reasonLabel}] ${desc}`;
+                const res = await FlagsApi.create(entryId, { description: fullDescription });
+                const updatedEntry = res && res.data && res.data.entry;
+                if (course) {
+                    course.isFlagged = true;
+                    course.flag = (updatedEntry && updatedEntry.flag) || reason;
+                    course.flagDescription = (updatedEntry && updatedEntry.flagDescription) || fullDescription;
+                    if (updatedEntry && updatedEntry.status) {
+                        course.status = (updatedEntry.status || '').toUpperCase() === 'PASS' ? 'pass' : ((updatedEntry.status || '').toUpperCase() === 'FAIL' ? 'fail' : 'pending');
+                    }
                 }
+                closeFlagModal();
+                showToast(`Flag submitted${course ? ' for ' + course.title : ''}. Your lecturer will be notified.`, 'success');
+                renderResultsTable();
+                renderDashboard();
+            } catch (err) {
+                showToast(err.message || 'Could not submit the flag. Please try again.', 'error');
+            } finally {
+                btn.classList.remove('is-loading'); btn.disabled = false;
             }
-            closeFlagModal();
-            showToast(`Flag submitted${course ? ' for ' + course.title : ''}. Your lecturer will be notified.`, 'success');
-            renderResultsTable();
-            renderDashboard();
-        } catch (err) {
-            showToast(err.message || 'Could not submit the flag. Please try again.', 'error');
-        } finally {
-            btn.classList.remove('is-loading'); btn.disabled = false;
-        }
-    });
+        });
 
-     async function handleUnflag(entryId) {
+        async function handleUnflag(entryId) {
             const course = allResults.find(r => r.entryId === entryId);
             try {
                 const res = await FlagsApi.remove(entryId);
@@ -3530,12 +3562,12 @@
             }
         }
 
-     const REASON_LABELS = { ca_score: 'Incorrect CA score', exam_score: 'Incorrect exam score', grade_computation: "Grade doesn't match scores", not_reflecting: 'Result not reflecting', other: 'Other' };
-                const FLAG_STEPS = [
-                        { key: 'submitted', label: 'Submitted', icon: 'send' },
-                        { key: 'pending_review', label: 'Pending Review', icon: 'clock' },
-                        { key: 'resolved', label: 'Approved', icon: 'check' }
-                    ];
+        const REASON_LABELS = { ca_score: 'Incorrect CA score', exam_score: 'Incorrect exam score', grade_computation: "Grade doesn't match scores", not_reflecting: 'Result not reflecting', other: 'Other' };
+        const FLAG_STEPS = [
+            { key: 'submitted', label: 'Submitted', icon: 'send' },
+            { key: 'pending_review', label: 'Pending Review', icon: 'clock' },
+            { key: 'resolved', label: 'Approved', icon: 'check' }
+        ];
         const FLAG_STATUS_BADGE = {
             pending: '<span class="badge gold">Pending Review</span>',
             pending_review: '<span class="badge gold">Pending Review</span>',
@@ -3561,34 +3593,34 @@
             }).join('')}</div>`;
         }
 
-      
-                               // Confirmed against a real /student/results/flags entry (Aug 27 2026):
-                                // the backend has no isResolved/status field for the flag pipeline —
-                                // only `resolution` (lecturer's note) and `resolvedAt` (timestamp), which
-                                // are only present once a lecturer has actually resolved the flag. The
-                                // reason label isn't a separate field either — it's embedded as a
-                                // "[Reason label] rest of the message" prefix inside flagDescription,
-                                // exactly as it was written on submit (see flagForm submit handler).
-                                function splitFlagDescription(raw) {
-                                    if (!raw) return { reasonLabel: null, description: '' };
-                                    const m = /^\[(.*?)\]\s*([\s\S]*)$/.exec(raw);
-                                    return m ? { reasonLabel: m[1], description: m[2] } : { reasonLabel: null, description: raw };
-                                }
-                                function normalizeFlagListItem(f) {
-                                    const isResolved = Boolean(f.resolution) || Boolean(f.resolvedAt);
-                                    const { reasonLabel, description } = splitFlagDescription(f.flagDescription ?? f.description ?? f.note);
-                                    return {
-                                        entryId: f.entryId ?? f.resultEntryId ?? f.id,
-                                        courseName: f.courseName ?? (f.course && f.course.name) ?? f.courseTitle ?? 'Course',
-                                        reasonLabel: reasonLabel || 'Other',
-                                        description,
-                                        status: isResolved ? 'resolved' : 'pending_review',
-                                        response: f.resolution ?? f.resolutionDescription ?? f.response ?? null,
-                                        createdAt: f.submittedAt ?? f.createdAt ?? f.flaggedAt,
-                                        respondedAt: f.resolvedAt ?? f.respondedAt ?? f.updatedAt
-                                    };
-                                }
-      function relativeTimeFromNow(iso) {
+
+        // Confirmed against a real /student/results/flags entry (Aug 27 2026):
+        // the backend has no isResolved/status field for the flag pipeline —
+        // only `resolution` (lecturer's note) and `resolvedAt` (timestamp), which
+        // are only present once a lecturer has actually resolved the flag. The
+        // reason label isn't a separate field either — it's embedded as a
+        // "[Reason label] rest of the message" prefix inside flagDescription,
+        // exactly as it was written on submit (see flagForm submit handler).
+        function splitFlagDescription(raw) {
+            if (!raw) return { reasonLabel: null, description: '' };
+            const m = /^\[(.*?)\]\s*([\s\S]*)$/.exec(raw);
+            return m ? { reasonLabel: m[1], description: m[2] } : { reasonLabel: null, description: raw };
+        }
+        function normalizeFlagListItem(f) {
+            const isResolved = Boolean(f.resolution) || Boolean(f.resolvedAt);
+            const { reasonLabel, description } = splitFlagDescription(f.flagDescription ?? f.description ?? f.note);
+            return {
+                entryId: f.entryId ?? f.resultEntryId ?? f.id,
+                courseName: f.courseName ?? (f.course && f.course.name) ?? f.courseTitle ?? 'Course',
+                reasonLabel: reasonLabel || 'Other',
+                description,
+                status: isResolved ? 'resolved' : 'pending_review',
+                response: f.resolution ?? f.resolutionDescription ?? f.response ?? null,
+                createdAt: f.submittedAt ?? f.createdAt ?? f.flaggedAt,
+                respondedAt: f.resolvedAt ?? f.respondedAt ?? f.updatedAt
+            };
+        }
+        function relativeTimeFromNow(iso) {
             if (!iso) return '';
             const date = new Date(iso);
             if (isNaN(date.getTime())) return '';
@@ -3622,23 +3654,23 @@
                 entityId: n.entityId ?? null
             }));
         }
-             let currentFlagsList = [];
-                // Confirmed against Swagger: GET /student/results/flags nests the array under
-                // data.flaggedEntries (not data itself, and not data.flags). Keep the looser
-                // fallbacks after it purely as a safety net in case the backend shape shifts.
-                function extractFlagsArray(raw) {
-                    if (!raw) return [];
-                    if (raw.data && Array.isArray(raw.data.flaggedEntries)) return raw.data.flaggedEntries;
-                    if (Array.isArray(raw.data)) return raw.data;
-                    if (Array.isArray(raw)) return raw;
-                    console.warn('[renderFlagsTable] Unrecognized /student/results/flags response shape:', raw);
-                    return [];
-                }
-                async function renderFlagsTable() {
-                    let raw;
-                    try { raw = await FlagsApi.list(); } catch (err) { showToast(err.message || 'Could not load your flags.', 'error'); raw = null; }
-                    const arr = extractFlagsArray(raw);
-                    currentFlagsList = arr.map(normalizeFlagListItem);
+        let currentFlagsList = [];
+        // Confirmed against Swagger: GET /student/results/flags nests the array under
+        // data.flaggedEntries (not data itself, and not data.flags). Keep the looser
+        // fallbacks after it purely as a safety net in case the backend shape shifts.
+        function extractFlagsArray(raw) {
+            if (!raw) return [];
+            if (raw.data && Array.isArray(raw.data.flaggedEntries)) return raw.data.flaggedEntries;
+            if (Array.isArray(raw.data)) return raw.data;
+            if (Array.isArray(raw)) return raw;
+            console.warn('[renderFlagsTable] Unrecognized /student/results/flags response shape:', raw);
+            return [];
+        }
+        async function renderFlagsTable() {
+            let raw;
+            try { raw = await FlagsApi.list(); } catch (err) { showToast(err.message || 'Could not load your flags.', 'error'); raw = null; }
+            const arr = extractFlagsArray(raw);
+            currentFlagsList = arr.map(normalizeFlagListItem);
             document.getElementById('flagsTable').style.display = currentFlagsList.length ? '' : 'none';
             document.getElementById('flagsEmptyState').hidden = currentFlagsList.length > 0;
             document.getElementById('flagsTableBody').innerHTML = currentFlagsList.map(f => `
@@ -3653,7 +3685,7 @@
             lucide.createIcons();
             document.querySelectorAll('[data-view-flag]').forEach(btn => btn.addEventListener('click', () => openFlagDetail(Number(btn.dataset.viewFlag))));
         }
-       async function openFlagDetail(entryId) {
+        async function openFlagDetail(entryId) {
             // Fall back to the already-loaded list item immediately so the modal opens
             // without a blank flash, then replace with fresh detail once it arrives.
             let f = currentFlagsList.find(x => x.entryId === entryId);
@@ -3677,7 +3709,7 @@
             }
         }
         function renderFlagDetailModal(f) {
-                      document.getElementById('flagDetailTitle').textContent = `${f.courseName} — ${f.reasonLabel || 'Flag'}`;
+            document.getElementById('flagDetailTitle').textContent = `${f.courseName} — ${f.reasonLabel || 'Flag'}`;
             document.getElementById('flagDetailSummary').innerHTML = `<div><div class="fc-title">${f.courseName}</div></div>${FLAG_STATUS_BADGE[f.status] || ''}`;
             document.getElementById('flagDetailStepper').innerHTML = renderFlagStepper(f.status);
             let thread = `<div class="thread-msg mine">${f.description || ''}<div class="tm-meta">You · ${f.createdAt ? new Date(f.createdAt).toLocaleString() : ''}</div></div>`;
@@ -3702,7 +3734,7 @@
         </div>`).join('');
             lucide.createIcons();
         }
-      document.getElementById('markAllReadBtn').addEventListener('click', async () => {
+        document.getElementById('markAllReadBtn').addEventListener('click', async () => {
             const btn = document.getElementById('markAllReadBtn');
             if (CONFIG.DATA_MODE === 'mock') {
                 allNotifications.forEach(n => n.read = true);
@@ -3745,20 +3777,20 @@
         function setLoading(btn, isLoading) { btn.disabled = isLoading; btn.classList.toggle('is-loading', isLoading); }
         function hideEl(el) { el.hidden = true; }
 
-             const RESET_PW_COPY = {
-                    default: { title: 'Choose a new password', sub: 'Enter a new password for your account.' },
-                    activation: { title: 'Set your password', sub: 'Your account has been activated. Choose a password to sign in and access your student dashboard.' }
-                };
-                const RESET_PW_SUCCESS_COPY = {
-                    default: 'Your password has been updated. Sign in with your new password.',
-                    activation: 'Your password has been set. Sign in with your new password to access your student dashboard.'
-                };
-                function setResetPasswordCopy(mode) {
-                    const copy = RESET_PW_COPY[mode] || RESET_PW_COPY.default;
-                    document.getElementById('resetPwTitle').textContent = copy.title;
-                    document.getElementById('resetPwSub').textContent = copy.sub;
-                }
-                const authViews = { viewSignIn: document.getElementById('viewSignIn'), viewForgot: document.getElementById('viewForgot'), viewActivate: document.getElementById('viewActivate'), viewResetPassword: document.getElementById('viewResetPassword') };
+        const RESET_PW_COPY = {
+            default: { title: 'Choose a new password', sub: 'Enter a new password for your account.' },
+            activation: { title: 'Set your password', sub: 'Your account has been activated. Choose a password to sign in and access your student dashboard.' }
+        };
+        const RESET_PW_SUCCESS_COPY = {
+            default: 'Your password has been updated. Sign in with your new password.',
+            activation: 'Your password has been set. Sign in with your new password to access your student dashboard.'
+        };
+        function setResetPasswordCopy(mode) {
+            const copy = RESET_PW_COPY[mode] || RESET_PW_COPY.default;
+            document.getElementById('resetPwTitle').textContent = copy.title;
+            document.getElementById('resetPwSub').textContent = copy.sub;
+        }
+        const authViews = { viewSignIn: document.getElementById('viewSignIn'), viewForgot: document.getElementById('viewForgot'), viewActivate: document.getElementById('viewActivate'), viewResetPassword: document.getElementById('viewResetPassword') };
         function showAuthView(id) {
             Object.values(authViews).forEach(v => v.classList.remove('is-active'));
             authViews[id].classList.add('is-active');
@@ -3780,7 +3812,7 @@
             });
         });
 
-      if (CONFIG.DATA_MODE === 'mock') document.getElementById('devModeBanner').hidden = false;
+        if (CONFIG.DATA_MODE === 'mock') document.getElementById('devModeBanner').hidden = false;
         if (CONFIG.DATA_MODE === 'mock') { const devBadge = document.getElementById('devDataBadge'); if (devBadge) devBadge.hidden = false; }
         (function restoreRememberedEmail() {
             const remembered = localStorage.getItem('rt_student_remembered_email');
@@ -3805,13 +3837,13 @@
             // (or returned by the live profile endpoint) — never a hardcoded name.
             document.getElementById('welcomeName').textContent = user.userName ? `, ${user.userName}` : '';
 
-          renderSidebar();
+            renderSidebar();
             await loadAllData();
             await loadDashboardStats();
             renderDashboard();
             navigate(location.hash.replace('#', '') || 'dashboard');
             if (!location.hash) location.hash = 'dashboard';
-     if (currentUser.mustChangePassword) openMustChangePwModal();
+            if (currentUser.mustChangePassword) openMustChangePwModal();
             else if (!getEffectiveYearEnum()) openYearConfirmModal();
         }
 
@@ -3839,18 +3871,27 @@
             }
             [emailInput, passwordInput].forEach(input => input.addEventListener('input', () => { if (input.closest('.auth-field').classList.contains('has-error')) validate(); }));
 
-                        form.addEventListener('submit', async (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 if (isSubmitting) return;
                 hideEl(banner);
-                if (!resetToken) { showBanner(banner, 'error', 'This reset link is missing or invalid. Request a new one.'); return; }
                 if (!validate()) return;
                 if (!navigator.onLine) { showBanner(banner, 'error', "You're offline. Check your connection and try again."); return; }
 
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+
                 isSubmitting = true; setLoading(submit, true);
                 try {
-                    await StudentAuth.resetPassword(resetToken, pwInput.value);
-                    formWrap.hidden = true; successWrap.hidden = false;
+                    const { data } = await StudentAuth.login(email, password);
+                    const user = (data && data.data) || data;
+                    if (document.getElementById('rememberMe').checked) {
+                        localStorage.setItem('rt_student_remembered_email', email);
+                    } else {
+                        localStorage.removeItem('rt_student_remembered_email');
+                    }
+                    if (CONFIG.DATA_MODE === 'mock') Session.set(user);
+                    await enterApp(user);
                 } catch (err) {
                     showBanner(banner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
                 } finally {
@@ -3894,7 +3935,7 @@
             });
         })();
 
-      (function initResetPassword() {
+        (function initResetPassword() {
             const form = document.getElementById('resetPwForm');
             const banner = document.getElementById('resetPwBanner');
             const submit = document.getElementById('resetPwSubmit');
@@ -3924,37 +3965,37 @@
             }
             [pwInput, confirmInput].forEach(input => input.addEventListener('input', () => { if (input.closest('.auth-field').classList.contains('has-error')) validate(); }));
 
-                     form.addEventListener('submit', async (e) => {
-              e.preventDefault();
-              if (isSubmitting) return;
-              hideEl(banner);
-              const isActivationFlow = !resetToken && Boolean(pendingActivationEmail);
-              if (!resetToken && !isActivationFlow) { showBanner(banner, 'error', 'This reset link is missing or invalid. Request a new one.'); return; }
-              if (!validate()) return;
-              if (!navigator.onLine) { showBanner(banner, 'error', "You're offline. Check your connection and try again."); return; }
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (isSubmitting) return;
+                hideEl(banner);
+                const isActivationFlow = !resetToken && Boolean(pendingActivationEmail);
+                if (!resetToken && !isActivationFlow) { showBanner(banner, 'error', 'This reset link is missing or invalid. Request a new one.'); return; }
+                if (!validate()) return;
+                if (!navigator.onLine) { showBanner(banner, 'error', "You're offline. Check your connection and try again."); return; }
 
-              isSubmitting = true; setLoading(submit, true);
-              try {
-                  if (isActivationFlow) {
-                      await StudentAuth.setPasswordAfterActivation(pendingActivationEmail, pwInput.value);
-                      document.getElementById('resetPwSuccessTitle').textContent = 'Password set';
-                      document.getElementById('resetPwSuccessDesc').textContent = RESET_PW_SUCCESS_COPY.activation;
-                      pendingActivationEmail = null;
-                  } else {
-                      await StudentAuth.resetPassword(resetToken, pwInput.value);
-                      document.getElementById('resetPwSuccessTitle').textContent = 'Password reset';
-                      document.getElementById('resetPwSuccessDesc').textContent = RESET_PW_SUCCESS_COPY.default;
-                  }
-                  formWrap.hidden = true; successWrap.hidden = false;
-              } catch (err) {
-                  showBanner(banner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
-              } finally {
-                  isSubmitting = false; setLoading(submit, false);
-              }
-          });
-      })();
+                isSubmitting = true; setLoading(submit, true);
+                try {
+                    if (isActivationFlow) {
+                        await StudentAuth.setPasswordAfterActivation(pendingActivationEmail, pwInput.value);
+                        document.getElementById('resetPwSuccessTitle').textContent = 'Password set';
+                        document.getElementById('resetPwSuccessDesc').textContent = RESET_PW_SUCCESS_COPY.activation;
+                        pendingActivationEmail = null;
+                    } else {
+                        await StudentAuth.resetPassword(resetToken, pwInput.value);
+                        document.getElementById('resetPwSuccessTitle').textContent = 'Password reset';
+                        document.getElementById('resetPwSuccessDesc').textContent = RESET_PW_SUCCESS_COPY.default;
+                    }
+                    formWrap.hidden = true; successWrap.hidden = false;
+                } catch (err) {
+                    showBanner(banner, 'error', err instanceof StudentAuth.AuthError ? err.message : 'Something unexpected happened. Please try again.');
+                } finally {
+                    isSubmitting = false; setLoading(submit, false);
+                }
+            });
+        })();
 
-     (function initActivate() {
+        (function initActivate() {
             const formWrap = document.getElementById('activateFormWrap');
             const otpWrap = document.getElementById('activateOtpWrap');
             const step3 = document.getElementById('activateStep3Wrap');
@@ -3965,11 +4006,11 @@
             const emailInput = document.getElementById('activateEmail');
             const emailErr = document.getElementById('activateEmailError');
 
-          let pendingUserId = null;
-         let isSubmitting = false;
-         function resetForm() {
-             pendingUserId = null;
-             sessionStorage.removeItem('rt_pending_activation_userid');
+            let pendingUserId = null;
+            let isSubmitting = false;
+            function resetForm() {
+                pendingUserId = null;
+                sessionStorage.removeItem('rt_pending_activation_userid');
                 formWrap.hidden = false; otpWrap.hidden = true; step3.hidden = true;
                 form.reset(); hideEl(banner);
                 setFieldError(emailField, emailErr, '');
@@ -4044,7 +4085,7 @@
                         year: document.getElementById('actYear').value,
                         department: document.getElementById('actDepartment').value.trim()
                     };
-                   const { data } = await StudentAuth.activateAccount(payload);
+                    const { data } = await StudentAuth.activateAccount(payload);
                     pendingUserId = data && data.data ? data.data.userId : null;
                     if (!pendingUserId) { showBanner(banner, 'error', "Something went wrong starting activation. Please try again."); return; }
                     sessionStorage.setItem('rt_pending_activation_userid', String(pendingUserId));
@@ -4076,11 +4117,11 @@
                 setFieldError(otpField, otpErr, '');
                 if (!navigator.onLine) { showBanner(otpBanner, 'error', "You're offline. Check your connection and try again."); return; }
 
-               otpSubmitting = true; setLoading(otpSubmit, true);
+                otpSubmitting = true; setLoading(otpSubmit, true);
                 try {
                     const userId = pendingUserId || Number(sessionStorage.getItem('rt_pending_activation_userid'));
                     if (!userId) { showBanner(otpBanner, 'error', 'Your activation session expired. Please start again.'); return; }
-                                     await StudentAuth.verifyOtp(userId, otp);
+                    await StudentAuth.verifyOtp(userId, otp);
                     sessionStorage.removeItem('rt_pending_activation_userid');
                     const activatedEmail = emailInput.value.trim();
                     // No reset token is returned by verify-otp, so the only backend-supported
@@ -4132,7 +4173,7 @@
             } finally {
                 btn.classList.remove('is-loading'); btn.disabled = false;
             }
-    });
+        });
 
         // ---- One-time year confirmation for accounts /student/profile doesn't return a year for yet ----
         function openYearConfirmModal() {
