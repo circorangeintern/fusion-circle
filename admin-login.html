@@ -4740,7 +4740,7 @@
             // separately (no fullName field) — this builds a display-ready fullName
             // the same way the rest of the app already expects, without touching
             // any UI code that reads it.
-           function normalizeAdminRecord(record) {
+            function normalizeAdminRecord(record) {
                 if (!record || typeof record !== 'object') return record;
                 // Backend enum confirmed via live GET /superAdmin/admins: "ACTIVATED" for
                 // active accounts. Deactivation goes through PATCH /superAdmin/admin/:id
